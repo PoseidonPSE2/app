@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -68,6 +71,62 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _makeAPICall_get() async {
+    final response = await http.get(Uri.parse('https://2sc10r.buildship.run/hello'));
+    if (response.statusCode == 200) {
+      // Handle successful API call
+      print('API call successful');
+      print(response.body);
+    } else {
+      // Handle error
+      print('Failed to make API call');
+    }
+  }
+
+  String _responseText = '';
+
+  void _makeAPICall_post() async {
+    // Define your data to send
+    Map<String, dynamic> data = {
+      'water': 600, // Example value, replace with your actual data
+      'user_id': 1, // Example value, replace with your actual data
+      'water_type': 'sprudlig' // Example value, replace with your actual data
+    };
+
+    print("mooin");
+
+    // Encode the data to JSON
+    var body = json.encode(data);
+
+    print("mooin2");
+
+    // Make POST request
+    final response = await http.post(
+      Uri.parse('https://2sc10r.buildship.run/create_entry'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    print("mooin3");
+
+    if (response.statusCode == 200) {
+      // Handle successful API call
+      setState(() {
+        _responseText = response.body;
+      });
+    } else {
+      // Handle error
+      setState(() {
+        _responseText = 'Failed to make API call';
+      });
+    }
+
+    print(_responseText);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -116,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _makeAPICall_post,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
