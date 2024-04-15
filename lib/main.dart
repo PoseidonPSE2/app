@@ -60,6 +60,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  final tabs = [
+    Center(child: Text('Home')),
+    Center(child: Text('Refill')),
+    Center(child: Text('Profil')),
+  ];
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -72,7 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _makeAPICall_get() async {
-    final response = await http.get(Uri.parse('https://2sc10r.buildship.run/hello'));
+    final response =
+        await http.get(Uri.parse('https://2sc10r.buildship.run/hello'));
     if (response.statusCode == 200) {
       // Handle successful API call
       print('API call successful');
@@ -124,7 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     print(_responseText);
-
   }
 
   @override
@@ -136,6 +142,30 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      body: tabs[_counter],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.water_damage),
+            label: 'Refill',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
+        currentIndex: _counter,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        onTap: (index) {
+          setState(() {
+            _counter = index;
+          });
+        },
+      ),
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
@@ -145,36 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
+     floatingActionButton: FloatingActionButton(
         onPressed: _makeAPICall_post,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
