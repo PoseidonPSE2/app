@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 
 void main() {
   runApp(const MyApp());
@@ -92,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Map<String, dynamic> data = {
       'water': 600, // Example value, replace with your actual data
       'user_id': 1, // Example value, replace with your actual data
-      'water_type': 'sprudlig123000' // Example value, replace with your actual data
+      'water_type': 'sprudlig' // Example value, replace with your actual data
     };
 
     print("mooin");
@@ -147,7 +145,35 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: content(),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _makeAPICall_post,
         tooltip: 'Increment',
@@ -155,23 +181,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-  Widget content() {
-    return FlutterMap(
-        options: MapOptions(
-            initialCenter: LatLng(49.443 , 7.77161),
-           initialZoom: 11,
-            interactionOptions:
-            const InteractionOptions(flags:~InteractiveFlag.doubleTapZoom),
-        ),
-        children: [
-          openStreetMapTileLayer,
-        ],
-    );
-  }
 }
-
-TileLayer get openStreetMapTileLayer => TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-);
