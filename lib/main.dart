@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Refill - Architecture Offline'),
     );
   }
 }
@@ -37,9 +38,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-
-
-   List<Widget> _widgetOptions = <Widget>[
+  List<Widget> _widgetOptions = <Widget>[
     Text('Map Page'),
     Text('Refill Page'),
     Text('Profile Page'),
@@ -73,12 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
       'water_type': 'sprudlig' // Example value, replace with your actual data
     };
 
-    print("mooin");
+    print("create json body");
 
     // Encode the data to JSON
     var body = json.encode(data);
 
-    print("mooin2");
+    print("send request");
 
     // Make POST request
     final response = await http.post(
@@ -89,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: body,
     );
 
-    print("mooin3");
+    print("wait for answer");
 
     if (response.statusCode == 200) {
       // Handle successful API call
@@ -123,8 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: _widgetOptions.elementAt(_counter),
-      ),
+          //child: _widgetOptions.elementAt(_counter),
+          child: content()),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -151,4 +151,41 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  Widget content() {
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: LatLng(49.440067, 7.769000),
+        initialZoom: 14,
+        interactionOptions:
+            const InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom),
+      ),
+      children: [
+        openStreetMapTileLater,
+        MarkerLayer(markers: [
+          Marker(
+            point: LatLng(49.440067, 7.769000),
+            width: 60,
+            height: 60,
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {
+                _makeAPICall_post;
+              },
+              child: Icon(
+                Icons.water_drop,
+                size: 60,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ]),
+      ],
+    );
+  }
 }
+
+TileLayer get openStreetMapTileLater => TileLayer(
+      urlTemplate: 'https:/tile.openstreetmap.org/{z}/{x}/{y}.png',
+      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+    );
