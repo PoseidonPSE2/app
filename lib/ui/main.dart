@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Settings',
           ),
         ],
+        selectedItemColor: Colors.blueAccent,
       ),
     );
   }
