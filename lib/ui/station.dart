@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:nfc_manager/nfc_manager.dart';
 
 String _responseText = '';
 
@@ -89,9 +90,59 @@ class RefillScreen extends StatelessWidget {
                 // Set the background color to blue
               ),
             ),
+            SizedBox(height: 20.0), // Add spacing between elements
+            ElevatedButton(
+              onPressed: _startNFCReading,
+              child: Text(
+                'NFC',
+                style: TextStyle(fontSize: 15.0, color: Colors.white),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+                // Set the background color to blue
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+void _startNFCReading() async {
+  try {
+    bool isAvailable = await NfcManager.instance.isAvailable();
+    if (isAvailable) {
+      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+        var nfcData = tag.data as Map<String, dynamic>;
+
+        Map<String, dynamic> ndefMap = nfcData;
+
+        if (ndefMap.containsKey('ndef')) {
+          var cachedMessageMap = ndefMap['ndef'];
+
+          if (cachedMessageMap.containsKey('cachedMessage')) {
+            var records = cachedMessageMap['cachedMessage'];
+
+
+              var payload = records['records'];
+
+
+              for (var entry in payload) {
+                var payloadBytes = entry['payload'];
+                String text = utf8.decode(payloadBytes);
+                print(text);
+
+              }
+
+          }
+        }
+      });
+    } else {
+      print('NFC not available.');
+    }
+  } catch (e) {
+    print('Error reading NFC: $e');
+  }
+}
+
