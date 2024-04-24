@@ -40,6 +40,7 @@ void _makeAPICall_post() async {
 }
 
 class RefillScreen extends StatelessWidget {
+  String _text = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,27 +103,34 @@ class RefillScreen extends StatelessWidget {
                 // Set the background color to blue
               ),
             ),
+            SizedBox(height: 50.0), // Add spacing between elements
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Text(
+                'NFC Token: ${_text}',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15.0, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-}
+  void _startNFCReading() async {
+    try {
+      bool isAvailable = await NfcManager.instance.isAvailable();
+      if (isAvailable) {
+        NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+          var nfcData = tag.data as Map<String, dynamic>;
 
-void _startNFCReading() async {
-  try {
-    bool isAvailable = await NfcManager.instance.isAvailable();
-    if (isAvailable) {
-      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-        var nfcData = tag.data as Map<String, dynamic>;
+          Map<String, dynamic> ndefMap = nfcData;
 
-        Map<String, dynamic> ndefMap = nfcData;
+          if (ndefMap.containsKey('ndef')) {
+            var cachedMessageMap = ndefMap['ndef'];
 
-        if (ndefMap.containsKey('ndef')) {
-          var cachedMessageMap = ndefMap['ndef'];
-
-          if (cachedMessageMap.containsKey('cachedMessage')) {
-            var records = cachedMessageMap['cachedMessage'];
+            if (cachedMessageMap.containsKey('cachedMessage')) {
+              var records = cachedMessageMap['cachedMessage'];
 
 
               var payload = records['records'];
@@ -131,18 +139,24 @@ void _startNFCReading() async {
               for (var entry in payload) {
                 var payloadBytes = entry['payload'];
                 String text = utf8.decode(payloadBytes);
-                print(text);
+                text = text.substring(3);
+                _text = text;
 
               }
 
+
+            }
           }
-        }
-      });
-    } else {
-      print('NFC not available.');
+        });
+      } else {
+        print('NFC not available.');
+      }
+    } catch (e) {
+      print('Error reading NFC: $e');
     }
-  } catch (e) {
-    print('Error reading NFC: $e');
   }
+
 }
+
+
 
