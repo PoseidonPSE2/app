@@ -1,17 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:nfc_manager/nfc_manager.dart';
 
+
 String _responseText = '';
 
-void _makeAPICall_post() async {
+void _makeAPICall_post(String text) async {
   print("go");
 
   Map<String, dynamic> data = {
     'water': 600, // Example value, replace with your actual data
     'user_id': 1, // Example value, replace with your actual data
-    'water_type': 'sprudlig' // Example value, replace with your actual data
+    'water_type': text // Example value, replace with your actual data
   };
 
   print("create json body");
@@ -29,7 +32,7 @@ void _makeAPICall_post() async {
   );
 
   print("wait for answer");
-  if (response.statusCode == 200) {
+  if (response.statusCode ==200) {
     // Handle successful API call
     _responseText = response.body;
   } else {
@@ -41,6 +44,8 @@ void _makeAPICall_post() async {
 
 class RefillScreen extends StatelessWidget {
   String _text = '';
+  ValueNotifier<dynamic> result = ValueNotifier(null);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +86,7 @@ class RefillScreen extends StatelessWidget {
             ),
             SizedBox(height: 40.0), // Add spacing between elements
             ElevatedButton(
-              onPressed: _makeAPICall_post,
+              onPressed: _startNFCReading,
               child: Text(
                 'Manuell auffüllen',
                 style: TextStyle(fontSize: 15.0, color: Colors.white),
@@ -92,17 +97,6 @@ class RefillScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.0), // Add spacing between elements
-            ElevatedButton(
-              onPressed: _startNFCReading,
-              child: Text(
-                'NFC',
-                style: TextStyle(fontSize: 15.0, color: Colors.white),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                // Set the background color to blue
-              ),
-            ),
             SizedBox(height: 50.0), // Add spacing between elements
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -117,6 +111,7 @@ class RefillScreen extends StatelessWidget {
       ),
     );
   }
+
   void _startNFCReading() async {
     try {
       bool isAvailable = await NfcManager.instance.isAvailable();
@@ -141,10 +136,8 @@ class RefillScreen extends StatelessWidget {
                 String text = utf8.decode(payloadBytes);
                 text = text.substring(3);
                 _text = text;
-
+                _makeAPICall_post(text);
               }
-
-
             }
           }
         });
@@ -155,6 +148,7 @@ class RefillScreen extends StatelessWidget {
       print('Error reading NFC: $e');
     }
   }
+
 
 }
 
