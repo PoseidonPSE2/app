@@ -5,16 +5,15 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:nfc_manager/nfc_manager.dart';
 
-
 String _responseText = '';
 
-void _makeAPICall_post(String text) async {
+void _makeAPICall_post(String stationsName, double waterAmount) async {
   print("go");
 
   Map<String, dynamic> data = {
-    'water': 600, // Example value, replace with your actual data
+    'water': waterAmount, // Example value, replace with your actual data
     'user_id': 1, // Example value, replace with your actual data
-    'water_type': text // Example value, replace with your actual data
+    'water_type': stationsName // Example value, replace with your actual data
   };
 
   print("create json body");
@@ -30,9 +29,10 @@ void _makeAPICall_post(String text) async {
     },
     body: body,
   );
+  print(body);
 
   print("wait for answer");
-  if (response.statusCode ==200) {
+  if (response.statusCode == 200) {
     // Handle successful API call
     _responseText = response.body;
   } else {
@@ -42,15 +42,71 @@ void _makeAPICall_post(String text) async {
   print(_responseText);
 }
 
-class RefillScreen extends StatelessWidget {
+class RefillScreen extends StatefulWidget {
+  @override
+  _RefillScreenState createState() => _RefillScreenState();
+}
+
+class _RefillScreenState extends State<RefillScreen> {
   String _text = '';
-  ValueNotifier<dynamic> result = ValueNotifier(null);
+  final ValueNotifier<String> _nfcResult = ValueNotifier(''); // Updated type
+  double _waterAmount = 0.0;
+
+  Future<void> _showWaterInputDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user can tap outside to dismiss
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Wassermenge eingeben'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "z.B. 1.5",
+            ),
+            onChanged: (value) =>
+                setState(() => _waterAmount = double.parse(value)),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Abbrechen'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text('Bestätigen'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _makeAPICall_post(_text, _waterAmount);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen for changes in the ValueNotifier
+    _nfcResult.addListener(() {
+      setState(() {
+        _text = _nfcResult.value;
+      });
+    });
+    _startNFCReading();
+  }
+
+  @override
+  void dispose() {
+    _nfcResult.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(8, 52, 76, 1),
-      // Set the background color to blue
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -63,49 +119,19 @@ class RefillScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 40.0,
                   color: Colors.white,
-                ), // Adjust font size as needed
+                ),
               ),
             ),
-            SizedBox(height: 50.0), // Add spacing between elements
+            SizedBox(height: 50.0),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
-                "Bitte halte dein Smartphone an das NDFC Lesegerät der Refill-Station.",
+                "Bitte halte dein Smartphone an das NFC Lesegerät der Refill-Station.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15.0, color: Colors.white),
               ),
             ),
-            SizedBox(height: 30.0), // Add spacing between elements
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Text(
-                "Falls die Refill-Station über keinen NFC-Reader verfügt, drücke bitte unten auf den Button.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15.0, color: Colors.white),
-              ),
-            ),
-            SizedBox(height: 40.0), // Add spacing between elements
-            ElevatedButton(
-              onPressed: _startNFCReading,
-              child: Text(
-                'Manuell auffüllen',
-                style: TextStyle(fontSize: 15.0, color: Colors.white),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                // Set the background color to blue
-              ),
-            ),
-            SizedBox(height: 20.0), // Add spacing between elements
-            SizedBox(height: 50.0), // Add spacing between elements
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Text(
-                'NFC Token: ${_text}',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15.0, color: Colors.white),
-              ),
-            ),
+            SizedBox(height: 40.0),
           ],
         ),
       ),
@@ -127,19 +153,16 @@ class RefillScreen extends StatelessWidget {
             if (cachedMessageMap.containsKey('cachedMessage')) {
               var records = cachedMessageMap['cachedMessage'];
 
-
               var payload = records['records'];
-
 
               for (var entry in payload) {
                 var payloadBytes = entry['payload'];
                 String text = utf8.decode(payloadBytes);
                 text = text.substring(3);
-                _text = text;
-                _makeAPICall_post(text);
               }
             }
           }
+          _showWaterInputDialog();
         });
       } else {
         print('NFC not available.');
@@ -148,9 +171,4 @@ class RefillScreen extends StatelessWidget {
       print('Error reading NFC: $e');
     }
   }
-
-
 }
-
-
-
