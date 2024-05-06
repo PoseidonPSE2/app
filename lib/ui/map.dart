@@ -41,13 +41,29 @@ class _MapWidgetState extends State<MapScreen> {
     setState(() {
       waterStations = dummyData
           .map((station) => WaterStationMarker(
-                position: LatLng((station["latitude"] as double),
-                    (station["longitude"] as double)),
-                name: station["name"] as String,
-                description: station["description"] as String,
-              ))
+        position: LatLng((station["latitude"] as double),
+            (station["longitude"] as double)),
+        name: station["name"] as String,
+        description: station["description"] as String,
+      ))
           .toList();
     });
+  }
+
+  void showMarkerInfoPopup(BuildContext context, String name, String description) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(name),
+        content: Text(description),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -65,7 +81,15 @@ class _MapWidgetState extends State<MapScreen> {
           subdomains: ['a', 'b', 'c'],
         ),
         MarkerLayer(
-          markers: waterStations,
+          markers: waterStations.map((marker) => Marker(
+            point: marker.position,
+            width: 80.0,
+            height: 80.0,
+            child: GestureDetector(
+              onTap: () => showMarkerInfoPopup(context, marker.name, marker.description),
+              child: marker.child,
+            ),
+          )).toList(),
         ),
       ],
     );
@@ -76,6 +100,7 @@ class WaterStationMarker extends Marker {
   final String name;
   final String description;
   final LatLng position;
+
   static final Widget markerChild = Container(
     child: Icon(
       Icons.water_drop,
