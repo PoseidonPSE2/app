@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hello_worl2/ui/screens/ContributionCommunity.dart';
+import 'package:hello_worl2/ui/screens/ContributionKaiserslautern.dart';
+import 'package:hello_worl2/ui/screens/myProgress.dart';
 import 'package:hello_worl2/ui/widgets.dart/customListTile.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -23,15 +26,39 @@ class MyAppState extends State<SettingsScreen> {
               children: [
                 CustomListTile(
                   text: 'Mein Progress',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MyProgress(
+                          input: ["123", "14,95€", "2 kg"],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 CustomListTile(
                   text: 'Beitrag in Kaiserslautern',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ContributionKaiserslautern(
+                          input: ["14x", "65x"],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 CustomListTile(
                   text: 'Community Beitrag',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ContributionCommunity(
+                          input: ["149", "2.000kg", "3%"],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 CustomListTile(
                   text: 'Verbrauchertest',
