@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hello_worl2/ui/screens/settings.dart';
 import 'map.dart'; // Import each screen file
-import 'settings.dart';
 import 'station.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,6 +17,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -39,8 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: Text('Refill - Architecture Offline',
-              style: TextStyle(color: Colors.white)),
+          title: const Text('Refill', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.lightBlueAccent),
       //backgroundColor: Color.fromRGBO(80,153,183,255),
 
@@ -49,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // Persistent navbar
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
             label: 'Map',

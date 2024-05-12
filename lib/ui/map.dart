@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
   _MapWidgetState createState() => _MapWidgetState();
 }
@@ -51,23 +53,24 @@ class _MapWidgetState extends State<MapScreen> {
     setState(() {
       waterStations = dummyData
           .map((station) => WaterStationMarker(
-        position: LatLng((station["latitude"] as double),
-            (station["longitude"] as double)),
-        name: station["name"] as String,
-        description: station["description"] as String,
-        //image: station["image"] as String,
-        address: station["address"] as String,
-        likes: station["likes"] as int,
-        isActive: station["isActive"] as bool,
-        isAvailable: station["isAvailable"] as bool,
-      ))
+                position: LatLng((station["latitude"] as double),
+                    (station["longitude"] as double)),
+                name: station["name"] as String,
+                description: station["description"] as String,
+                //image: station["image"] as String,
+                address: station["address"] as String,
+                likes: station["likes"] as int,
+                isActive: station["isActive"] as bool,
+                isAvailable: station["isAvailable"] as bool,
+              ))
           .toList();
     });
   }
 
   void showMarkerInfoPopup(BuildContext context, WaterStationMarker marker) {
     final isActiveText = marker.isActive ? 'Aktiv' : 'Inaktiv';
-    final isAvailableText = marker.isAvailable ? 'Verfügbar' : 'Nicht verfügbar';
+    final isAvailableText =
+        marker.isAvailable ? 'Verfügbar' : 'Nicht verfügbar';
 
     showDialog(
       context: context,
@@ -75,7 +78,7 @@ class _MapWidgetState extends State<MapScreen> {
         title: Row(
           children: [
             //Image.network(marker.image, width: 100, height: 100),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(child: Text(marker.name)),
           ],
         ),
@@ -91,7 +94,7 @@ class _MapWidgetState extends State<MapScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Close'),
+            child: const Text('Close'),
           ),
           TextButton(
             onPressed: () {
@@ -99,7 +102,7 @@ class _MapWidgetState extends State<MapScreen> {
               // You can navigate to another screen or make an API call here
               print('Report error button pressed for ${marker.name}');
             },
-            child: Text('Fehler melden'),
+            child: const Text('Fehler melden'),
           ),
         ],
       ),
@@ -109,7 +112,7 @@ class _MapWidgetState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      options: MapOptions(
+      options: const MapOptions(
         initialCenter: LatLng(49.440067, 7.749126),
         initialZoom: 13,
         minZoom: 10,
@@ -118,18 +121,20 @@ class _MapWidgetState extends State<MapScreen> {
       children: [
         TileLayer(
           urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c'],
+          subdomains: const ['a', 'b', 'c'],
         ),
         MarkerLayer(
-          markers: waterStations.map((marker) => Marker(
-            point: marker.position, // Use the existing point property
-            width: 80.0,
-            height: 80.0,
-            child: GestureDetector(
-              onTap: () => showMarkerInfoPopup(context, marker),
-              child: marker.child,
-            ),
-          )).toList(),
+          markers: waterStations
+              .map((marker) => Marker(
+                    point: marker.position, // Use the existing point property
+                    width: 80.0,
+                    height: 80.0,
+                    child: GestureDetector(
+                      onTap: () => showMarkerInfoPopup(context, marker),
+                      child: marker.child,
+                    ),
+                  ))
+              .toList(),
         ),
       ],
     );
@@ -147,7 +152,7 @@ class WaterStationMarker {
   final bool isAvailable;
 
   static final Widget markerChild = Container(
-    child: Icon(
+    child: const Icon(
       Icons.water_drop,
       size: 40,
       color: Colors.blueAccent,
