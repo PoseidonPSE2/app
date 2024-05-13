@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -60,10 +59,11 @@ class MyAppState extends State<SettingsScreen> {
                           mainAxisSpacing: 4,
                           children: [
                             ElevatedButton(
-                                onPressed: _tagRead, child: Text('Tag Read')),
+                                onPressed: _tagRead,
+                                child: const Text('Tag Read')),
                             ElevatedButton(
                                 onPressed: _ndefWrite,
-                                child: Text('Ndef Write')),
+                                child: const Text('Ndef Write')),
                           ],
                         ),
                       ),

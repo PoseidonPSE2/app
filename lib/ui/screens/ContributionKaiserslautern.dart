@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hello_worl2/ui/widgets.dart/customText.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

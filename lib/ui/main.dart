@@ -3,14 +3,14 @@ import 'package:hello_worl2/ui/screens/settings.dart';
 import 'map.dart'; // Import each screen file
 import 'station.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyHomePage(), // Set the initial screen
     );
   }
@@ -27,9 +27,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0; // Track the current selected index in navbar
 
   final List<Widget> _screens = [
-    MapScreen(), // List of screens to navigate between
-    RefillScreen(),
-    SettingsScreen(),
+    const MapScreen(), // List of screens to navigate between
+    const RefillScreen(),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
