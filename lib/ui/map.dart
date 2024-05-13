@@ -32,7 +32,12 @@ class _MapWidgetState extends State<MapScreen> {
         "address": "Jacobstarße 15, 67655 Kaiserslautern",
         "likes": 3,
         "isActive": true,
-        "isAvailable": true
+        "isAvailable": true,
+        "rating": {
+          " cleanliness": 3,
+          " accessibility": 2,
+          " Water quality": 1,
+        }
       },
       {
         "name": "Wasserstation Lauterstraße",
@@ -43,7 +48,12 @@ class _MapWidgetState extends State<MapScreen> {
         "address": "Lauferstraße 12, 67655 Kaiserslautern",
         "likes": 1,
         "isActive": true,
-        "isAvailable": false
+        "isAvailable": false,
+        "rating": {
+          " cleanliness": 3,
+          " accessibility": 2,
+          " Water quality": 1,
+        }
       },
       // Add more water stations here...
     ];
@@ -55,11 +65,11 @@ class _MapWidgetState extends State<MapScreen> {
             (station["longitude"] as double)),
         name: station["name"] as String,
         description: station["description"] as String,
-        //image: station["image"] as String,
         address: station["address"] as String,
         likes: station["likes"] as int,
         isActive: station["isActive"] as bool,
         isAvailable: station["isAvailable"] as bool,
+        rating: station["rating"] as Map<String, int>,
       ))
           .toList();
     });
@@ -68,14 +78,12 @@ class _MapWidgetState extends State<MapScreen> {
   void showMarkerInfoPopup(BuildContext context, WaterStationMarker marker) {
     final isActiveText = marker.isActive ? 'Aktiv' : 'Inaktiv';
     final isAvailableText = marker.isAvailable ? 'Verfügbar' : 'Nicht verfügbar';
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Row(
           children: [
             //Image.network(marker.image, width: 100, height: 100),
-            SizedBox(width: 10),
             Expanded(child: Text(marker.name)),
           ],
         ),
@@ -86,6 +94,9 @@ class _MapWidgetState extends State<MapScreen> {
             Text(marker.address),
             Text('Likes: ${marker.likes}'),
             Text('Status: $isActiveText - $isAvailableText'),
+            Text('cleanliness: ${marker.rating[' cleanliness']}'),
+            Text('accessibility: ${marker.rating[' accessibility']}'),
+            Text('Water quality: ${marker.rating[' Water quality']}'),
           ],
         ),
         actions: [
@@ -145,6 +156,7 @@ class WaterStationMarker {
   final int likes;
   final bool isActive;
   final bool isAvailable;
+  final Map<String, int> rating;
 
   static final Widget markerChild = Container(
     child: Icon(
@@ -163,6 +175,7 @@ class WaterStationMarker {
     required this.likes,
     required this.isActive,
     required this.isAvailable,
+    required this.rating,
   }) : super();
   Widget get child => markerChild;
 }
