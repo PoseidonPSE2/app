@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -7,9 +5,9 @@ import 'package:nfc_manager/nfc_manager.dart';
 
 String _responseText = '';
 
-
-
 class RefillScreen extends StatefulWidget {
+  const RefillScreen({super.key});
+
   @override
   _RefillScreenState createState() => _RefillScreenState();
 }
@@ -20,17 +18,16 @@ class _RefillScreenState extends State<RefillScreen> {
   double _waterAmount = 0.0;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
   Future<void> _showWaterInputDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user can tap outside to dismiss
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Wassermenge eingeben'),
+          title: const Text('Wassermenge eingeben'),
           content: TextField(
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "z.B. 1.5",
             ),
             onChanged: (value) =>
@@ -38,11 +35,11 @@ class _RefillScreenState extends State<RefillScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Abbrechen'),
+              child: const Text('Abbrechen'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text('Bestätigen'),
+              child: const Text('Bestätigen'),
               onPressed: () {
                 Navigator.of(context).pop();
                 String water = _waterAmount.toString();
@@ -77,13 +74,13 @@ class _RefillScreenState extends State<RefillScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: navigatorKey,
-      backgroundColor: Color.fromRGBO(8, 52, 76, 1),
-      body: Center(
+      backgroundColor: const Color(0xff1c3845),
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 'Auffüllstation in der Nähe',
                 textAlign: TextAlign.center,
@@ -95,7 +92,7 @@ class _RefillScreenState extends State<RefillScreen> {
             ),
             SizedBox(height: 50.0),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 "Bitte halte dein Smartphone an das NFC Lesegerät der Refill-Station.",
                 textAlign: TextAlign.center,
@@ -114,7 +111,7 @@ class _RefillScreenState extends State<RefillScreen> {
       bool isAvailable = await NfcManager.instance.isAvailable();
       if (isAvailable) {
         NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-          var nfcData = tag.data as Map<String, dynamic>;
+          var nfcData = tag.data;
 
           Map<String, dynamic> ndefMap = nfcData;
 
@@ -143,6 +140,7 @@ class _RefillScreenState extends State<RefillScreen> {
       print('Error reading NFC: $e');
     }
   }
+
   void _makeAPICall_post(String stationsName, String waterAmount) async {
     print("go");
 
@@ -172,7 +170,7 @@ class _RefillScreenState extends State<RefillScreen> {
       // Handle successful API call
       _responseText = response.body;
       ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Erfolgreich! Daten an API gesendet.'),
           backgroundColor: Colors.green,
         ),
