@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/ui/screens/ContributionCommunity.dart';
-import 'package:hello_worl2/ui/screens/ContributionKaiserslautern.dart';
-import 'package:hello_worl2/ui/screens/myProgress.dart';
-import 'package:hello_worl2/ui/widgets.dart/customListTile.dart';
+import 'package:hello_worl2/pages/ContributionCommunity.dart';
+import 'package:hello_worl2/pages/ContributionKaiserslautern.dart';
+import 'package:hello_worl2/pages/myProgress.dart';
+import 'package:hello_worl2/widgets.dart/customListTile.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -12,12 +12,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class MyAppState extends State<SettingsScreen> {
-  ValueNotifier<dynamic> result = ValueNotifier(null);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff1c3845),
       body: Column(
         children: [
           const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
@@ -70,24 +67,23 @@ class MyAppState extends State<SettingsScreen> {
                 ),
                 CustomListTile(
                   text: 'Einstellung',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, "/");
+                  },
                 ),
               ],
             ),
           ),
-          const Text(
+          Text(
             "App Versions",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white, fontSize: 21, fontWeight: FontWeight.w500),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-          const Text(
-            "v0.0.1",
+          Text(
+            "v0.0.2",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Color.fromARGB(255, 102, 152, 226),
-                fontSize: 14,
-                fontWeight: FontWeight.w300),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 30))
         ],

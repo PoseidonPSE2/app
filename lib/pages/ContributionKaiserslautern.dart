@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/ui/widgets.dart/customText.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ContributionKaiserslautern extends StatelessWidget {
@@ -10,13 +9,11 @@ class ContributionKaiserslautern extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          title: const Text('Refill', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.lightBlueAccent),
-      backgroundColor: const Color(0xff1c3845),
+        centerTitle: true,
+        title: const Text(
+          'Refill',
+        ),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -25,11 +22,10 @@ class ContributionKaiserslautern extends StatelessWidget {
           const Padding(padding: EdgeInsets.all(10)),
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-            child: const CustomText(
-              text: "Alle Refillstationen in Kaiserslautern",
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
+            child: Text(
+              "Alle Refillstationen in Kaiserslautern",
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
             ),
           ),
           const Padding(padding: EdgeInsets.all(20)),
@@ -44,11 +40,9 @@ class ContributionKaiserslautern extends StatelessWidget {
                     color: Colors.white,
                     size: 40,
                   ),
-                  CustomText(
-                    text: input[0],
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    input[0],
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               ),
@@ -60,11 +54,9 @@ class ContributionKaiserslautern extends StatelessWidget {
                     color: Colors.white,
                     size: 40,
                   ),
-                  CustomText(
-                    text: input[1],
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    input[1],
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               ),
@@ -72,15 +64,10 @@ class ContributionKaiserslautern extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.all(30)),
           ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-              ),
               onPressed: () {},
-              child: const CustomText(
-                text: 'Zur Kaiserslautern Seite',
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
+              child: Text(
+                'Zur Kaiserslautern Seite',
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
         ],
       ),

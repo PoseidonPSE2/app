@@ -11,8 +11,7 @@ class CustomListTile extends StatelessWidget {
     return ListTile(
       title: Text(
         text,
-        style: const TextStyle(
-            color: Colors.white, fontSize: 21, fontWeight: FontWeight.w500),
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       onTap: onTap,
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),

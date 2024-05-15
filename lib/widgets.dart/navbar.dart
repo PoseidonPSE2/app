@@ -1,29 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/ui/screens/settings.dart';
-import 'map.dart'; // Import each screen file
-import 'station.dart';
+import 'package:hello_worl2/pages/settings.dart';
+import '../pages/map.dart'; // Import each screen file
+import '../pages/station.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class NavBar extends StatefulWidget {
+  const NavBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(), // Set the initial screen
-    );
-  }
+  _NavBarState createState() => _NavBarState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _NavBarState extends State<NavBar> {
   int _currentIndex = 0; // Track the current selected index in navbar
 
   final List<Widget> _screens = [
@@ -42,14 +29,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Refill', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.lightBlueAccent),
-      //backgroundColor: Color.fromRGBO(80,153,183,255),
-
-      body: _screens[_currentIndex], // Display current screen
+        centerTitle: true,
+        title: const Text('Refill'),
+      ),
+      body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        // Persistent navbar
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         items: const [
@@ -71,5 +55,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// Individual screens (replace content with your desired UI)
