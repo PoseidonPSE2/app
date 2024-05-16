@@ -9,7 +9,6 @@ class MyProgress extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        iconTheme: const IconThemeData(),
         title: const Text('Refill'),
       ),
       body: Column(

@@ -21,56 +21,44 @@ class MyAppState extends State<SettingsScreen> {
           Expanded(
             child: ListView(
               children: [
-                CustomListTile(
+                const CustomListTile(
                   text: 'Mein Progress',
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const MyProgress(
-                          input: ["123", "14,95€", "2 kg"],
-                        ),
-                      ),
-                    );
-                  },
+                  destination: MyProgress(input: ["123", "14,95€", "2 kg"]),
                 ),
-                CustomListTile(
+                const CustomListTile(
                   text: 'Beitrag in Kaiserslautern',
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ContributionKaiserslautern(
-                          input: ["14x", "65x"],
-                        ),
-                      ),
-                    );
-                  },
+                  destination: ContributionKaiserslautern(
+                    input: ["14x", "65x"],
+                  ),
                 ),
-                CustomListTile(
+                const CustomListTile(
                   text: 'Community Beitrag',
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ContributionCommunity(
-                          input: ["149", "2.000kg", "3%"],
-                        ),
-                      ),
-                    );
-                  },
+                  destination: ContributionCommunity(
+                    input: ["149", "2.000kg", "3%"],
+                  ),
                 ),
-                CustomListTile(
+                const CustomListTile(
                   text: 'Verbrauchertest',
-                  onTap: () {},
+                  destination: ContributionCommunity(
+                    input: ["149", "2.000kg", "3%"],
+                  ),
                 ),
-                CustomListTile(
+                const CustomListTile(
                   text: 'Meine Flasche',
-                  onTap: () {},
+                  destination: ContributionCommunity(
+                    input: ["149", "2.000kg", "3%"],
+                  ),
                 ),
-                CustomListTile(
-                  text: 'Einstellung',
+                ListTile(
+                  title: Text(
+                    'Einstellung',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, "/");
                   },
+                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                 ),
               ],
             ),

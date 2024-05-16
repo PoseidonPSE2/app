@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/login.dart';
-import 'package:hello_worl2/theme/custom_theme.dart';
-import 'package:hello_worl2/theme/util.dart';
+import 'package:hello_worl2/materialTheme/custom_theme.dart';
+import 'package:hello_worl2/materialTheme/util.dart';
+import 'package:hello_worl2/theme/theme.dart';
 import 'package:hello_worl2/widgets.dart/navbar.dart';
 
 void main() {
@@ -19,8 +20,8 @@ class MyApp extends StatelessWidget {
 
     MaterialTheme theme = MaterialTheme(textTheme);
     return MaterialApp(
-      theme: theme
-          .dark(), //brightness == Brightness.light ? theme.light() : theme.dark(),
+      theme: brightness == Brightness.light ? lightMode : lightMode,
+      //brightness == Brightness.light ? theme.light() : theme.dark(),
       home: Login(),
       routes: {
         '/home': (context) => const NavBar(),

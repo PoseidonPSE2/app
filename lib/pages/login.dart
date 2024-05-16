@@ -23,9 +23,16 @@ class Login extends StatelessWidget {
             padding: const EdgeInsets.all(15),
             child: TextField(
               controller: _textEditingController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'UserID',
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.secondary),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.secondary),
+                ),
+                hintText: 'UserID',
               ),
             ),
           ),

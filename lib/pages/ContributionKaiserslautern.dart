@@ -37,7 +37,6 @@ class ContributionKaiserslautern extends StatelessWidget {
                 children: <Widget>[
                   const FaIcon(
                     FontAwesomeIcons.handHoldingDroplet,
-                    color: Colors.white,
                     size: 40,
                   ),
                   Text(
@@ -51,7 +50,6 @@ class ContributionKaiserslautern extends StatelessWidget {
                 children: <Widget>[
                   const FaIcon(
                     FontAwesomeIcons.glassWaterDroplet,
-                    color: Colors.white,
                     size: 40,
                   ),
                   Text(
