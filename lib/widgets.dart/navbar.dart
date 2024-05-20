@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/pages/settings.dart';
-import '../pages/map.dart'; // Import each screen file
-import '../pages/station.dart';
+import 'package:hello_worl2/pages/navbar/settings.dart';
+import '../pages/navbar/map.dart'; // Import each screen file
+import '../pages/navbar/station.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});

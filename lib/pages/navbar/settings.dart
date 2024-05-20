@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/pages/ContributionCommunity.dart';
-import 'package:hello_worl2/pages/ContributionKaiserslautern.dart';
-import 'package:hello_worl2/pages/myProgress.dart';
+import 'package:hello_worl2/pages/settings/ContributionCommunity.dart';
+import 'package:hello_worl2/pages/settings/ContributionKaiserslautern.dart';
+import 'package:hello_worl2/pages/myBottle.dart';
+import 'package:hello_worl2/pages/settings/myProgress.dart';
 import 'package:hello_worl2/widgets.dart/customListTile.dart';
+import 'package:hello_worl2/widgets.dart/testingWidget.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -39,15 +41,11 @@ class MyAppState extends State<SettingsScreen> {
                 ),
                 const CustomListTile(
                   text: 'Verbrauchertest',
-                  destination: ContributionCommunity(
-                    input: ["149", "2.000kg", "3%"],
-                  ),
+                  destination: Testingwidget(),
                 ),
                 const CustomListTile(
                   text: 'Meine Flasche',
-                  destination: ContributionCommunity(
-                    input: ["149", "2.000kg", "3%"],
-                  ),
+                  destination: MyBottle(),
                 ),
                 ListTile(
                   title: Text(
@@ -55,8 +53,7 @@ class MyAppState extends State<SettingsScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, "/");
+                    Navigator.pushNamed(context, "/water_settings");
                   },
                   trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                 ),

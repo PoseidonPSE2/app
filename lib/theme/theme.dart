@@ -28,6 +28,7 @@ ThemeData darkMode = ThemeData(
     surface: const Color(0xff1c3845),
     primary: Colors.grey.shade800,
     secondary: Colors.grey.shade500,
+    tertiary: Colors.white,
   ),
   scaffoldBackgroundColor: Colors.grey.shade800,
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -40,4 +41,8 @@ ThemeData darkMode = ThemeData(
   iconTheme: const IconThemeData(
     color: Colors.white,
   ),
+  // chipTheme: ChipThemeData(
+  //   backgroundColor: const Color(0xff1c3845),
+  //   selectedColor: const Color(0xff1c3845),
+  // ),
 );

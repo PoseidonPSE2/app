@@ -44,6 +44,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   nfc_manager: ^3.4.0
   google_fonts: ^6.2.1
+  provider: ^6.1.2
 
 
 dev_dependencies:
@@ -72,6 +73,7 @@ flutter:
   assets:
     - assets/image/recycling.jpg
     - assets/image/frontpage.png
+    - assets/image/wasserspender.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

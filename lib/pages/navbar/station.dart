@@ -74,7 +74,6 @@ class _RefillScreenState extends State<RefillScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: navigatorKey,
-      backgroundColor: const Color(0xff1c3845),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
