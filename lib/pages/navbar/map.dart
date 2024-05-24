@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:hello_worl2/pages/WaterstationDetails.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapScreen extends StatefulWidget {
@@ -75,6 +76,15 @@ class _MapWidgetState extends State<MapScreen> {
     });
   }
 
+  void navigateToDetailsPage(BuildContext context, WaterStationMarker marker) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Waterstationdetails(marker: marker),
+      ),
+    );
+  }
+
   void showMarkerInfoPopup(BuildContext context, WaterStationMarker marker) {
     final isActiveText = marker.isActive ? 'Aktiv' : 'Inaktiv';
     final isAvailableText =
@@ -140,7 +150,7 @@ class _MapWidgetState extends State<MapScreen> {
                     width: 80.0,
                     height: 80.0,
                     child: GestureDetector(
-                      onTap: () => showMarkerInfoPopup(context, marker),
+                      onTap: () => navigateToDetailsPage(context, marker),
                       child: marker.child,
                     ),
                   ))
@@ -163,11 +173,15 @@ class WaterStationMarker {
   final Map<String, int> rating;
 
   static final Widget markerChild = Container(
-    child: const Icon(
+    child: Container(
+      child: Image.asset('assets/image/frontpage.png'),
+    ),
+    /*const Icon(
       Icons.water_drop,
       size: 40,
       color: Colors.blueAccent,
-    ),
+    ), */
+
   );
 
   WaterStationMarker({
@@ -181,5 +195,6 @@ class WaterStationMarker {
     required this.isAvailable,
     required this.rating,
   }) : super();
+
   Widget get child => markerChild;
 }
