@@ -98,21 +98,27 @@ class _WaterSettingsState extends State<WaterSettings> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              MyChoiceChip(
-                choiceItems: waterType,
-                onSelected: (value) {
-                  setState(() {
-                    selectedWaterType = value;
-                  });
-                },
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MyChoiceChip(
+                  choiceItems: waterType,
+                  onSelected: (value) {
+                    setState(() {
+                      selectedWaterType = value;
+                    });
+                  },
+                ),
               ),
-              MyChoiceChip(
-                choiceItems: waterDegree,
-                onSelected: (value) {
-                  setState(() {
-                    selectedWaterDegree = value;
-                  });
-                },
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MyChoiceChip(
+                  choiceItems: waterDegree,
+                  onSelected: (value) {
+                    setState(() {
+                      selectedWaterDegree = value;
+                    });
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -135,7 +141,6 @@ class _WaterSettingsState extends State<WaterSettings> {
                       context.read<BottleProvider>().addBottle(newBottle);
                       Navigator.pop(context);
                     } else {
-                      // Show error message if any field is not filled out
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Bitte füllen Sie alle Felder aus'),

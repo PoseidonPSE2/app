@@ -34,6 +34,7 @@ class _NavBarState extends State<NavBar> {
       ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         items: const [
