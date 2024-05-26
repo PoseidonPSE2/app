@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Reviewslider extends StatefulWidget {
-  const Reviewslider({Key? key, required reviewvalue}) : super(key: key);
+  const Reviewslider({Key? key}) : super(key: key);
 
   @override
   State<Reviewslider> createState() => _SliderState();
