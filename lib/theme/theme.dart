@@ -49,6 +49,5 @@ ThemeData darkMode = ThemeData(
       activeTickMarkColor: Colors.white,
       activeTrackColor: Colors.white,
       thumbColor: Colors.white, // Farbe des Daumens
-
-      // Weitere Eigenschaften ...
+      
     ));
