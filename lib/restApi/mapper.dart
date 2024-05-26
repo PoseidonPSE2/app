@@ -144,8 +144,6 @@ class RefillstationLike {
   }
 }
 
-
-
 class Contribution {
   final int amountFillings;
   final double savedMoney;
@@ -213,7 +211,7 @@ class Bottle {
   final int chipId;
   final double fillVolume;
   final WaterStationType waterType;
-  final List<int> pathImage;
+  final List<int>? pathImage;
   final String title;
   final String tagHardwareId;
 
@@ -221,7 +219,7 @@ class Bottle {
       {required this.chipId,
       required this.fillVolume,
       required this.waterType,
-      required this.pathImage,
+      this.pathImage,
       required this.title,
       required this.tagHardwareId});
 

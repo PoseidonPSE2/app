@@ -5,8 +5,8 @@ import 'navbar/map.dart';
 
 
 class Waterstationreview extends StatelessWidget {
-
-  const Waterstationreview({super.key});
+  final WaterStationMarker marker;
+  const Waterstationreview({super.key, required this.marker});
 
 
 
@@ -22,9 +22,9 @@ class Waterstationreview extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Reviewslider(),
-                const Reviewslider(),
-                const Reviewslider(),
+                const Reviewslider(0),
+                const Reviewslider(0),
+                const Reviewslider(0),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 20,

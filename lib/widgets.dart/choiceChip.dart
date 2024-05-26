@@ -19,7 +19,12 @@ class _MyChoiceChipState extends State<MyChoiceChip> {
       spacing: 8.0,
       children: widget.choiceItems.map((choice) {
         return ChoiceChip(
-          label: Text(choice),
+          label: Text(
+            choice,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
+          ),
           selected: selectedChoice == choice,
           onSelected: (selected) {
             setState(() {

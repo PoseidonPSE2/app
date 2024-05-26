@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/widgets.dart/bottleTile.dart';
 
 class MyBottle extends StatefulWidget {
@@ -17,29 +16,33 @@ class _MyBottleState extends State<MyBottle> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Meine Flaschen',
-        ),
+        title: const Text('Meine Flaschen'),
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.45,
+          Expanded(
             child: Consumer<BottleProvider>(
               builder: (context, bottleProvider, child) {
                 return bottleProvider.bottles.isEmpty
                     ? Center(
                         child: Text(
                           "Erstelle neue Wasserflaschen...",
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       )
-                    : ListView.builder(
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.75,
+                        ),
                         itemCount: bottleProvider.bottles.length,
-                        scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return BottleTile(
-                              bottle: bottleProvider.bottles[index]);
+                            bottle: bottleProvider.bottles[index],
+                          );
                         },
                       );
               },
@@ -56,6 +59,9 @@ class _MyBottleState extends State<MyBottle> {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(30),
           ),
         ],
       ),
