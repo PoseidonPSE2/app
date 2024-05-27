@@ -50,7 +50,8 @@ class Waterstationdetails extends StatelessWidget {
                           },
                           child: Text(
                             'Ein Problem melden',
-                            style: Theme.of(context).textTheme.labelMedium,
+                            style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(decoration: TextDecoration.underline),
                           ),
                         ))
                   ],
