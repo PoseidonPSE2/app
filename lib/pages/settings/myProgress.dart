@@ -16,7 +16,7 @@ class MyProgress extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Image(
-            image: AssetImage("assets/recycling.jpg"),
+            image: AssetImage("assets/image/recycling.jpg"),
           ),
           const Padding(padding: EdgeInsets.all(10)),
           Container(
