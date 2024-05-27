@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Reviewslider extends StatefulWidget {
-  const Reviewslider({Key? key}) : super(key: key);
+  final double initialValue;
+  const Reviewslider({Key? key, required this.initialValue}) : super(key: key);
 
   @override
   State<Reviewslider> createState() => _SliderState();
@@ -9,6 +10,12 @@ class Reviewslider extends StatefulWidget {
 
 class _SliderState extends State<Reviewslider> {
   double _currentSliderValue = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSliderValue = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
