@@ -54,8 +54,7 @@ class Waterstationdetails extends StatelessWidget {
                                 .textTheme
                                 .labelMedium
                                 ?.copyWith(
-                                  decoration: TextDecoration.underline,
-                                ),
+                                    decoration: TextDecoration.underline),
                           ),
                         ))
                   ],

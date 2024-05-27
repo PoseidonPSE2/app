@@ -21,9 +21,21 @@ class Waterstationreview extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Reviewslider(),
-                const Reviewslider(),
-                const Reviewslider(),
+                Text(
+                  'Sauberkeit',
+                  style: Theme.of(context).textTheme.labelLarge
+                ),
+                const Reviewslider(initialValue: 3.5),
+                Text(
+                    'Barrierefreiheit',
+                    style: Theme.of(context).textTheme.labelLarge
+                ),
+                const Reviewslider(initialValue: 3.5),
+                Text(
+                    'Wasserqualität',
+                    style: Theme.of(context).textTheme.labelLarge
+                ),
+                const Reviewslider(initialValue: 3.5),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 20,

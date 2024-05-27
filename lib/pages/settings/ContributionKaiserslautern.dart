@@ -18,7 +18,7 @@ class ContributionKaiserslautern extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Image(image: AssetImage("assets/recycling.jpg")),
+          const Image(image: AssetImage("assets/image/recycling.jpg")),
           const Padding(padding: EdgeInsets.all(10)),
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
