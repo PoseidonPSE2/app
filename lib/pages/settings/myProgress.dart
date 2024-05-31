@@ -26,6 +26,33 @@ class _MyProgressState extends State<MyProgress> {
     futureContribution = userContributionService.fetchUserContribution(user!);
   }
 
+  String formatMoney(int amount) {
+    int euro = amount ~/ 100;
+    int cent = amount % 100;
+
+    String centString = cent.toString().padLeft(2, '0');
+
+    return '$euro,$centString€';
+  }
+
+  String formatVolume(int milliliters) {
+    if (milliliters < 1000) {
+      return '$milliliters ml';
+    } else {
+      double liters = milliliters / 1000;
+      return '${liters.toStringAsFixed(liters.truncateToDouble() == liters ? 0 : 2)} Liter';
+    }
+  }
+
+  String formatWeight(int grams) {
+    if (grams < 1000) {
+      return '${grams}g';
+    } else {
+      double kilograms = grams / 1000;
+      return '${kilograms.toStringAsFixed(kilograms.truncateToDouble() == kilograms ? 0 : 2)}kg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +90,7 @@ class _MyProgressState extends State<MyProgress> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                   child: Text(
-                    "Du hast insgesamt ${data['amountWater']}ml Wasser gefüllt.",
+                    "Du hast insgesamt ${formatVolume(data['amountWater'])} Wasser gefüllt.",
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -71,7 +98,7 @@ class _MyProgressState extends State<MyProgress> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Text(
-                    'Das entspricht ${data['savedMoney']} gesparten Euro und ${data['savedTrash']} an Müll verhindert',
+                    'Das entspricht ${formatMoney(data['savedMoney'])} gesparten Euro und ${formatWeight(data['savedTrash'])} an Müll verhindert',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),

@@ -1,5 +1,5 @@
 class User {
-  final int? userId;
+  final int userId;
 
-  User({this.userId});
+  User({required this.userId});
 }

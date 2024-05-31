@@ -23,3 +23,21 @@ class NewBottleService {
     }
   }
 }
+
+class BottleService {
+  static const String url = 'https://poseidon-backend.fly.dev/bottles';
+
+  Future<List<Bottle>> fetchBottles() async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      print("Raw JSON response: $data");
+
+      List<Bottle> bottles = data.map((item) => Bottle.fromJson(item)).toList();
+
+      return bottles;
+    } else {
+      throw Exception('Failed to load bottles');
+    }
+  }
+}

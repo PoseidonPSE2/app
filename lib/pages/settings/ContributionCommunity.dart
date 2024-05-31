@@ -18,6 +18,28 @@ class _CommunityContributionScreenState
     futureContribution = communityService.fetchCommunityContribution();
   }
 
+  String formatMoney(double amount) {
+    int euro = amount.truncate();
+    int cent = ((amount - euro) * 100).round();
+
+    return '$euro,$cent€';
+  }
+
+  String formatVolume(int milliliters) {
+    if (milliliters < 1000) {
+      return '$milliliters ml';
+    } else {
+      double liters = milliliters / 1000;
+      return '${liters.toStringAsFixed(liters.truncateToDouble() == liters ? 0 : 1)} Liter';
+    }
+  }
+
+  String formatWeight(double grams) {
+    int kg = grams.truncate();
+    int g = ((grams - kg) * 100).round();
+    return '$kg,${g}kg';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +67,7 @@ class _CommunityContributionScreenState
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                   child: Text(
-                    "Du bist einer von ${data['amountUser'] + 1} aktiven Refillern!",
+                    "Du bist einer von ${data['amountUser']} aktiven Refillern!",
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -53,7 +75,7 @@ class _CommunityContributionScreenState
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Text(
-                    'Gemeinsam habt ihr ${data['savedTrash']} an Müll und Plastik verhindert.',
+                    'Gemeinsam habt ihr ${formatWeight(data['savedTrash'])} an Müll und Plastik verhindert.',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -61,7 +83,15 @@ class _CommunityContributionScreenState
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Text(
-                    'Ihr habt insgesamt ${data['amountFillings']} Füllungen durchgeführt und dabei ${data['savedMoney']} gespart.',
+                    'Ihr habt insgesamt ${formatVolume(data['amountWater'])} Wasser gefüllt.',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Text(
+                    'Ihr habt insgesamt ${data['amountFillings']} Füllungen durchgeführt und dabei ${formatMoney(data['savedMoney'])} gespart.',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
