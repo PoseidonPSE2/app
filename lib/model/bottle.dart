@@ -1,52 +1,42 @@
 class Bottle {
-  String _title;
-  String _fill_volume;
-  String _water_type;
-  String _water_degree;
-  String _tag_hardware_id;
-  String? _path_image;
+  final int? chipId;
+  final double fillVolume;
+  final String waterType;
+  final List<int>? pathImage;
+  final String title;
+  final String hardwareID;
+  final int? userId;
 
-  Bottle({
-    required String title,
-    required String fill_volume,
-    required String water_type,
-    required String tag_hardware_id,
-    String? path_image,
-    required String water_degree,
-  })  : _title = title,
-        _fill_volume = fill_volume,
-        _water_type = water_type,
-        _tag_hardware_id = tag_hardware_id,
-        _path_image = path_image,
-        _water_degree = water_degree;
+  Bottle(
+      {this.chipId,
+      required this.fillVolume,
+      required this.waterType,
+      this.pathImage,
+      required this.title,
+      required this.hardwareID,
+      this.userId});
 
-  String get title => _title;
-  set title(String value) {
-    _title = value;
+  factory Bottle.fromJson(Map<String, dynamic> json) {
+    return Bottle(
+      chipId: json['chipId'] as int,
+      fillVolume: json['fillVolume'] as double,
+      waterType: json['waterType'] as String,
+      pathImage: json['pathImage'] as List<int>,
+      title: json['title'] as String,
+      hardwareID: json['tagHardwareId'] as String,
+      userId: json['userId'] as int,
+    );
   }
 
-  String get fill_volume => _fill_volume;
-  set fill_volume(String value) {
-    _fill_volume = value;
-  }
-
-  String get water_type => _water_type;
-  set water_type(String value) {
-    _water_type = value;
-  }
-
-  String get tag_hardware_id => _tag_hardware_id;
-  set tag_hardware_id(String value) {
-    _tag_hardware_id = value;
-  }
-
-  String? get path_image => _path_image;
-  set path_image(String? value) {
-    _path_image = value;
-  }
-
-  String get water_degree => _water_degree;
-  set water_degree(String value) {
-    _water_degree = value;
+  Map<String, dynamic> toJson() {
+    return {
+      'chipId': chipId,
+      'fillVolume': fillVolume.round(),
+      'waterType': waterType,
+      'pathImage': pathImage,
+      'title': title,
+      'hardwareID': hardwareID,
+      'userId': userId,
+    };
   }
 }

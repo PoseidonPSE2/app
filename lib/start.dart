@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_worl2/pages/settings/SettingsScreen.dart';
 import 'package:hello_worl2/pages/waterSettings.dart';
 import 'package:hello_worl2/pages/other/login.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => const NavBar(),
         '/water_settings': (context) => const WaterSettings(),
+        '/test': (context) => UserListScreen(),
       },
     );
   }

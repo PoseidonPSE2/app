@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 
-void main() => runApp(MaterialApp(home: Example()));
-
-class Example extends StatefulWidget {
+class WaterloadingAnimation extends StatefulWidget {
   @override
-  _ExampleState createState() => _ExampleState();
+  _WaterloadingAnimationState createState() => _WaterloadingAnimationState();
 }
 
-class _ExampleState extends State<Example> with SingleTickerProviderStateMixin {
+class _WaterloadingAnimationState extends State<WaterloadingAnimation>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _isFull = false;
@@ -34,7 +33,7 @@ class _ExampleState extends State<Example> with SingleTickerProviderStateMixin {
           // Show SnackBar when animation is complete
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('The water bottle is full!'),
+              content: Text('Die Flasche ist voll!'),
             ),
           );
         }
@@ -59,7 +58,6 @@ class _ExampleState extends State<Example> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: Text("Water Bottle Indicator"),
       ),
-      backgroundColor: Colors.amber,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -67,10 +65,13 @@ class _ExampleState extends State<Example> with SingleTickerProviderStateMixin {
             ElevatedButton(
               onPressed:
                   _isFull ? null : _startAnimation, // Disable button when full
-              child: Text('Start Animation'),
+              child: Text(
+                'Start Animation',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
-            SizedBox(height: 20),
-            Container(
+            const SizedBox(height: 20),
+            SizedBox(
               width: 200,
               height: 400,
               child: AnimatedBuilder(

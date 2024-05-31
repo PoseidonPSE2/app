@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hello_worl2/model/bottle.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:hello_worl2/restApi/mapper.dart';
@@ -23,8 +24,7 @@ class ApiService {
     }
   }
 
-  Future<List<RefillStation>> getRefillstationById(
-      int refillstationId) async {
+  Future<List<RefillStation>> getRefillstationById(int refillstationId) async {
     String url = "$_baseUrl/getRefillstationById/$refillstationId";
     final response = await http.get(Uri.parse(url));
 
@@ -117,9 +117,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => Contribution.fromJson(station))
-          .toList();
+      return jsonBody.map((station) => Contribution.fromJson(station)).toList();
     } else {
       throw Exception(
           'Failed to fetch contribution community: ${response.statusCode}');
@@ -139,15 +137,13 @@ class ApiService {
     } else {}
   }
 
-  Future<List<Contribution>> getContributionByUser(int userId ) async {
+  Future<List<Contribution>> getContributionByUser(int userId) async {
     String url = "$_baseUrl/getContributionByUser/$userId";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => Contribution.fromJson(station))
-          .toList();
+      return jsonBody.map((station) => Contribution.fromJson(station)).toList();
     } else {
       throw Exception(
           'Failed to fetch contribution from user: ${response.statusCode}');
@@ -203,9 +199,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => Bottle.fromJson(station))
-          .toList();
+      return jsonBody.map((station) => Bottle.fromJson(station)).toList();
     } else {
       throw Exception(
           'Failed to fetch bottle by user id: ${response.statusCode}');

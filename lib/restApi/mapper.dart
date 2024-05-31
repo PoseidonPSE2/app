@@ -207,34 +207,6 @@ class ConsumerTestAverage {
   }
 }
 
-class Bottle {
-  final int chipId;
-  final double fillVolume;
-  final WaterStationType waterType;
-  final List<int>? pathImage;
-  final String title;
-  final String tagHardwareId;
-
-  Bottle(
-      {required this.chipId,
-      required this.fillVolume,
-      required this.waterType,
-      this.pathImage,
-      required this.title,
-      required this.tagHardwareId});
-
-  factory Bottle.fromJson(Map<String, dynamic> json) {
-    return Bottle(
-      chipId: json['chipId'] as int,
-      fillVolume: json['fillVolume'] as double,
-      waterType: json['waterType'] as WaterStationType,
-      pathImage: json['pathImage'] as List<int>,
-      title: json['title'] as String,
-      tagHardwareId: json['tagHardwareId'] as String,
-    );
-  }
-}
-
 class ConsumerTestAnswer {
   final int testQuestionId;
   final int userId;

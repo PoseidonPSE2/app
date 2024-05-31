@@ -36,7 +36,7 @@ class _MyBottleState extends State<MyBottle> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
-                          childAspectRatio: 0.75,
+                          childAspectRatio: 0.7,
                         ),
                         itemCount: bottleProvider.bottles.length,
                         itemBuilder: (context, index) {
