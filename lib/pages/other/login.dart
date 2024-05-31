@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hello_worl2/model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/userProvider.dart'; // Import your UserProvider
@@ -26,6 +27,8 @@ class Login extends StatelessWidget {
             padding: const EdgeInsets.all(15),
             child: TextField(
               controller: _textEditingController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -42,11 +45,19 @@ class Login extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               if (_textEditingController.text.isNotEmpty) {
-                context
-                    .read<UserProvider>()
-                    .setUser(User(userId: _textEditingController.text));
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/home");
+                int? userId = int.tryParse(_textEditingController.text);
+                if (userId != null) {
+                  context.read<UserProvider>().setUser(User(userId: userId));
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/home");
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          'Ungültige UserID. Bitte geben Sie eine gültige Zahl ein'),
+                    ),
+                  );
+                }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

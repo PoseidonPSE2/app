@@ -41,12 +41,25 @@ ThemeData darkMode = ThemeData(
     iconTheme: const IconThemeData(
       color: Colors.white,
     ),
-    chipTheme: ChipThemeData(
-      backgroundColor: const Color(0xff1c3845),
-      selectedColor: const Color(0xff1c3845),
+    chipTheme: const ChipThemeData(
+      backgroundColor: Color.fromRGBO(117, 117, 117, 1),
+      selectedColor: Color(0xff1c3845),
     ),
     sliderTheme: const SliderThemeData(
-      activeTickMarkColor: Colors.white,
-      activeTrackColor: Colors.white,
-      thumbColor: Colors.white, // Farbe des Daumens
+      activeTickMarkColor: Color(0xff1c3845),
+      activeTrackColor: Color(0xff1c3845),
+      inactiveTrackColor: Colors.white,
+      thumbColor: Colors.white,
+      valueIndicatorColor: Colors.white,
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.all<Color>(
+        Colors.white,
+      ),
+      trackColor: WidgetStateProperty.all<Color>(
+        const Color(0xff1c3845),
+      ),
+      trackOutlineColor: WidgetStateProperty.all<Color>(
+        Colors.white,
+      ),
     ));

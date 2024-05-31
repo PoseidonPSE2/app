@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/widgets.dart/choiceChip.dart';
+import 'package:hello_worl2/provider/userProvider.dart';
+import 'package:hello_worl2/service/new_bottle_service.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
 
@@ -14,19 +15,9 @@ class WaterSettings extends StatefulWidget {
 class _WaterSettingsState extends State<WaterSettings> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
-  final List<String> fillVolume = [
-    "250ml",
-    "500ml",
-    "750ml",
-    "1 Liter",
-    "1.5 Liter"
-  ];
-  final List<String> waterType = ["Still", "Sprudel"];
-  final List<String> waterDegree = ["Kalt", "Warm"];
 
-  String selectedFillVolume = "";
-  String selectedWaterType = "";
-  String selectedWaterDegree = "";
+  int _currentWaterAmount = 250;
+  bool isStillWater = true;
 
   @override
   Widget build(BuildContext context) {
@@ -77,47 +68,53 @@ class _WaterSettingsState extends State<WaterSettings> {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                  "Meine Füllmenge",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              MyChoiceChip(
-                choiceItems: fillVolume,
-                onSelected: (value) {
-                  setState(() {
-                    selectedFillVolume = value;
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
                   "Meine Wasserpräferenz",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MyChoiceChip(
-                  choiceItems: waterType,
-                  onSelected: (value) {
-                    setState(() {
-                      selectedWaterType = value;
-                    });
-                  },
-                ),
+              Slider(
+                value: _currentWaterAmount as double,
+                min: 250,
+                max: 1500,
+                divisions: 5,
+                label: '${_currentWaterAmount.round()} ml',
+                onChanged: (double value) {
+                  setState(() {
+                    _currentWaterAmount = value as int;
+                  });
+                },
+              ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('250 ml', style: TextStyle(fontSize: 16)),
+                  Text('1500 ml', style: TextStyle(fontSize: 16)),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: MyChoiceChip(
-                  choiceItems: waterDegree,
-                  onSelected: (value) {
-                    setState(() {
-                      selectedWaterDegree = value;
-                    });
-                  },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Still',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Switch(
+                      value: !isStillWater,
+                      onChanged: (bool value) {
+                        setState(() {
+                          isStillWater = !value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Sprudel',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -126,26 +123,42 @@ class _WaterSettingsState extends State<WaterSettings> {
                   bottom: 20,
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate() &&
-                        selectedFillVolume.isNotEmpty &&
-                        selectedWaterType.isNotEmpty &&
-                        selectedWaterDegree.isNotEmpty) {
-                      final newBottle = Bottle(
-                        title: _textEditingController.text,
-                        fill_volume: selectedFillVolume,
-                        water_type: selectedWaterType,
-                        water_degree: selectedWaterDegree,
-                        tag_hardware_id: '',
-                      );
-                      context.read<BottleProvider>().addBottle(newBottle);
-                      Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Bitte füllen Sie alle Felder aus'),
-                        ),
-                      );
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final userProvider = context.read<UserProvider>();
+                      final currentUser =
+                          userProvider.user; // Access the current user
+                      if (currentUser != null) {
+                        // Check if currentUser is not null
+                        final newBottle = Bottle(
+                          id: 0, // Initialwert, da ID normalerweise vom Backend generiert wird.
+                          title: _textEditingController.text,
+                          fillVolume: _currentWaterAmount,
+                          waterType:
+                              isStillWater ? "Tap Water" : "Mineral Water",
+                          nfcId: '', // Falls verfügbar, sonst leer.
+                          userId: currentUser.userId,
+                          pathImage:
+                              null, // Initialwert null, wenn kein Bild vorhanden.
+                          active: true, // Standardmäßig aktiv.
+                          waterTransactions:
+                              null, // Initialwert null, wenn keine Transaktionen vorhanden.
+                        );
+
+                        context.read<BottleProvider>().addBottle(newBottle);
+                        try {
+                          await NewBottleService.postNewBottle(newBottle);
+                        } catch (e) {
+                          print('Error creating new bottle: $e');
+                        }
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Bitte füllen Sie alle Felder aus'),
+                          ),
+                        );
+                      }
                     }
                   },
                   child: Text(

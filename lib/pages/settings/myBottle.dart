@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
-import 'package:provider/provider.dart';
 import 'package:hello_worl2/widgets.dart/bottleTile.dart';
+import 'package:provider/provider.dart';
 
 class MyBottle extends StatefulWidget {
   const MyBottle({super.key});
@@ -23,6 +23,10 @@ class _MyBottleState extends State<MyBottle> {
           Expanded(
             child: Consumer<BottleProvider>(
               builder: (context, bottleProvider, child) {
+                if (bottleProvider.isLoading) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
                 return bottleProvider.bottles.isEmpty
                     ? Center(
                         child: Text(
@@ -36,7 +40,7 @@ class _MyBottleState extends State<MyBottle> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
-                          childAspectRatio: 0.75,
+                          childAspectRatio: 0.7,
                         ),
                         itemCount: bottleProvider.bottles.length,
                         itemBuilder: (context, index) {

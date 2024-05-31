@@ -29,13 +29,11 @@ class _BottleTileState extends State<BottleTile> {
             children: [
               SizedBox(
                 width: constraints.maxWidth,
-                height: constraints.maxHeight * 0.5,
+                height: constraints.maxHeight * 0.6,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
-                    widget.bottle.path_image?.isEmpty ?? true
-                        ? "assets/image/wasserspender.jpg"
-                        : widget.bottle.path_image!,
+                    "assets/image/wasserspender.jpg",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -60,19 +58,13 @@ class _BottleTileState extends State<BottleTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.bottle.fill_volume,
+                        "${widget.bottle.fillVolume.round()}ml",
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.inversePrimary),
                       ),
                       Text(
-                        widget.bottle.water_type,
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
-                      ),
-                      Text(
-                        widget.bottle.water_degree,
+                        widget.bottle.waterType,
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.inversePrimary),

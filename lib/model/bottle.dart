@@ -1,52 +1,51 @@
 class Bottle {
-  String _title;
-  String _fill_volume;
-  String _water_type;
-  String _water_degree;
-  String _tag_hardware_id;
-  String? _path_image;
+  final int id;
+  final int userId;
+  final String nfcId;
+  final int fillVolume;
+  final String waterType;
+  final String title;
+  final String? pathImage;
+  final bool active;
+  final List<dynamic>? waterTransactions;
 
   Bottle({
-    required String title,
-    required String fill_volume,
-    required String water_type,
-    required String tag_hardware_id,
-    String? path_image,
-    required String water_degree,
-  })  : _title = title,
-        _fill_volume = fill_volume,
-        _water_type = water_type,
-        _tag_hardware_id = tag_hardware_id,
-        _path_image = path_image,
-        _water_degree = water_degree;
+    required this.id,
+    required this.userId,
+    required this.nfcId,
+    required this.fillVolume,
+    required this.waterType,
+    required this.title,
+    this.pathImage,
+    required this.active,
+    this.waterTransactions,
+  });
 
-  String get title => _title;
-  set title(String value) {
-    _title = value;
+  factory Bottle.fromJson(Map<String, dynamic> json) {
+    return Bottle(
+      id: json['ID'] as int,
+      userId: json['UserID'] as int,
+      nfcId: json['NFCID'] as String,
+      fillVolume: json['FillVolume'] as int,
+      waterType: json['WaterType'] as String,
+      title: json['Title'] as String,
+      pathImage: json['PathImage'] as String?,
+      active: json['Active'] as bool,
+      waterTransactions: json['WaterTransactions'] as List<dynamic>?,
+    );
   }
 
-  String get fill_volume => _fill_volume;
-  set fill_volume(String value) {
-    _fill_volume = value;
-  }
-
-  String get water_type => _water_type;
-  set water_type(String value) {
-    _water_type = value;
-  }
-
-  String get tag_hardware_id => _tag_hardware_id;
-  set tag_hardware_id(String value) {
-    _tag_hardware_id = value;
-  }
-
-  String? get path_image => _path_image;
-  set path_image(String? value) {
-    _path_image = value;
-  }
-
-  String get water_degree => _water_degree;
-  set water_degree(String value) {
-    _water_degree = value;
+  Map<String, dynamic> toJson() {
+    return {
+      'ID': id,
+      'UserID': userId,
+      'NFCID': nfcId,
+      'FillVolume': fillVolume,
+      'WaterType': waterType,
+      'Title': title,
+      'PathImage': pathImage,
+      'Active': active,
+      'WaterTransactions': waterTransactions,
+    };
   }
 }

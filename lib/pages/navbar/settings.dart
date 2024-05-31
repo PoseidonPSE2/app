@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/settings/ContributionCommunity.dart';
 import 'package:hello_worl2/pages/settings/ContributionKaiserslautern.dart';
-import 'package:hello_worl2/pages/myBottle.dart';
+import 'package:hello_worl2/pages/settings/myBottle.dart';
 import 'package:hello_worl2/pages/settings/myProgress.dart';
+import 'package:hello_worl2/provider/userProvider.dart';
 import 'package:hello_worl2/widgets.dart/customListTile.dart';
 import 'package:hello_worl2/widgets.dart/testingWidget.dart';
+import 'package:hello_worl2/widgets.dart/waterLoadingAnimation.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -16,6 +19,8 @@ class SettingsScreen extends StatefulWidget {
 class MyAppState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -25,23 +30,19 @@ class MyAppState extends State<SettingsScreen> {
               children: [
                 const CustomListTile(
                   text: 'Mein Progress',
-                  destination: MyProgress(input: ["123", "14,95€", "2 kg"]),
+                  destination: MyProgress(),
                 ),
-                const CustomListTile(
+                CustomListTile(
                   text: 'Beitrag in Kaiserslautern',
-                  destination: ContributionKaiserslautern(
-                    input: ["14x", "65x"],
-                  ),
+                  destination: KLContributionScreen(),
                 ),
-                const CustomListTile(
+                CustomListTile(
                   text: 'Community Beitrag',
-                  destination: ContributionCommunity(
-                    input: ["149", "2.000kg", "3%"],
-                  ),
+                  destination: CommunityContributionScreen(),
                 ),
-                const CustomListTile(
+                CustomListTile(
                   text: 'Verbrauchertest',
-                  destination: Testingwidget(),
+                  destination: WaterloadingAnimation(),
                 ),
                 const CustomListTile(
                   text: 'Meine Flasche',
@@ -53,24 +54,13 @@ class MyAppState extends State<SettingsScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, "/water_settings");
+                    Navigator.pushNamed(context, "/test");
                   },
                   trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Text(
-            "App Versions",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          Text(
-            "v0.0.2",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 30))
         ],
       ),
     );
