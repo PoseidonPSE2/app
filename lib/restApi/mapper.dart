@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hello_worl2/restApi/waterEnums.dart';
 
 class RefillStation {
@@ -7,7 +8,7 @@ class RefillStation {
   final double latitude;
   final double longitude;
   final String address;
-  final int likeCounter;
+  final int? likeCounter;
   final String waterSource;
   final String openingTimes;
   final bool active;
@@ -21,53 +22,68 @@ class RefillStation {
     required this.latitude,
     required this.longitude,
     required this.address,
-    required this.likeCounter,
+    this.likeCounter,
     required this.waterSource,
     required this.openingTimes,
     required this.active,
     required this.type,
     required this.offeredWatertype,
-  });
+  }) : super();
 
   factory RefillStation.fromJson(Map<String, dynamic> json) {
     return RefillStation(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      latitude: json['latitude'] as double,
-      longitude: json['longitude'] as double,
-      address: json['address'] as String,
-      likeCounter: json['likeCounter'] as int,
-      waterSource: json['waterSource'] as String,
-      openingTimes: json['openingTimes'] as String,
-      active: json['active'] as bool,
-      type: json['type'] as WaterStationType,
-      offeredWatertype: json['offeredWatertype'] as OfferedWatertype,
+      id: json['ID'] as int,
+      name: json['Name'] as String,
+      description: json['Description'] as String,
+      latitude: json['Latitude'] as double,
+      longitude: json['Longitude'] as double,
+      address: json['Address'] as String,
+      likeCounter: json['Likes'] != null ? json['Likes'] as int : 0,
+      waterSource: json['WaterSource'] as String,
+      openingTimes: json['OpeningTimes'] as String,
+      active: json['Active'] as bool,
+      type: getWaterStationType(json['Type']as String),
+      offeredWatertype: getOfferedWatertype(json['OfferedWaterTypes']as String),
     );
   }
+  static final Widget markerChild = Container(
+    child: Container(
+      child: Image.asset('assets/image/frontpage.png'),
+    ),
+  );
+
+  Widget get child => markerChild;
 }
 
 class RefillStationMarker {
   final int id;
   final double longitude;
   final double latitude;
-  final String status;
+  final bool status;
 
   RefillStationMarker({
     required this.id,
     required this.longitude,
     required this.latitude,
     required this.status,
-  });
+  }): super();
 
   factory RefillStationMarker.fromJson(Map<String, dynamic> json) {
     return RefillStationMarker(
       id: json['id'] as int,
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
-      status: json['status'] as String,
+      status: json['status'] as bool,
     );
   }
+
+  static final Widget markerChild = Container(
+    child: Container(
+      child: Image.asset('assets/image/frontpage.png'),
+    ),
+  );
+
+  Widget get child => markerChild;
 }
 
 class RefillstationReview {
@@ -91,26 +107,37 @@ class RefillstationReview {
 }
 
 class RefillstationProblem {
-  final int refillstationId;
+  final int stationID;
   final String title;
   final String description;
-  final List<int> mediaLink;
+  //final List<int>? mediaLink;
+  final String status;
 
   RefillstationProblem({
-    required this.refillstationId,
+    required this.stationID,
     required this.title,
     required this.description,
-    required this.mediaLink,
+    required this.status,
+    //this.mediaLink,
   });
 
   factory RefillstationProblem.fromJson(Map<String, dynamic> json) {
     return RefillstationProblem(
-      refillstationId: json['refillstationId'] as int,
+      stationID: json['refillstationId'] as int,
       title: json['title'] as String,
       description: json['description'] as String,
-      mediaLink: json['mediaLink'] as List<int>,
+      //mediaLink: json['mediaLink'] as List<int>,
+      status: json['status'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'stationID': stationID,
+        'title': title,
+        'description': description,
+        'status': status, // Convert enum to string
+        //'mediaLink': mediaLink,
+      };
 }
 
 class ContributionKL {

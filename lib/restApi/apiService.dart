@@ -1,15 +1,17 @@
 import 'dart:convert';
+import 'package:flutter/physics.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:hello_worl2/restApi/mapper.dart';
 import 'package:yaml/yaml.dart';
 
 class ApiService {
-  static final config = loadYaml('config.yaml').readAsStringSync();
-  static final String _baseUrl = config['server_url'];
+  // static final config = loadYaml('config.yaml');
+  // static final String _baseUrl = config['server_url'];
+  final String _baseUrl = "https://poseidon-backend.fly.dev";
 
-  Future<List<RefillStationMarker>> getAllRefillStations() async {
-    String url = "$_baseUrl/getAllRefillStations";
+  Future<List<RefillStationMarker>> getAllRefillMarker() async {
+    String url = "$_baseUrl/refill_stations/markers";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -23,16 +25,14 @@ class ApiService {
     }
   }
 
-  Future<List<RefillStation>> getRefillstationById(
-      int refillstationId) async {
-    String url = "$_baseUrl/getRefillstationById/$refillstationId";
+  Future<RefillStation> getRefillstationById(int refillstationId) async {
+    String url = "$_baseUrl/refill_stations/$refillstationId";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => RefillStation.fromJson(station))
-          .toList();
+      final jsonBody = jsonDecode(response.body);
+      print(jsonBody);
+      return RefillStation.fromJson(jsonBody);
     } else {
       throw Exception(
           'Failed to fetch refill station with id: ${response.statusCode}');
@@ -69,16 +69,16 @@ class ApiService {
   }
 
   void postRefillstationProblem(RefillstationProblem problem) async {
-    String body = json.encode(problem);
+    var body = jsonEncode(problem);
+    // var body = problem.toJson();
+
+    Uri uri =
+        Uri.parse("$_baseUrl/refill_station_problems");
     final response = await http.post(
-      Uri.parse("$_baseUrl/postRefillstationProblem"),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      uri,
       body: body,
     );
-    if (response.statusCode == 200) {
-    } else {}
+    print(response);
   }
 
   Future<List<RefillstationLike>> getRefillstationLike() async {
@@ -117,9 +117,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => Contribution.fromJson(station))
-          .toList();
+      return jsonBody.map((station) => Contribution.fromJson(station)).toList();
     } else {
       throw Exception(
           'Failed to fetch contribution community: ${response.statusCode}');
@@ -139,15 +137,13 @@ class ApiService {
     } else {}
   }
 
-  Future<List<Contribution>> getContributionByUser(int userId ) async {
+  Future<List<Contribution>> getContributionByUser(int userId) async {
     String url = "$_baseUrl/getContributionByUser/$userId";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => Contribution.fromJson(station))
-          .toList();
+      return jsonBody.map((station) => Contribution.fromJson(station)).toList();
     } else {
       throw Exception(
           'Failed to fetch contribution from user: ${response.statusCode}');
@@ -203,9 +199,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => Bottle.fromJson(station))
-          .toList();
+      return jsonBody.map((station) => Bottle.fromJson(station)).toList();
     } else {
       throw Exception(
           'Failed to fetch bottle by user id: ${response.statusCode}');

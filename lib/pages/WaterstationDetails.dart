@@ -2,23 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/WaterstationReport.dart';
 import 'package:hello_worl2/pages/WaterstationReview.dart';
+import 'package:hello_worl2/restApi/mapper.dart';
 import 'navbar/map.dart';
 
 class Waterstationdetails extends StatelessWidget {
-  final WaterStationMarker marker;
+  final RefillStation station;
 
-  const Waterstationdetails({super.key, required this.marker});
+  const Waterstationdetails({super.key, required this.station});
 
   void navigateToReportPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Waterstationreport(),
+        builder: (context) =>  Waterstationreport(station: station),
       ),
     );
   }
 
-  void navigateToReviewPage(BuildContext context, WaterStationMarker marker) {
+  void navigateToReviewPage(BuildContext context, RefillStation marker) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -59,7 +60,7 @@ class Waterstationdetails extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(15),
                   child: Text(
-                    marker.name,
+                    station.name,
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
@@ -74,13 +75,13 @@ class Waterstationdetails extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              marker.address,
+                              station.address,
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            marker.likes.toString(),
+                            station.likeCounter.toString(),
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                           Icon(
@@ -97,7 +98,7 @@ class Waterstationdetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        marker.description,
+                        station.description,
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ],
@@ -108,7 +109,7 @@ class Waterstationdetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Status: ${marker.isActive ? 'Aktiv' : 'Inaktiv'}',
+                        'Status: ${station.active ? 'Aktiv' : 'Inaktiv'}',
                         style: Theme.of(context).textTheme.labelLarge,
                       ), //Text('Zugänglich: ${marker.openingTimes}')
                     ],
@@ -121,7 +122,7 @@ class Waterstationdetails extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      navigateToReviewPage(context, marker);
+                      navigateToReviewPage(context, station);
                     },
                     child: Text(
                       'Bewerten',
