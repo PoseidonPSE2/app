@@ -5,6 +5,7 @@ enum OfferedWatertype {
   tap,
   mineralAndTap,
 }
+
 WaterStationType getWaterStationType(String typeString) {
   String type = typeString.toLowerCase();
   switch (type) {
@@ -28,5 +29,27 @@ OfferedWatertype getOfferedWatertype(String typeString) {
       return OfferedWatertype.mineralAndTap;
     default:
       throw Exception("Invalid water type: $typeString");
+  }
+}
+
+String offeredWaterTypeToString(OfferedWatertype waterType) {
+  String waterTypeAsString;
+  switch (waterType) {
+    case OfferedWatertype.mineral:
+      return waterTypeAsString = "Mineralwasser";
+    case OfferedWatertype.tap:
+      return waterTypeAsString = "Leitungswasser";
+    case OfferedWatertype.mineralAndTap:
+      return waterTypeAsString = "Mineralwasser, Leitungswasser";
+  }
+}
+
+String waterStationTypeToString(WaterStationType waterType) {
+  String waterTypeAsString;
+  switch (waterType) {
+    case WaterStationType.manual:
+      return waterTypeAsString = "Manuele Wasserstation";
+    case WaterStationType.smart:
+      return waterTypeAsString = "Smarte Wasserstation";
   }
 }

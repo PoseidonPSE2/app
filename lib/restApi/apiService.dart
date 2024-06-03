@@ -29,7 +29,6 @@ class ApiService {
     }
   }
 
-
   Future<RefillStation> getRefillstationById(int refillstationId) async {
     String url = "$_baseUrl/refill_stations/$refillstationId";
 
@@ -37,11 +36,29 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
-      print(jsonBody);
       return RefillStation.fromJson(jsonBody);
     } else {
       throw Exception(
           'Failed to fetch refill station with id: ${response.statusCode}');
+    }
+  }
+
+  Future<RefillstationReviewAverage> getRefillStationReviewAverage(
+      int refillstationId) async {
+    String url = "$_baseUrl/refill_stations/{id}/reviews?id=$refillstationId";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final jsonBody = jsonDecode(response.body);
+      return RefillstationReviewAverage.fromJson(jsonBody);
+    }
+    if(response.statusCode == 404) {
+      final jsonBody = jsonDecode(response.body);
+      return RefillstationReviewAverage(average: 0.0);
+    }
+    else {
+      throw Exception(
+          'Failed to fetch refill station review average: ${response.statusCode}');
     }
   }
 
@@ -78,8 +95,7 @@ class ApiService {
     var body = jsonEncode(problem);
     // var body = problem.toJson();
 
-    Uri uri =
-        Uri.parse("$_baseUrl/refill_station_problems");
+    Uri uri = Uri.parse("$_baseUrl/refill_station_problems");
     final response = await http.post(
       uri,
       body: body,
