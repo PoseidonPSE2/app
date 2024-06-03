@@ -34,30 +34,26 @@ class _MapWidgetState extends State<MapScreen> {
   void navigateToDetailsPage(
       BuildContext context, RefillStationMarker marker) async {
     var refillstation = await ApiService().getRefillstationById(marker.id);
-    var averageReview = await ApiService().getRefillStationReviewAverage(marker.id);
+    var averageReview =
+        await ApiService().getRefillStationReviewAverage(marker.id);
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Waterstationdetails(station: refillstation, averageReview: averageReview.average,),
+        builder: (context) => Waterstationdetails(
+          station: refillstation,
+          averageReview: averageReview.average,
+        ),
       ),
     );
   }
 
   Widget _buildMarkerChild(bool status) {
-    if (status) {
-      return Container(
-        child: Container(
-          child: Image.asset('assets/image/frontpage.png'),
-        ),
-      );
-    } else {
-      return Container(
-        child: Container(
-          child: Image.asset('assets/image/frontpage_dark.png'), // Replace with your alternative image path
-        ),
-      );
-    }
+    return Container(
+      child: Image.asset(status
+          ? 'assets/image/frontpage.png'
+          : 'assets/image/frontpage_dark.png'),
+    );
   }
 
   @override
@@ -75,21 +71,22 @@ class _MapWidgetState extends State<MapScreen> {
           subdomains: const ['a', 'b', 'c'],
         ),
         MarkerLayer(
-          markers: refillStationLocations
-              .map((marker) => Marker(
-                    point: LatLng(marker.latitude, marker.longitude),
-                    // Use the existing point property
-                    width: 80.0,
-                    height: 80.0,
-                    child: GestureDetector(
+          markers: refillStationLocations.map((marker) {
+            return Marker(
+              point: LatLng(marker.latitude, marker.longitude),
+              width: 80.0,
+              height: 80.0,
+              // Conditionally wrap the child in GestureDetector
+              child: marker.status
+                  ? GestureDetector(
                       onTap: () => navigateToDetailsPage(context, marker),
                       child: _buildMarkerChild(marker.status),
-                    ),
-                  ))
-              .toList(),
+                    )
+                  : _buildMarkerChild(marker.status),
+            );
+          }).toList(),
         ),
       ],
     );
   }
-
 }
