@@ -83,9 +83,8 @@ class _BottleTileState extends State<BottleTile> {
                       ),
                       onPressed: () {
                         setState(() {
-                          context
-                              .read<BottleProvider>()
-                              .removeBottle(widget.bottle.title);
+                          Provider.of<BottleProvider>(context, listen: false)
+                              .removeBottle(widget.bottle.id!);
                         });
                       },
                     ),

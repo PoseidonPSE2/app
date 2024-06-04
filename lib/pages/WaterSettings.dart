@@ -16,7 +16,7 @@ class _WaterSettingsState extends State<WaterSettings> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
 
-  int _currentWaterAmount = 250;
+  double _currentWaterAmount = 250;
   bool isStillWater = true;
 
   @override
@@ -74,14 +74,14 @@ class _WaterSettingsState extends State<WaterSettings> {
                 ),
               ),
               Slider(
-                value: _currentWaterAmount as double,
+                value: _currentWaterAmount,
                 min: 250,
                 max: 1500,
                 divisions: 5,
                 label: '${_currentWaterAmount.round()} ml',
                 onChanged: (double value) {
                   setState(() {
-                    _currentWaterAmount = value as int;
+                    _currentWaterAmount = value;
                   });
                 },
               ),
@@ -131,23 +131,20 @@ class _WaterSettingsState extends State<WaterSettings> {
                       if (currentUser != null) {
                         // Check if currentUser is not null
                         final newBottle = Bottle(
-                          id: 0, // Initialwert, da ID normalerweise vom Backend generiert wird.
                           title: _textEditingController.text,
-                          fillVolume: _currentWaterAmount,
-                          waterType:
-                              isStillWater ? "Tap Water" : "Mineral Water",
-                          nfcId: '', // Falls verfügbar, sonst leer.
+                          fillVolume: _currentWaterAmount.toInt(),
+                          waterType: isStillWater ? "tap" : "mineral",
+                          nfcId:
+                              "${_textEditingController.text}test", // Falls verfügbar, sonst leer.
                           userId: currentUser.userId,
-                          pathImage:
-                              null, // Initialwert null, wenn kein Bild vorhanden.
-                          active: true, // Standardmäßig aktiv.
-                          waterTransactions:
-                              null, // Initialwert null, wenn keine Transaktionen vorhanden.
                         );
 
-                        context.read<BottleProvider>().addBottle(newBottle);
+                        //context.read<BottleProvider>().addBottle(newBottle);
                         try {
-                          await NewBottleService.postNewBottle(newBottle);
+                          Provider.of<BottleProvider>(context, listen: false)
+                              .addBottle(newBottle);
+                          Provider.of<BottleProvider>(context, listen: false)
+                              .fetchBottles(currentUser!);
                         } catch (e) {
                           print('Error creating new bottle: $e');
                         }

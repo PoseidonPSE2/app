@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:nfc_manager/nfc_manager.dart';
 
-
 String _responseText = '';
 
 class RefillScreen extends StatefulWidget {
@@ -86,7 +85,6 @@ class _RefillScreenState extends State<RefillScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 40.0,
-                  color: Colors.white,
                 ),
               ),
             ),
@@ -96,7 +94,9 @@ class _RefillScreenState extends State<RefillScreen> {
               child: Text(
                 "Bitte halte dein Smartphone an das NFC Lesegerät der Refill-Station.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15.0, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 15.0,
+                ),
               ),
             ),
             SizedBox(height: 40.0),

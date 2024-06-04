@@ -22,19 +22,27 @@ class NewBottleService {
       throw Exception('Failed to create new bottle');
     }
   }
-}
 
-class BottleService {
-  static const String url = 'https://poseidon-backend.fly.dev/bottles';
+  Future<void> deleteBottle(int bottleId) async {
+    final url = '$baseUrl/?id=$bottleId';
+    final response = await http.delete(Uri.parse(url));
+    print(url);
+    print(response.statusCode);
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      print("Bottle deleted successfully");
+    } else {
+      throw Exception('Failed to delete bottle');
+    }
+  }
 
-  Future<List<Bottle>> fetchBottles() async {
+  Future<List<Bottle>> fetchUserBottles(int userId) async {
+    final url = '$baseUrl/users/$userId';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       print("Raw JSON response: $data");
 
       List<Bottle> bottles = data.map((item) => Bottle.fromJson(item)).toList();
-
       return bottles;
     } else {
       throw Exception('Failed to load bottles');

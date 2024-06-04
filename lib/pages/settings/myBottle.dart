@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hello_worl2/model/user.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
+import 'package:hello_worl2/provider/userProvider.dart';
 import 'package:hello_worl2/widgets.dart/bottleTile.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +13,19 @@ class MyBottle extends StatefulWidget {
 }
 
 class _MyBottleState extends State<MyBottle> {
+  User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = Provider.of<UserProvider>(context, listen: false).user;
+    // Fetch bottles on initialization if a user is available
+    if (currentUser != null) {
+      Provider.of<BottleProvider>(context, listen: false)
+          .fetchBottles(currentUser!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +41,6 @@ class _MyBottleState extends State<MyBottle> {
                 if (bottleProvider.isLoading) {
                   return Center(child: CircularProgressIndicator());
                 }
-
                 return bottleProvider.bottles.isEmpty
                     ? Center(
                         child: Text(

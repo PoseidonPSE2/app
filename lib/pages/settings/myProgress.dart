@@ -26,13 +26,11 @@ class _MyProgressState extends State<MyProgress> {
     futureContribution = userContributionService.fetchUserContribution(user!);
   }
 
-  String formatMoney(int amount) {
-    int euro = amount ~/ 100;
-    int cent = amount % 100;
+  String formatMoney(double amount) {
+    int euro = amount.truncate();
+    int cent = ((amount - euro) * 100).round();
 
-    String centString = cent.toString().padLeft(2, '0');
-
-    return '$euro,$centString€';
+    return '$euro,$cent€';
   }
 
   String formatVolume(int milliliters) {
@@ -44,13 +42,10 @@ class _MyProgressState extends State<MyProgress> {
     }
   }
 
-  String formatWeight(int grams) {
-    if (grams < 1000) {
-      return '${grams}g';
-    } else {
-      double kilograms = grams / 1000;
-      return '${kilograms.toStringAsFixed(kilograms.truncateToDouble() == kilograms ? 0 : 2)}kg';
-    }
+  String formatWeight(double grams) {
+    int kg = grams.truncate();
+    int g = ((grams - kg) * 100).round();
+    return '$kg,${g}kg';
   }
 
   @override
