@@ -5,7 +5,7 @@ import 'package:hello_worl2/model/bottle.dart';
 class NewBottleService {
   static String baseUrl = 'https://poseidon-backend.fly.dev/bottles';
 
-  static Future<void> postNewBottle(Bottle bottle) async {
+  Future<void> postNewBottle(Bottle bottle) async {
     final response = await http.post(
       Uri.parse(baseUrl),
       headers: <String, String>{

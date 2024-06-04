@@ -19,7 +19,6 @@ class _MyBottleState extends State<MyBottle> {
   void initState() {
     super.initState();
     currentUser = Provider.of<UserProvider>(context, listen: false).user;
-    // Fetch bottles on initialization if a user is available
     if (currentUser != null) {
       Provider.of<BottleProvider>(context, listen: false)
           .fetchBottles(currentUser!);
@@ -54,7 +53,7 @@ class _MyBottleState extends State<MyBottle> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
-                          childAspectRatio: 0.7,
+                          childAspectRatio: 0.6,
                         ),
                         itemCount: bottleProvider.bottles.length,
                         itemBuilder: (context, index) {
