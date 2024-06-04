@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/settings/ContributionCommunity.dart';
 import 'package:hello_worl2/pages/settings/ContributionKaiserslautern.dart';
+import 'package:hello_worl2/pages/settings/consumertest/consumertest_pages.dart';
 import 'package:hello_worl2/pages/settings/myBottle.dart';
 import 'package:hello_worl2/pages/settings/myProgress.dart';
 import 'package:hello_worl2/provider/userProvider.dart';
 import 'package:hello_worl2/widgets.dart/customListTile.dart';
-import 'package:hello_worl2/widgets.dart/testingWidget.dart';
-import 'package:hello_worl2/widgets.dart/waterLoadingAnimation.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -42,7 +41,9 @@ class MyAppState extends State<SettingsScreen> {
                 ),
                 CustomListTile(
                   text: 'Verbrauchertest',
-                  destination: WaterloadingAnimation(),
+                  destination: QuizScreen(
+                    quizId: "1",
+                  ),
                 ),
                 const CustomListTile(
                   text: 'Meine Flasche',
