@@ -19,7 +19,6 @@ class _MyBottleState extends State<MyBottle> {
   void initState() {
     super.initState();
     currentUser = Provider.of<UserProvider>(context, listen: false).user;
-    // Fetch bottles on initialization if a user is available
     if (currentUser != null) {
       Provider.of<BottleProvider>(context, listen: false)
           .fetchBottles(currentUser!);

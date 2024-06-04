@@ -28,7 +28,7 @@ class BottleProvider extends ChangeNotifier {
   }
 
   Future<void> addBottle(Bottle bottle) async {
-    await NewBottleService.postNewBottle(bottle);
+    await _bottleService.postNewBottle(bottle);
     notifyListeners();
   }
 
