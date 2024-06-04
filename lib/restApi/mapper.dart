@@ -32,19 +32,19 @@ class RefillStation {
 
   factory RefillStation.fromJson(Map<String, dynamic> json) {
     return RefillStation(
-      id: json['ID'] as int,
-      name: json['Name'] as String,
-      description: json['Description'] as String,
-      latitude: json['Latitude'] as double,
-      longitude: json['Longitude'] as double,
-      address: json['Address'] as String,
-      likeCounter: json['Likes'] != null ? json['Likes'] as int : 0,
-      waterSource: json['WaterSource'] as String,
-      openingTimes: json['OpeningTimes'] as String,
-      active: json['Active'] as bool,
-      type: getWaterStationType(json['Type'] as String),
+      id: json['id'] as int,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      latitude: json['latitude'] as double,
+      longitude: json['longitude'] as double,
+      address: json['address'] as String,
+      likeCounter: json['likes'] != null ? json['Likes'] as int : 0,
+      waterSource: json['water_source'] as String,
+      openingTimes: json['opening_times'] as String,
+      active: json['active'] as bool,
+      type: getWaterStationType(json['type'] as String),
       offeredWatertype: getOfferedWatertype(
-          json['OfferedWaterTypes'] as String),
+          json['offered_water_types'] as String),
     );
   }
 
