@@ -42,10 +42,12 @@ class RefillStation {
       waterSource: json['WaterSource'] as String,
       openingTimes: json['OpeningTimes'] as String,
       active: json['Active'] as bool,
-      type: getWaterStationType(json['Type']as String),
-      offeredWatertype: getOfferedWatertype(json['OfferedWaterTypes']as String),
+      type: getWaterStationType(json['Type'] as String),
+      offeredWatertype: getOfferedWatertype(
+          json['OfferedWaterTypes'] as String),
     );
   }
+
   static final Widget markerChild = Container(
     child: Container(
       child: Image.asset('assets/image/frontpage.png'),
@@ -66,7 +68,7 @@ class RefillStationMarker {
     required this.longitude,
     required this.latitude,
     required this.status,
-  }): super();
+  }) : super();
 
   factory RefillStationMarker.fromJson(Map<String, dynamic> json) {
     return RefillStationMarker(
@@ -84,6 +86,21 @@ class RefillStationMarker {
   );
 
   Widget get child => markerChild;
+}
+
+class RefillstationReviewAverage {
+  final double average;
+
+  RefillstationReviewAverage({
+    required this.average,
+  });
+
+  factory RefillstationReviewAverage.fromJson(Map<String, dynamic> json) {
+    return RefillstationReviewAverage(
+      average: json['average'] as double,
+
+    );
+  }
 }
 
 class RefillstationReview {
@@ -110,6 +127,7 @@ class RefillstationProblem {
   final int stationID;
   final String title;
   final String description;
+
   //final List<int>? mediaLink;
   final String status;
 
@@ -131,7 +149,8 @@ class RefillstationProblem {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'stationID': stationID,
         'title': title,
         'description': description,
