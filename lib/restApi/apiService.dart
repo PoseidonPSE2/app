@@ -52,11 +52,10 @@ class ApiService {
       final jsonBody = jsonDecode(response.body);
       return RefillstationReviewAverage.fromJson(jsonBody);
     }
-    if(response.statusCode == 404) {
+    if (response.statusCode == 404) {
       final jsonBody = jsonDecode(response.body);
       return RefillstationReviewAverage(average: 0.0);
-    }
-    else {
+    } else {
       throw Exception(
           'Failed to fetch refill station review average: ${response.statusCode}');
     }
@@ -79,18 +78,14 @@ class ApiService {
   }
 
   void postRefillstationReview(RefillstationReview review) async {
-    String body = json.encode(review);
+    var body = jsonEncode(review);
+    Uri uri = Uri.parse("$_baseUrl/refill_station_reviews");
     final response = await http.post(
-      Uri.parse("$_baseUrl/postRefillstationReview"),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      uri,
       body: body,
     );
-    if (response.statusCode == 200) {
-    } else {}
-  }
 
+  }
   void postRefillstationProblem(RefillstationProblem problem) async {
     var body = jsonEncode(problem);
     // var body = problem.toJson();
@@ -100,7 +95,7 @@ class ApiService {
       uri,
       body: body,
     );
-    print(response);
+
   }
 
   Future<List<RefillstationLike>> getRefillstationLike() async {

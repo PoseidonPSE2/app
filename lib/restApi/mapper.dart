@@ -103,27 +103,41 @@ class RefillstationReviewAverage {
 }
 
 class RefillstationReview {
-  final int averageCleannessRating;
-  final int averageAccesibilityRating;
-  final int averageWaterQualityRating;
+  final int cleanness;
+  final int accessibility;
+  final int water_quality;
+  final int? user_id;
+  final int? station_id;
 
   RefillstationReview({
-    required this.averageCleannessRating,
-    required this.averageAccesibilityRating,
-    required this.averageWaterQualityRating,
+    required this.cleanness,
+    required this.accessibility,
+    required this.water_quality,
+    this.station_id,
+    this.user_id,
   });
 
   factory RefillstationReview.fromJson(Map<String, dynamic> json) {
     return RefillstationReview(
-      averageCleannessRating: json['averageCleannessRating'] as int,
-      averageAccesibilityRating: json['averageAccesibilityRating'] as int,
-      averageWaterQualityRating: json['averageWaterQualityRating'] as int,
+      cleanness: json['cleanness'] as int,
+      accessibility: json['accessibility'] as int,
+      water_quality: json['water_quality'] as int,
+      user_id: json['user_id'] != null ? json['user_id'] as int : null,
+      station_id: json['station_id'] != null ? json['station_id'] as int : null,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'station_id': station_id,
+        'user_id': user_id,
+        'cleanness': cleanness,
+        'accessibility': accessibility, // Convert enum to string
+        'water_quality': water_quality,
+      };
 }
 
 class RefillstationProblem {
-  final int stationID;
+  final int station_id;
   final String title;
   final String description;
 
@@ -131,7 +145,7 @@ class RefillstationProblem {
   final String status;
 
   RefillstationProblem({
-    required this.stationID,
+    required this.station_id,
     required this.title,
     required this.description,
     required this.status,
@@ -140,7 +154,7 @@ class RefillstationProblem {
 
   factory RefillstationProblem.fromJson(Map<String, dynamic> json) {
     return RefillstationProblem(
-      stationID: json['refillstationId'] as int,
+      station_id: json['refillstationId'] as int,
       title: json['title'] as String,
       description: json['description'] as String,
       //mediaLink: json['mediaLink'] as List<int>,
@@ -149,7 +163,7 @@ class RefillstationProblem {
   }
 
   Map<String, dynamic> toJson() => {
-        'stationID': stationID,
+        'station_id': station_id,
         'title': title,
         'description': description,
         'status': status, // Convert enum to string

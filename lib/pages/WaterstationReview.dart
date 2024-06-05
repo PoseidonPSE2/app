@@ -1,12 +1,34 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_worl2/restApi/apiService.dart';
+import 'package:hello_worl2/restApi/mapper.dart';
 import 'package:hex/hex.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:provider/provider.dart';
+import '../model/user.dart';
+import '../provider/userProvider.dart';
 import '../widgets.dart/reviewSlider.dart';
 import 'navbar/map.dart';
 
-class Waterstationreview extends StatelessWidget {
-  const Waterstationreview({super.key});
+class Waterstationreview extends StatefulWidget {
+  final RefillStation station;
+
+  const Waterstationreview({super.key, required this.station});
+
+  @override
+  State<Waterstationreview> createState() => _WaterstationreviewState();
+}
+
+class _WaterstationreviewState extends State<Waterstationreview> {
+  User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = Provider.of<UserProvider>(context, listen: false).user;
+  }
 
   void _startNFCReading() async {
     try {
@@ -101,13 +123,22 @@ class Waterstationreview extends StatelessWidget {
                     bottom: 20,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      RefillstationReview review = RefillstationReview(
+                          cleanness: 3,
+                          accessibility: 3,
+                          water_quality: 3,
+                          station_id: widget.station.id,
+                          user_id: currentUser?.userId);
+                      ApiService().postRefillstationReview(review);
+                    },
                     child: Text(
                       'Absenden',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                 ),
+
                 /*  ElevatedButton(
               onPressed: () => _showNFCDialog(context),
               style: ElevatedButton.styleFrom(

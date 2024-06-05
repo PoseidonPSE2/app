@@ -24,7 +24,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Waterstationreview(),
+        builder: (context) =>  Waterstationreview(station: widget.station),
       ),
     );
   }

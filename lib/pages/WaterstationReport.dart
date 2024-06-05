@@ -83,8 +83,8 @@ class _WaterWaterstationreportState extends State<Waterstationreport> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      var problem = RefillstationProblem(
-                          stationID: widget.station.id,
+                      RefillstationProblem problem = RefillstationProblem(
+                          station_id: widget.station.id,
                           title: _titleController.text,
                           description: _descriptionController.text,
                           status: "Active");
