@@ -4,6 +4,8 @@ import 'package:hello_worl2/pages/WaterstationReport.dart';
 import 'package:hello_worl2/pages/WaterstationReview.dart';
 import 'package:hello_worl2/restApi/mapper.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:provider/provider.dart';
+import '../provider/ratingProvider.dart';
 import '../restApi/apiService.dart';
 import '../restApi/waterEnums.dart';
 import 'navbar/map.dart';
@@ -24,7 +26,10 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>  Waterstationreview(station: widget.station),
+        builder: (context) => ChangeNotifierProvider<RatingProvider>(
+          create: (_) => RatingProvider(),
+          child: Waterstationreview(station: widget.station),
+        ),
       ),
     );
   }

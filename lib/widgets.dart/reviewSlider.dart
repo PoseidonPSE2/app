@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/ratingProvider.dart';
 
 class Reviewslider extends StatefulWidget {
-  final double initialValue;
-  const Reviewslider({Key? key, required this.initialValue}) : super(key: key);
+  final String title;
+  const Reviewslider({Key? key, required this.title}) : super(key: key);
 
   @override
   State<Reviewslider> createState() => _SliderState();
@@ -14,21 +17,36 @@ class _SliderState extends State<Reviewslider> {
   @override
   void initState() {
     super.initState();
-    _currentSliderValue = widget.initialValue;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
-      value: _currentSliderValue,
-      max: 5,
-      divisions: 5,
-      label: _currentSliderValue.round().toString(),
-      onChanged: (double value) {
-        setState(() {
-          _currentSliderValue = value;
-        });
-      },
+    final ratingProvider = Provider.of<RatingProvider>(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.title),
+        Slider(
+          value: _currentSliderValue,
+          max: 5,
+          divisions: 5,
+          label: _currentSliderValue.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+              // Update the rating in the provider based on the title
+              if (widget.title == "cleanliness") {
+                ratingProvider.cleanlinessRating = value.round();
+              } else if (widget.title == "accessibility") {
+                ratingProvider.accessibilityRating = value.round();
+              } else if (widget.title == "waterquality") {
+                ratingProvider.waterQualityRating = value.round();
+              }
+            });
+          },
+        ),
+      ],
     );
   }
 }

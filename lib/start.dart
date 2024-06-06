@@ -3,6 +3,7 @@ import 'package:hello_worl2/pages/settings/SettingsScreen.dart';
 import 'package:hello_worl2/pages/waterSettings.dart';
 import 'package:hello_worl2/pages/other/login.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
+import 'package:hello_worl2/provider/ratingProvider.dart';
 import 'package:hello_worl2/provider/userProvider.dart';
 import 'package:hello_worl2/theme/theme.dart';
 import 'package:hello_worl2/widgets.dart/navbar.dart';
@@ -14,6 +15,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => BottleProvider()),
+        ChangeNotifierProvider(create: (context) => RatingProvider()),
       ],
       child: const MyApp(),
     ),

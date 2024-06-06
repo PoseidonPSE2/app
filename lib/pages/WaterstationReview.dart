@@ -8,6 +8,7 @@ import 'package:hex/hex.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 import '../model/user.dart';
+import '../provider/ratingProvider.dart';
 import '../provider/userProvider.dart';
 import '../widgets.dart/reviewSlider.dart';
 import 'navbar/map.dart';
@@ -98,6 +99,8 @@ class _WaterstationreviewState extends State<Waterstationreview> {
 
   @override
   Widget build(BuildContext context) {
+    final ratingProvider = Provider.of<RatingProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Wasserstation Details'),
@@ -110,13 +113,13 @@ class _WaterstationreviewState extends State<Waterstationreview> {
               children: [
                 Text('Sauberkeit',
                     style: Theme.of(context).textTheme.labelLarge),
-                const Reviewslider(initialValue: 3.5),
+                const Reviewslider(title: "cleanliness"),
                 Text('Barrierefreiheit',
                     style: Theme.of(context).textTheme.labelLarge),
-                const Reviewslider(initialValue: 3.5),
+                const Reviewslider(title: "accessibility",),
                 Text('Wasserqualität',
                     style: Theme.of(context).textTheme.labelLarge),
-                const Reviewslider(initialValue: 3.5),
+                const Reviewslider(title: "waterquality",),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -125,9 +128,9 @@ class _WaterstationreviewState extends State<Waterstationreview> {
                   child: ElevatedButton(
                     onPressed: () {
                       RefillstationReview review = RefillstationReview(
-                          cleanness: 3,
-                          accessibility: 3,
-                          water_quality: 3,
+                          cleanness: ratingProvider.cleanlinessRating,
+                          accessibility: ratingProvider.accessibilityRating,
+                          water_quality: ratingProvider.waterQualityRating,
                           station_id: widget.station.id,
                           user_id: currentUser?.userId);
                       ApiService().postRefillstationReview(review);
