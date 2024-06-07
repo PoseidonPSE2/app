@@ -36,14 +36,11 @@ class BottleProvider extends ChangeNotifier {
     final index = _bottles.indexWhere((bottle) => bottle.id == bottleId);
     if (index != -1) {
       try {
-        // Call service to delete bottle on server
         await _bottleService.deleteBottle(bottleId);
-        // Remove bottle from local list upon successful deletion
         _bottles.removeAt(index);
         notifyListeners();
       } catch (e) {
         print("Error deleting bottle: $e");
-        // Handle deletion error (optional: show a user-friendly message)
       }
     } else {
       print("Bottle with ID: $bottleId not found in local list");
