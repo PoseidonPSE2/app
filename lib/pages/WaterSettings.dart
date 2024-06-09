@@ -142,8 +142,6 @@ class _WaterSettingsState extends State<WaterSettings> {
                         try {
                           Provider.of<BottleProvider>(context, listen: false)
                               .addBottle(newBottle);
-                          Provider.of<BottleProvider>(context, listen: false)
-                              .fetchBottles(currentUser!);
                         } catch (e) {
                           print('Error creating new bottle: $e');
                         }

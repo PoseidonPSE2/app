@@ -25,6 +25,13 @@ class _MyBottleState extends State<MyBottle> {
     }
   }
 
+  Future<void> _refreshBottles() async {
+    if (currentUser != null) {
+      await Provider.of<BottleProvider>(context, listen: false)
+          .fetchBottles(currentUser!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +75,9 @@ class _MyBottleState extends State<MyBottle> {
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/water_settings");
+              onPressed: () async {
+                await Navigator.pushNamed(context, "/water_settings");
+                _refreshBottles(); // Flaschen aktualisieren, wenn zurückgekehrt
               },
               child: Text(
                 'Erstelle eine neue Wasserflasche',
