@@ -5,6 +5,7 @@ import 'package:hello_worl2/pages/WaterstationReview.dart';
 import 'package:hello_worl2/restApi/mapper.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
+import '../converter/base64Convert.dart';
 import '../provider/ratingProvider.dart';
 import '../restApi/apiService.dart';
 import '../restApi/waterEnums.dart';
@@ -40,7 +41,6 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
     String formattedAddress = addressParts[0] + ",\n" + addressParts[1];
     return formattedAddress;
   }
-
 
   List<Widget> generateStarRating(double rating) {
     List<Widget> stars = [];
@@ -211,7 +211,9 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               padding: EdgeInsets.only(left: 15.0),
               child: Column(

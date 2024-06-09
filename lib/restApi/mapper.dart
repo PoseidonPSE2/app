@@ -41,7 +41,7 @@ class RefillStation {
       likeCounter: json['likes'] != null ? json['Likes'] as int : 0,
       waterSource: json['water_source'] as String,
       openingTimes: json['opening_times'] as String,
-      active: (json['active'] as Map<String, dynamic>)['Valid'] as bool,
+      active: (json['active'] as Map<String, dynamic>)['valid'] as bool,
       type: getWaterStationType(json['type'] as String),
       offeredWatertype:
           getOfferedWatertype(json['offered_water_types'] as String),
@@ -75,7 +75,7 @@ class RefillStationMarker {
       id: json['id'] as int,
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
-      status: (json['status'] as Map<String, dynamic>)['Valid'] as bool,
+      status: (json['status'] as Map<String, dynamic>)['valid'] as bool,
     );
   }
 
