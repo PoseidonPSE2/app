@@ -64,7 +64,7 @@ class _BottleTileState extends State<BottleTile> {
                                 Theme.of(context).colorScheme.inversePrimary),
                       ),
                       Text(
-                        widget.bottle.waterType,
+                        widget.bottle.waterType == "tap" ? "Still" : "Sprudel",
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.inversePrimary),

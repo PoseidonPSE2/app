@@ -18,11 +18,13 @@ class _MyBottleState extends State<MyBottle> {
   @override
   void initState() {
     super.initState();
-    currentUser = Provider.of<UserProvider>(context, listen: false).user;
-    if (currentUser != null) {
-      Provider.of<BottleProvider>(context, listen: false)
-          .fetchBottles(currentUser!);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      currentUser = Provider.of<UserProvider>(context, listen: false).user;
+      if (currentUser != null) {
+        Provider.of<BottleProvider>(context, listen: false)
+            .fetchBottles(currentUser!);
+      }
+    });
   }
 
   Future<void> _refreshBottles() async {
