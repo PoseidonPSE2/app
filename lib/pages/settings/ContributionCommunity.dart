@@ -75,7 +75,7 @@ class _CommunityContributionScreenState
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Text(
-                    'Gemeinsam habt ihr ${formatWeight(data['savedTrash'])} an Müll und Plastik verhindert.',
+                    'Gemeinsam habt ihr ${formatWeight((data['savedTrash'] as num).toDouble())} an Müll und Plastik verhindert.',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -91,7 +91,7 @@ class _CommunityContributionScreenState
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Text(
-                    'Ihr habt insgesamt ${data['amountFillings']} Füllungen durchgeführt und dabei ${formatMoney(data['savedMoney'])} gespart.',
+                    'Ihr habt insgesamt ${data['amountFillings']} Füllungen durchgeführt und dabei ${formatMoney((data['savedMoney'] as num).toDouble())} gespart.',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
