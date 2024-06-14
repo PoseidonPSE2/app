@@ -48,14 +48,18 @@ class ApiService {
       int refillstationId) async {
     String url = "$_baseUrl/refill_stations/$refillstationId/reviews";
     final response = await http.get(Uri.parse(url));
-
+    print(response.body);
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
       return RefillstationReviewAverage.fromJson(jsonBody);
     }
     if (response.statusCode == 404) {
       final jsonBody = jsonDecode(response.body);
-      return RefillstationReviewAverage(average: 0.0);
+
+      RefillstationReviewAverage average = jsonBody
+          .map((item) => RefillstationReviewAverage.fromJson(item))
+          .toList();
+      return average;
     } else {
       throw Exception(
           'Failed to fetch refill station review average: ${response.statusCode}');

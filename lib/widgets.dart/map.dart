@@ -28,14 +28,14 @@ class _MapWidgetState extends State<MapScreen> {
   void navigateToDetailsPage(
       BuildContext context, RefillStationMarker marker) async {
     var refillstation = await ApiService().getRefillstationById(marker.id);
-    var averageReview =
+    RefillstationReviewAverage average =
         await ApiService().getRefillStationReviewAverage(marker.id);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Waterstationdetails(
           station: refillstation,
-          averageReview: averageReview.average,
+          average: average,
         ),
       ),
     );

@@ -89,15 +89,21 @@ class RefillStationMarker {
 }
 
 class RefillstationReviewAverage {
-  final double average;
+  final double accesibility;
+  final double cleanness;
+  final double waterQuality;
 
   RefillstationReviewAverage({
-    required this.average,
+    required this.accesibility,
+    required this.cleanness,
+    required this.waterQuality,
   });
 
-  factory RefillstationReviewAverage.fromJson(Map<String, dynamic> json) {
+  factory RefillstationReviewAverage.fromJson(Map<dynamic, dynamic> json) {
     return RefillstationReviewAverage(
-      average: json['average'] as double,
+      accesibility: (json['accesibility'] as num).toDouble(),
+      cleanness: (json['cleanness'] as num).toDouble(),
+      waterQuality: (json['waterQuality'] as num).toDouble(),
     );
   }
 }

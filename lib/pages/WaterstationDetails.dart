@@ -8,10 +8,10 @@ import '../restApi/waterEnums.dart';
 
 class Waterstationdetails extends StatefulWidget {
   final RefillStation station;
-  final double averageReview;
+  final RefillstationReviewAverage average;
 
   const Waterstationdetails(
-      {super.key, required this.station, required this.averageReview});
+      {super.key, required this.station, required this.average});
 
   @override
   State<Waterstationdetails> createState() => WaterstationdetailsState();
@@ -81,7 +81,6 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
   Widget build(BuildContext context) {
     final screenHight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    List<Widget> stars = generateStarRating(widget.averageReview);
 
     return Scaffold(
       appBar: AppBar(
@@ -207,10 +206,35 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
+                  Column(
                     children: [
-                      const Expanded(child: Text("Bewertung: ")),
-                      Expanded(child: Row(children: stars)),
+                      Row(
+                        children: [
+                          const Expanded(child: Text("Accesibility: ")),
+                          Expanded(
+                              child: Row(
+                                  children: generateStarRating(
+                                      widget.average.accesibility))),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(child: Text("Cleanness: ")),
+                          Expanded(
+                              child: Row(
+                                  children: generateStarRating(
+                                      widget.average.cleanness))),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(child: Text("Wasser Qualität: ")),
+                          Expanded(
+                              child: Row(
+                                  children: generateStarRating(
+                                      widget.average.waterQuality))),
+                        ],
+                      ),
                     ],
                   ),
                 ],
