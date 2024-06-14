@@ -1,15 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/WaterstationReport.dart';
 import 'package:hello_worl2/pages/WaterstationReview.dart';
 import 'package:hello_worl2/restApi/mapper.dart';
-import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
-import '../converter/base64Convert.dart';
 import '../provider/ratingProvider.dart';
-import '../restApi/apiService.dart';
 import '../restApi/waterEnums.dart';
-import 'navbar/map.dart';
+
+class Waterstationdetails extends StatefulWidget {
+  final RefillStation station;
+  final double averageReview;
+
+  const Waterstationdetails(
+      {super.key, required this.station, required this.averageReview});
+
+  @override
+  State<Waterstationdetails> createState() => WaterstationdetailsState();
+}
 
 class WaterstationdetailsState extends State<Waterstationdetails> {
   bool _liked = false;
@@ -84,7 +90,6 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(
-          // Wrap both containers in a Column
           children: [
             Container(
               width: screenWidth,
@@ -313,15 +318,4 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
       ),
     );
   }
-}
-
-class Waterstationdetails extends StatefulWidget {
-  final RefillStation station;
-  final double averageReview;
-
-  const Waterstationdetails(
-      {super.key, required this.station, required this.averageReview});
-
-  @override
-  State<Waterstationdetails> createState() => WaterstationdetailsState();
 }

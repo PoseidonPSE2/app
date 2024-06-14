@@ -93,9 +93,8 @@ class _KLContributionScreenState extends State<KLContributionScreen> {
                     launchUrlString(
                         'https://www.kaiserslautern.de/sozial_leben_wohnen/umwelt/klimaschutz/projekte/055055/index.html.de');
                   },
-                  child: Text(
+                  child: const Text(
                     'Zur Kaiserslautern Seite',
-                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ],

@@ -36,6 +36,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
+      print(jsonBody);
       return RefillStation.fromJson(jsonBody);
     } else {
       throw Exception(
@@ -45,7 +46,7 @@ class ApiService {
 
   Future<RefillstationReviewAverage> getRefillStationReviewAverage(
       int refillstationId) async {
-    String url = "$_baseUrl/refill_stations/{id}/reviews?id=$refillstationId";
+    String url = "$_baseUrl/refill_stations/$refillstationId/reviews";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -84,8 +85,8 @@ class ApiService {
       uri,
       body: body,
     );
-
   }
+
   void postRefillstationProblem(RefillstationProblem problem) async {
     var body = jsonEncode(problem);
     // var body = problem.toJson();
@@ -95,7 +96,6 @@ class ApiService {
       uri,
       body: body,
     );
-
   }
 
   Future<List<RefillstationLike>> getRefillstationLike() async {

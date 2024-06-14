@@ -18,7 +18,7 @@ class CustomListTile extends StatelessWidget {
     return ListTile(
       title: Text(
         text,
-        style: Theme.of(context).textTheme.titleLarge,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
       onTap: () {
         Navigator.of(context).push(

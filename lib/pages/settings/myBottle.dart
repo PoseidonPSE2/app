@@ -40,6 +40,15 @@ class _MyBottleState extends State<MyBottle> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Meine Flaschen'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await Navigator.pushNamed(context, "/water_settings");
+              _refreshBottles();
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -47,7 +56,7 @@ class _MyBottleState extends State<MyBottle> {
             child: Consumer<BottleProvider>(
               builder: (context, bottleProvider, child) {
                 if (bottleProvider.isLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return bottleProvider.bottles.isEmpty
                     ? Center(
@@ -73,22 +82,6 @@ class _MyBottleState extends State<MyBottle> {
                       );
               },
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: ElevatedButton(
-              onPressed: () async {
-                await Navigator.pushNamed(context, "/water_settings");
-                _refreshBottles(); // Flaschen aktualisieren, wenn zurückgekehrt
-              },
-              child: Text(
-                'Erstelle eine neue Wasserflasche',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(30),
           ),
         ],
       ),

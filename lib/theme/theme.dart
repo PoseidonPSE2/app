@@ -4,23 +4,76 @@ ThemeData lightMode = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-    surface: Colors.grey.shade400,
+    surface: Colors.grey.shade200,
     primary: Colors.grey.shade300,
     secondary: Colors.grey.shade200,
+    tertiary: const Color(0xFF2196F3),
   ),
-  scaffoldBackgroundColor: Colors.grey.shade300,
+  scaffoldBackgroundColor: Colors.grey.shade200,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: WidgetStateProperty.all<Color>(
-        const Color.fromARGB(255, 19, 179, 253),
+        const Color(0xFF2196F3),
+      ),
+      foregroundColor: WidgetStateProperty.all<Color>(
+        Colors.white,
+      ),
+      textStyle: WidgetStateProperty.all<TextStyle>(
+        const TextStyle(
+          fontSize: 18,
+        ),
       ),
     ),
   ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Color.fromARGB(222, 255, 255, 255),
+      foregroundColor: Colors.black),
   iconTheme: const IconThemeData(
     color: Color.fromRGBO(97, 97, 97, 1),
   ),
+  chipTheme: ChipThemeData(
+    backgroundColor: const Color.fromRGBO(117, 117, 117, 1),
+    selectedColor: Colors.grey.shade400,
+  ),
+  sliderTheme: SliderThemeData(
+    activeTickMarkColor: Colors.grey.shade400,
+    activeTrackColor: Colors.grey.shade400,
+    inactiveTrackColor: Colors.black,
+    thumbColor: Colors.black,
+    valueIndicatorColor: Colors.black,
+  ),
+  switchTheme: SwitchThemeData(
+    thumbColor: WidgetStateProperty.all<Color>(
+      Colors.black,
+    ),
+    trackColor: WidgetStateProperty.all<Color>(
+      Colors.grey.shade400,
+    ),
+    trackOutlineColor: WidgetStateProperty.all<Color>(
+      Colors.black,
+    ),
+  ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: Colors.black,
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle: const TextStyle(color: Colors.black),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    ),
+  ),
 );
 
+//Themen für den Darkmode
 ThemeData darkMode = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,

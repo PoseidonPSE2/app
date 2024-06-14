@@ -7,11 +7,10 @@ enum OfferedWatertype {
 }
 
 WaterStationType getWaterStationType(String typeString) {
-
   switch (typeString) {
-    case "MANUAL":
+    case "manual":
       return WaterStationType.manual;
-    case "SMART":
+    case "smart":
       return WaterStationType.smart;
     default:
       throw Exception("Invalid water station type: $typeString");
@@ -20,11 +19,11 @@ WaterStationType getWaterStationType(String typeString) {
 
 OfferedWatertype getOfferedWatertype(String typeString) {
   switch (typeString) {
-    case "MINERAL":
+    case "mineral":
       return OfferedWatertype.mineral;
-    case "TAP":
+    case "tap":
       return OfferedWatertype.tap;
-    case "MINERALTAP":
+    case "mineraltap":
       return OfferedWatertype.mineralAndTap;
     default:
       throw Exception("Invalid water type: $typeString");

@@ -18,7 +18,7 @@ class _BottleTileState extends State<BottleTile> {
       builder: (context, constraints) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(12),
           ),
           margin: const EdgeInsets.all(8),
@@ -58,16 +58,10 @@ class _BottleTileState extends State<BottleTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${widget.bottle.fillVolume.round()}ml",
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
+                        "${widget.bottle.fillVolume.round()} ml",
                       ),
                       Text(
                         widget.bottle.waterType == "tap" ? "Still" : "Sprudel",
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
                       ),
                     ],
                   ),

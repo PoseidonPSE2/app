@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/restApi/apiService.dart';
 import 'package:hello_worl2/restApi/mapper.dart';
-import 'navbar/map.dart';
+import '../widgets.dart/map.dart';
 
 class Waterstationreport extends StatefulWidget {
   final RefillStation station;
@@ -89,7 +89,7 @@ class _WaterWaterstationreportState extends State<Waterstationreport> {
                           description: _descriptionController.text,
                           status: "Active");
                       ApiService().postRefillstationProblem(problem);
-
+                      Navigator.pop(context);
                     },
                     child: Text(
                       'Absenden',

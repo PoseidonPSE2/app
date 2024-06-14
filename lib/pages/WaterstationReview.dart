@@ -11,7 +11,7 @@ import '../model/user.dart';
 import '../provider/ratingProvider.dart';
 import '../provider/userProvider.dart';
 import '../widgets.dart/reviewSlider.dart';
-import 'navbar/map.dart';
+import '../widgets.dart/map.dart';
 
 class Waterstationreview extends StatefulWidget {
   final RefillStation station;
@@ -116,10 +116,14 @@ class _WaterstationreviewState extends State<Waterstationreview> {
                 const Reviewslider(title: "cleanliness"),
                 Text('Barrierefreiheit',
                     style: Theme.of(context).textTheme.labelLarge),
-                const Reviewslider(title: "accessibility",),
+                const Reviewslider(
+                  title: "accessibility",
+                ),
                 Text('Wasserqualität',
                     style: Theme.of(context).textTheme.labelLarge),
-                const Reviewslider(title: "waterquality",),
+                const Reviewslider(
+                  title: "waterquality",
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -134,6 +138,7 @@ class _WaterstationreviewState extends State<Waterstationreview> {
                           station_id: widget.station.id,
                           user_id: currentUser?.userId);
                       ApiService().postRefillstationReview(review);
+                      Navigator.pop(context);
                     },
                     child: Text(
                       'Absenden',

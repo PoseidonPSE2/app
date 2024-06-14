@@ -1,7 +1,7 @@
 class Bottle {
   final int? id;
   final int userId;
-  final String nfcId;
+  final String? nfcId;
   final int fillVolume;
   final String waterType;
   final String title;
@@ -12,7 +12,7 @@ class Bottle {
   Bottle({
     this.id,
     required this.userId,
-    required this.nfcId,
+    this.nfcId,
     required this.fillVolume,
     required this.waterType,
     required this.title,
@@ -25,7 +25,7 @@ class Bottle {
     return Bottle(
       id: json['id'] as int,
       userId: json['user_id'] as int,
-      nfcId: json['nfc_id'] as String,
+      nfcId: json['nfc_id'],
       fillVolume: json['fill_volume'] as int,
       waterType: json['water_type'] as String,
       title: json['title'] as String,

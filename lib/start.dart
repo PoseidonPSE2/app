@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/settings/SettingsScreen.dart';
-import 'package:hello_worl2/pages/settings/consumertest/consumertest_pages.dart';
 import 'package:hello_worl2/pages/waterSettings.dart';
 import 'package:hello_worl2/pages/other/login.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
@@ -8,7 +7,7 @@ import 'package:hello_worl2/provider/ratingProvider.dart';
 import 'package:hello_worl2/provider/userProvider.dart';
 import 'package:hello_worl2/provider/consumertestProvider.dart';
 import 'package:hello_worl2/theme/theme.dart';
-import 'package:hello_worl2/widgets.dart/navbar.dart';
+import 'package:hello_worl2/widgets.dart/home.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -33,14 +32,14 @@ class MyApp extends StatelessWidget {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
 
     return MaterialApp(
-      theme: brightness == Brightness.light ? darkMode : darkMode,
+      theme: brightness == Brightness.light ? lightMode : darkMode,
       home: Login(),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/home': (context) => const NavBar(),
+        '/home': (context) => const Home(),
         '/water_settings': (context) => const WaterSettings(),
         '/test': (context) => UserListScreen(),
-        '/quiz': (context) => QuizScreen(quizId: 'sample_quiz_id'),
+        // '/quiz': (context) => QuizScreen(quizId: 'sample_quiz_id'),
       },
     );
   }

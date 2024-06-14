@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/provider/userProvider.dart';
+import 'package:hex/hex.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/bottleProvider.dart';
 
@@ -17,13 +19,62 @@ class _WaterSettingsState extends State<WaterSettings> {
 
   double _currentWaterAmount = 250;
   bool isStillWater = true;
+  String nfcId = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _startNFCReading();
+  }
+
+  void _startNFCReading() async {
+    try {
+      bool isAvailable = await NfcManager.instance.isAvailable();
+      if (isAvailable) {
+        NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+          var nfcData = tag.data;
+
+          Map<String, dynamic> ndefMap = nfcData;
+
+          if (ndefMap.containsKey('ndef')) {
+            var cachedMessageMap = ndefMap['ndef'];
+            if (cachedMessageMap.containsKey('identifier')) {
+              var identifier = cachedMessageMap['identifier'];
+              final hexEncoder = const HexEncoder();
+              String hexString = hexEncoder.convert(identifier);
+              String hexStringWithOperator = "";
+
+              for (int i = 0; i < hexString.length; i++) {
+                if (i % 2 == 0) {
+                  hexStringWithOperator += hexString[i];
+                } else {
+                  hexStringWithOperator += "${hexString[i]}:";
+                }
+              }
+
+              String nfcChipId = hexStringWithOperator.substring(
+                  0, hexStringWithOperator.length - 1);
+              print(nfcChipId);
+              setState(() {
+                nfcId = nfcChipId;
+              });
+            }
+          }
+        });
+      } else {
+        print('NFC ist nicht erreichbar.');
+      }
+    } catch (e) {
+      print('Error beim NFC lesen: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Refill'),
+        title: const Text('Neue Flasche'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
@@ -33,14 +84,6 @@ class _WaterSettingsState extends State<WaterSettings> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Text(
-                  "Meine Flasche",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(15),
                 child: TextFormField(
@@ -54,11 +97,11 @@ class _WaterSettingsState extends State<WaterSettings> {
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary),
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary),
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     hintText: 'Flaschentitel',
                   ),
@@ -92,7 +135,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,6 +159,55 @@ class _WaterSettingsState extends State<WaterSettings> {
                   ],
                 ),
               ),
+              nfcId == ""
+                  ? Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade400,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Bitte NFC-Chip scannen:",
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "(optional NFC auf dem Smartphone aktivieren)",
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade400,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(nfcId),
+                          const Icon(
+                            Icons.check,
+                            size: 50,
+                            color: Colors.green,
+                          ),
+                        ],
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.only(
                   top: 20,
@@ -133,8 +225,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                           title: _textEditingController.text,
                           fillVolume: _currentWaterAmount.toInt(),
                           waterType: isStillWater ? "tap" : "mineral",
-                          nfcId:
-                              "${_textEditingController.text}test", // Falls verfügbar, sonst leer.
+                          nfcId: nfcId, // Falls verfügbar, sonst leer.
                           userId: currentUser.userId,
                         );
 
@@ -156,9 +247,8 @@ class _WaterSettingsState extends State<WaterSettings> {
                       }
                     }
                   },
-                  child: Text(
+                  child: const Text(
                     'Bestätigen',
-                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ),

@@ -11,11 +11,9 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Refill - Poseidon"),
-      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.3,
@@ -29,15 +27,7 @@ class Login extends StatelessWidget {
               controller: _textEditingController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary),
-                ),
+              decoration: const InputDecoration(
                 hintText: 'UserID',
               ),
             ),
@@ -66,9 +56,8 @@ class Login extends StatelessWidget {
                 );
               }
             },
-            child: Text(
+            child: const Text(
               'Login',
-              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ],

@@ -21,6 +21,7 @@ class BottleProvider extends ChangeNotifier {
       _bottles = await _bottleService.fetchUserBottles(userId.userId);
     } catch (e) {
       print(e);
+      print("hier ein fehler");
     } finally {
       _isLoading = false;
       notifyListeners();

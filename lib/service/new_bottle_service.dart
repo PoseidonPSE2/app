@@ -24,15 +24,8 @@ class NewBottleService {
   }
 
   Future<void> deleteBottle(int bottleId) async {
-    final url =
-        Uri.https('poseidon-backend.fly.dev', '/bottles', {'id': '$bottleId'});
-
-    final response = await http.delete(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+    final url = '$baseUrl/$bottleId';
+    final response = await http.delete(Uri.parse(url));
     print(response.statusCode);
     if (response.statusCode == 200 || response.statusCode == 204) {
       print("Bottle deleted successfully");
