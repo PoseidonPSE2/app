@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/provider/bottleProvider.dart';
+import 'package:hello_worl2/model/user.dart';
+import 'package:hello_worl2/provider/bottle_provider.dart';
+import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hex/hex.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ class _RefillScreenState extends State<RefillScreen> {
   final ValueNotifier<String> _nfcResult = ValueNotifier('');
   double _waterAmount = 0.0;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  User? currentUser;
 
   @override
   void initState() {
@@ -28,6 +31,13 @@ class _RefillScreenState extends State<RefillScreen> {
       });
     });
     _startNFCReading();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      currentUser = Provider.of<UserProvider>(context, listen: false).user;
+      if (currentUser != null) {
+        Provider.of<BottleProvider>(context, listen: false)
+            .fetchBottles(currentUser!);
+      }
+    });
   }
 
   @override
@@ -68,27 +78,16 @@ class _RefillScreenState extends State<RefillScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bottleProvider = Provider.of<BottleProvider>(context);
-    final List<Bottle> bottles = bottleProvider.bottles;
-
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Flasche auffüllen"),
+      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       key: navigatorKey,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
-                'Flasche auffüllen',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 40.0,
-                ),
-              ),
-            ),
             const SizedBox(height: 50.0),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -101,72 +100,138 @@ class _RefillScreenState extends State<RefillScreen> {
               ),
             ),
             const SizedBox(height: 40.0),
-            Center(
-              child: bottles.isNotEmpty
-                  ? CarouselSlider(
-                      options: CarouselOptions(
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        enableInfiniteScroll: false,
-                      ),
-                      items: bottles.map((bottle) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  const BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 10,
-                                    offset: Offset(0, 5),
-                                  ),
-                                ],
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/image/wasserspender.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
+            Consumer<BottleProvider>(
+              builder: (context, bottleProvider, child) {
+                if (bottleProvider.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return bottleProvider.bottles.isEmpty
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Manuell auffüllen"),
+                          ),
+                          const SizedBox(height: 40.0),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Center(
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                enableInfiniteScroll: false,
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black54,
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10.0),
-                                        bottomRight: Radius.circular(10.0),
+                              items: bottleProvider.bottles.map((bottle) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        print("hi");
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 10,
+                                              offset: Offset(0, 5),
+                                            ),
+                                          ],
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                "assets/image/wasserspender.jpg"),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              width: double.infinity,
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.black54,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10.0),
+                                                  bottomRight:
+                                                      Radius.circular(10.0),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      bottle.title,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 24.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        Text(
+                                                          bottle.waterType,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "${bottle.fillVolume} ml",
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    child: Text(
-                                      bottle.title,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    )
-                  : const CircularProgressIndicator(),
-            ),
-            const SizedBox(height: 20.0),
-            const Text("oder"),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Manuell auffüllen"),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          const Text("oder"),
+                          const SizedBox(height: 20.0),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Manuell auffüllen"),
+                          ),
+                        ],
+                      );
+              },
             ),
           ],
         ),
@@ -201,6 +266,7 @@ class _RefillScreenState extends State<RefillScreen> {
 
               String nfcChipId = hexStringWithOperator.substring(
                   0, hexStringWithOperator.length - 1);
+              _nfcResult.value = nfcChipId;
             }
           }
         });

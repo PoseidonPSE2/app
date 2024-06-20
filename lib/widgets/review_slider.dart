@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/ratingProvider.dart';
+import '../provider/rating_provider.dart';
 
 class Reviewslider extends StatefulWidget {
   final String title;

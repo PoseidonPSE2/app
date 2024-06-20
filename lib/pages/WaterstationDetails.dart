@@ -1,42 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/pages/WaterstationReport.dart';
-import 'package:hello_worl2/pages/WaterstationReview.dart';
-import 'package:hello_worl2/restApi/mapper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hello_worl2/model/refillstation.dart';
+import 'package:hello_worl2/model/user.dart';
+import 'package:hello_worl2/provider/refillstation_provider.dart';
+import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:provider/provider.dart';
-import '../provider/ratingProvider.dart';
 import '../restApi/waterEnums.dart';
+import 'WaterstationReport.dart';
+import 'WaterstationReview.dart';
 
 class Waterstationdetails extends StatefulWidget {
-  final RefillStation station;
-  final RefillstationReviewAverage average;
+  final RefillStationMarker marker;
 
-  const Waterstationdetails(
-      {super.key, required this.station, required this.average});
+  const Waterstationdetails({super.key, required this.marker});
 
   @override
   State<Waterstationdetails> createState() => WaterstationdetailsState();
 }
 
 class WaterstationdetailsState extends State<Waterstationdetails> {
-  bool _liked = false;
+  User? currentUser;
 
-  void navigateToReportPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Waterstationreport(station: widget.station),
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    currentUser = Provider.of<UserProvider>(context, listen: false).user;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchReviewData();
+    });
   }
 
-  void navigateToReviewPage(BuildContext context, RefillStation marker) {
+  Future<void> fetchReviewData() async {
+    final provider = Provider.of<RefillStationProvider>(context, listen: false);
+    await provider.getLike(widget.marker.id, currentUser!.userId);
+    await provider.fetchReviewAverage(widget.marker.id);
+    await provider.fetchStationById(widget.marker.id);
+    await provider.getLikeCounterForStation(widget.marker.id);
+  }
+
+  Future<void> navigateToReviewPage(
+      BuildContext context, RefillStation marker) async {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider<RatingProvider>(
-          create: (_) => RatingProvider(),
-          child: Waterstationreview(station: widget.station),
-        ),
+        builder: (context) => Waterstationreview(station: marker),
+      ),
+    );
+    fetchReviewData(); // Fetch the latest review data when returning from the review page
+  }
+
+  void navigateToReportPage(BuildContext context, RefillStation marker) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Waterstationreport(station: marker),
       ),
     );
   }
@@ -79,266 +96,281 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wasserstation'),
+        actions: [
+          Consumer<RefillStationProvider>(
+            builder: (context, provider, child) {
+              return TextButton(
+                onPressed: () {
+                  navigateToReportPage(context, provider.selectedStation!);
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Problem melden',
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.copyWith(decoration: TextDecoration.underline),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Container(
-              width: screenWidth,
-              height: (screenHight / 3),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/image/herz.jpg"),
-                      fit: BoxFit.cover)),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 160.0,
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 25.0),
-                    height: 160.0,
-                    width: screenWidth - 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 2.0, color: Colors.white),
-                        top: BorderSide(width: 2.0, color: Colors.white),
-                      ),
-                    ),
+      body: Consumer<RefillStationProvider>(
+        builder: (context, provider, child) {
+          if (provider.selectedStation == null) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(15),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                          height: 10,
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: screenWidth * 0.3,
+                                    height: screenHeight * 0.15,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: const DecorationImage(
+                                        image:
+                                            AssetImage("assets/image/herz.jpg"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                provider.selectedStation!.name,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineSmall,
+                                              ),
+                                            ),
+                                            Column(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    provider.toggleLike(
+                                                        widget.marker.id,
+                                                        currentUser!.userId);
+                                                  },
+                                                  icon: Icon(
+                                                    provider.isLiked
+                                                        ? Icons.favorite
+                                                        : Icons.favorite_border,
+                                                    color: provider.isLiked
+                                                        ? Colors.red
+                                                        : Colors.grey,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  provider.likes.toString(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on_sharp,
+                                              size: 22.0,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              formatAddressWithLineBreak(
+                                                  provider.selectedStation!
+                                                      .address),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelLarge,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        provider.reviewAverage!.accesibility
+                                            .toStringAsFixed(1)
+                                            .toString(),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      const Icon(
+                                        Icons.star,
+                                      ),
+                                    ],
+                                  ),
+                                  const Text(
+                                    ' · ',
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        provider.reviewAverage!.cleanness
+                                            .toStringAsFixed(1)
+                                            .toString(),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      const Icon(
+                                        Icons.star,
+                                      ),
+                                    ],
+                                  ),
+                                  const Text(
+                                    ' · ',
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        provider.reviewAverage!.waterQuality
+                                            .toStringAsFixed(1)
+                                            .toString(),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      const Icon(
+                                        Icons.star,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
+                              const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Erreichbarkeit",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    "Sauberkeit",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    "Wasser Qualität",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
+                        Text(
+                          provider.selectedStation!.description,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
-                            Text(widget.station.name,
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall),
-                            SizedBox(
-                              width: 60,
+                            const Icon(
+                              Icons.water_drop,
+                              size: 22.0,
                             ),
+                            const SizedBox(width: 10),
                             Text(
-                              widget.station.likeCounter.toString(),
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _liked = !_liked;
-                                });
-                              },
-                              icon: Icon(
-                                _liked ? Icons.favorite : Icons.favorite_border,
-                                color: _liked ? Colors.red : null,
-                                size: 25,
-                              ),
+                              offeredWaterTypeToString(
+                                  provider.selectedStation!.offeredWatertype),
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ],
                         ),
-                        Text(
-                          widget.station.description,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.glassWaterDroplet,
+                              size: 22.0,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              waterStationTypeToString(
+                                  provider.selectedStation!.type),
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 10,
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.water_rounded,
+                              size: 22.0,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              provider.selectedStation!.waterSource,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 15.0),
-              height: 120.0,
-              width: screenWidth - 40,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on_sharp,
-                        size: 22.0,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        formatAddressWithLineBreak(widget.station.address),
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.access_alarm,
-                        size: 22.0,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        widget.station.openingTimes,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Expanded(child: Text("Accesibility: ")),
-                          Expanded(
-                              child: Row(
-                                  children: generateStarRating(
-                                      widget.average.accesibility))),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Expanded(child: Text("Cleanness: ")),
-                          Expanded(
-                              child: Row(
-                                  children: generateStarRating(
-                                      widget.average.cleanness))),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Expanded(child: Text("Wasser Qualität: ")),
-                          Expanded(
-                              child: Row(
-                                  children: generateStarRating(
-                                      widget.average.waterQuality))),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 15.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.water_drop,
-                        size: 22.0,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        offeredWaterTypeToString(
-                            widget.station.offeredWatertype),
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.local_gas_station,
-                        size: 22.0,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        waterStationTypeToString(widget.station.type),
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.gas_meter_outlined,
-                        size: 22.0,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        widget.station.waterSource,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: screenWidth - 30,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15, top: 15, right: 15, bottom: 40),
+                  child: ElevatedButton(
                     onPressed: () {
-                      navigateToReviewPage(context, widget.station);
+                      print("test2");
+                      navigateToReviewPage(context, provider.selectedStation!);
                     },
-                    child: Text(
-                      'Bewerten',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    child: Text('Bewerten'),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      navigateToReportPage(context);
-                    },
-                    child: Text(
-                      'Problem melden',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(decoration: TextDecoration.underline),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }

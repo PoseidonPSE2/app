@@ -4,8 +4,8 @@ import 'package:hello_worl2/pages/settings/ContributionCommunity.dart';
 import 'package:hello_worl2/pages/settings/ContributionKaiserslautern.dart';
 import 'package:hello_worl2/pages/settings/consumertest/consumertest_pages.dart';
 import 'package:hello_worl2/pages/settings/myBottle.dart';
-import 'package:hello_worl2/widgets.dart/customListTile.dart';
-import 'package:hello_worl2/widgets.dart/user_progress.dart';
+import 'package:hello_worl2/widgets/custom_list_tile.dart';
+import 'package:hello_worl2/widgets/user_progress.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -38,12 +38,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 CustomListTile(
                   text: 'Community Beitrag',
                   destination: CommunityContributionScreen(),
-                ),
-                CustomListTile(
-                  text: 'Verbrauchertest',
-                  destination: QuizScreen(
-                    quizId: "1",
-                  ),
                 ),
                 const CustomListTile(
                   text: 'Meine Flasche',

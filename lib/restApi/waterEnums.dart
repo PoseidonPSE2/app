@@ -23,7 +23,7 @@ OfferedWatertype getOfferedWatertype(String typeString) {
       return OfferedWatertype.mineral;
     case "tap":
       return OfferedWatertype.tap;
-    case "mineraltap":
+    case "both":
       return OfferedWatertype.mineralAndTap;
     default:
       throw Exception("Invalid water type: $typeString");

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/navbar/refill.dart';
-import 'package:hello_worl2/widgets.dart/drawer.dart';
-import 'package:hello_worl2/widgets.dart/map.dart';
+import 'package:hello_worl2/widgets/bottom_sheet.dart';
+import 'package:hello_worl2/widgets/drawer.dart';
+import 'package:hello_worl2/widgets/map.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,12 +15,18 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+    // Entfernt: Der Aufruf von fetchStations ist nicht mehr hier notwendig
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
         children: [
-          const MapScreen(),
+          const Map(),
           Padding(
             padding: const EdgeInsets.only(left: 25, top: 50),
             child: FloatingActionButton(
@@ -29,14 +36,15 @@ class _HomeState extends State<Home> {
               child: const Icon(Icons.menu),
             ),
           ),
+          const CustomBottomSheet(),
         ],
       ),
       extendBody: true,
       drawer: const CustomDrawer(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 40),
-        child: Container(
+        child: SizedBox(
           width: 80,
           height: 80,
           child: FittedBox(

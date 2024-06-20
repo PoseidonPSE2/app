@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/physics.dart';
-
 import 'package:hello_worl2/model/bottle.dart';
+import 'package:hello_worl2/model/refillstation.dart';
 
 import 'package:http/http.dart' as http;
 
 import 'package:hello_worl2/restApi/mapper.dart';
-import 'package:yaml/yaml.dart';
 
 class ApiService {
   // static final config = loadYaml('config.yaml');
@@ -66,16 +64,24 @@ class ApiService {
     }
   }
 
-  Future<List<RefillstationReview>> getRefillstationReview(
-      int refillstationId) async {
-    String url = "$_baseUrl/getRefillstationReview/$refillstationId";
+  Future<RefillstationReview> getRefillstationReviewByUserId(
+      int refillstationId, int stationId) async {
+    String url = "$_baseUrl/refill_station_reviews/$refillstationId/$stationId";
     final response = await http.get(Uri.parse(url));
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => RefillstationReview.fromJson(station))
-          .toList();
+      if (jsonBody.isNotEmpty) {
+        return RefillstationReview.fromJson(jsonBody.first);
+      } else {
+        // Return a default review if no review is found
+        return RefillstationReview(
+            cleanness: 0,
+            accessibility: 0,
+            water_quality: 0,
+            station_id: stationId,
+            user_id: refillstationId);
+      }
     } else {
       throw Exception(
           'Failed to fetch refill station review with id: ${response.statusCode}');
@@ -84,11 +90,13 @@ class ApiService {
 
   void postRefillstationReview(RefillstationReview review) async {
     var body = jsonEncode(review);
+    print("test2:" + body);
     Uri uri = Uri.parse("$_baseUrl/refill_station_reviews");
     final response = await http.post(
       uri,
       body: body,
     );
+    print("test" + response.body);
   }
 
   void postRefillstationProblem(RefillstationProblem problem) async {
@@ -102,18 +110,71 @@ class ApiService {
     );
   }
 
-  Future<List<RefillstationLike>> getRefillstationLike() async {
-    String url = "$_baseUrl/getRefillstationLike";
-    final response = await http.get(Uri.parse(url));
+  Future<int> getLikeCounterForStation(int stationId) async {
+    final response =
+        await http.get(Uri.parse('$_baseUrl/likes/$stationId/count'));
+    print(response.body);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['like_counter'];
+    } else {
+      throw Exception('Failed to load likes');
+    }
+  }
+
+  Future<bool> getLike(int stationId, int userId) async {
+    final response = await http.get(
+      Uri.parse("$_baseUrl/likes/$stationId/$userId"),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
     if (response.statusCode == 200) {
-      final jsonBody = jsonDecode(response.body) as List<dynamic>;
-      return jsonBody
-          .map((station) => RefillstationLike.fromJson(station))
-          .toList();
+      final data = json.decode(response.body);
+      print('Like is: ${data['isLiked']}');
+      return data['isLiked'];
     } else {
-      throw Exception(
-          'Failed to fetch refill station like: ${response.statusCode}');
+      print('Failed to post like: ${response.statusCode}');
+      return false; // Rückgabe von `false` im Fehlerfall
+    }
+  }
+
+  Future<void> postLike(int stationId, int userId) async {
+    final like = RefillstationLike(stationId: stationId, userId: userId);
+    String body = json.encode(like.toJson());
+    final response = await http.post(
+      Uri.parse("$_baseUrl/likes"),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      final data = json.decode(response.body);
+      print('Like posted successfully: $data');
+    } else {
+      print('Failed to post like: ${response.statusCode}');
+    }
+  }
+
+  Future<void> deleteLike(int stationId, int userId) async {
+    final like = RefillstationLike(stationId: stationId, userId: userId);
+    String body = json.encode(like.toJson());
+    final response = await http.delete(
+      Uri.parse("$_baseUrl/likes"),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print('Like posted successfully: $data');
+    } else {
+      print('Failed to post like: ${response.statusCode}');
     }
   }
 
@@ -143,19 +204,6 @@ class ApiService {
       throw Exception(
           'Failed to fetch contribution community: ${response.statusCode}');
     }
-  }
-
-  void postRefillstationLike(RefillstationLike like) async {
-    String body = json.encode(like);
-    final response = await http.post(
-      Uri.parse("$_baseUrl/postRefillstationLike"),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: body,
-    );
-    if (response.statusCode == 200) {
-    } else {}
   }
 
   Future<List<Contribution>> getContributionByUser(int userId) async {

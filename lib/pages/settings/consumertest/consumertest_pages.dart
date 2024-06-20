@@ -4,9 +4,9 @@ import 'package:hello_worl2/model/models.dart';
 import 'package:hello_worl2/pages/settings/consumertest/consumertest_begin.dart';
 import 'package:hello_worl2/pages/settings/consumertest/quiz.dart';
 import 'package:hello_worl2/provider/consumertestProvider.dart';
-import 'package:hello_worl2/widgets.dart/animationBar.dart';
-import 'package:hello_worl2/widgets.dart/error.dart';
-import 'package:hello_worl2/widgets.dart/loading.dart';
+import 'package:hello_worl2/widgets/animation_bar.dart';
+import 'package:hello_worl2/widgets/error.dart';
+import 'package:hello_worl2/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class QuizScreen extends StatelessWidget {

@@ -1,28 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/model/user_contribution.dart';
-import 'package:hello_worl2/provider/userProvider.dart';
-import 'package:hello_worl2/service/settings/user_contribution_service.dart';
+import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
-class Progress extends StatefulWidget {
+class Progress extends StatelessWidget {
   const Progress({super.key});
-
-  @override
-  State<Progress> createState() => _ProgressState();
-}
-
-class _ProgressState extends State<Progress> {
-  late Future<UserContribution> futureContribution;
-  @override
-  void initState() {
-    super.initState();
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final User? user = userProvider.user;
-
-    final userContributionService = UserContributionService();
-    futureContribution = userContributionService.fetchUserContribution(user!);
-  }
 
   String formatMoney(double amount) {
     int euro = amount.truncate();
@@ -47,31 +28,16 @@ class _ProgressState extends State<Progress> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<UserContribution>(
-      future: futureContribution,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Column(
-            children: [
-              Center(child: CircularProgressIndicator()),
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Column(
-            children: [
-              Center(child: Text('Error: ${snapshot.error}')),
-            ],
-          );
-        } else if (!snapshot.hasData) {
-          return const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Center(child: Text('No data available')),
-          );
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        final userContribution = userProvider.userContribution;
+        if (userProvider.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (userContribution == null) {
+          return const Center(child: Text('No data available'));
         } else {
-          final data = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.all(5),
-            // top: 20.0, left: 20, right: 20, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +59,7 @@ class _ProgressState extends State<Progress> {
                         const Icon(Icons.local_drink),
                         const SizedBox(width: 8),
                         Text(
-                          ": ${data.amountFillings} Füllungen",
+                          ": ${userContribution.amountFillings} Füllungen",
                         ),
                       ],
                     ),
@@ -102,7 +68,7 @@ class _ProgressState extends State<Progress> {
                         const Icon(Icons.water_drop),
                         const SizedBox(width: 8),
                         Text(
-                          ": ${formatVolume(data.amountWater)}",
+                          ": ${formatVolume(userContribution.amountWater)}",
                         ),
                       ],
                     ),
@@ -117,7 +83,7 @@ class _ProgressState extends State<Progress> {
                         const Icon(Icons.euro),
                         const SizedBox(width: 8),
                         Text(
-                          ": ${formatMoney(data.savedMoney)}",
+                          ": ${formatMoney(userContribution.savedMoney)}",
                         ),
                       ],
                     ),
@@ -126,7 +92,7 @@ class _ProgressState extends State<Progress> {
                         const Icon(Icons.delete),
                         const SizedBox(width: 8),
                         Text(
-                          ": ${formatWeight(data.savedTrash)}",
+                          ": ${formatWeight(userContribution.savedTrash)}",
                         ),
                       ],
                     ),

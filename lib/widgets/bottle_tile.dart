@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/provider/bottleProvider.dart';
+import 'package:hello_worl2/provider/bottle_provider.dart';
 import 'package:provider/provider.dart';
 
 class BottleTile extends StatefulWidget {
@@ -29,7 +29,7 @@ class _BottleTileState extends State<BottleTile> {
             children: [
               SizedBox(
                 width: constraints.maxWidth,
-                height: constraints.maxHeight * 0.6,
+                height: constraints.maxHeight * 0.5,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.asset(

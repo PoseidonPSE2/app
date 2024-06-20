@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/provider/userProvider.dart';
+import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hex/hex.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:hello_worl2/provider/bottleProvider.dart';
+import 'package:hello_worl2/provider/bottle_provider.dart';
 
 class WaterSettings extends StatefulWidget {
   const WaterSettings({super.key});

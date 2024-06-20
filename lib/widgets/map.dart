@@ -1,41 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:hello_worl2/model/refillstation.dart';
 import 'package:hello_worl2/pages/WaterstationDetails.dart';
-import 'package:hello_worl2/restApi/mapper.dart';
+import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:hello_worl2/restApi/apiService.dart';
+import 'package:provider/provider.dart';
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+class Map extends StatefulWidget {
+  const Map({super.key});
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
 }
 
-class _MapWidgetState extends State<MapScreen> {
-  late Future<List<RefillStationMarker>> futureRefillStationLocations;
-
+class _MapWidgetState extends State<Map> {
+  final provider = RefillStationProvider();
   @override
   void initState() {
     super.initState();
-    futureRefillStationLocations = fetchWaterStations();
-  }
-
-  Future<List<RefillStationMarker>> fetchWaterStations() async {
-    return await ApiService().getAllRefillMarker();
   }
 
   void navigateToDetailsPage(
       BuildContext context, RefillStationMarker marker) async {
-    var refillstation = await ApiService().getRefillstationById(marker.id);
-    RefillstationReviewAverage average =
-        await ApiService().getRefillStationReviewAverage(marker.id);
+    await provider.fetchStationById(marker.id);
+    await provider.fetchReviewAverage(marker.id);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Waterstationdetails(
-          station: refillstation,
-          average: average,
+          marker: marker,
         ),
       ),
     );
@@ -45,21 +38,20 @@ class _MapWidgetState extends State<MapScreen> {
     return Image.asset(status
         ? 'assets/image/frontpage.png'
         : 'assets/image/frontpage_dark.png');
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<RefillStationMarker>>(
-      future: futureRefillStationLocations,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return Consumer<RefillStationProvider>(
+      builder: (context, provider, child) {
+        if (provider.isLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        } else if (provider.errorMessage != null) {
+          return Center(child: Text('Error: ${provider.errorMessage}'));
+        } else if (provider.stations.isEmpty) {
           return const Center(child: Text('Keine Refill-Station vorhanden!'));
         } else {
-          final refillStationLocations = snapshot.data!;
+          final refillStationLocations = provider.stations;
           return FlutterMap(
             options: const MapOptions(
               initialCenter: LatLng(49.440067, 7.749126),

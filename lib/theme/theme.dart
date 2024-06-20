@@ -36,10 +36,10 @@ ThemeData lightMode = ThemeData(
     selectedColor: Colors.grey.shade400,
   ),
   sliderTheme: SliderThemeData(
-    activeTickMarkColor: Colors.grey.shade400,
-    activeTrackColor: Colors.grey.shade400,
-    inactiveTrackColor: Colors.black,
-    thumbColor: Colors.black,
+    activeTickMarkColor: Colors.blue.shade500,
+    activeTrackColor: Colors.blue.shade500,
+    inactiveTrackColor: Colors.grey.shade400,
+    thumbColor: Colors.blue.shade500,
     valueIndicatorColor: Colors.black,
   ),
   switchTheme: SwitchThemeData(
