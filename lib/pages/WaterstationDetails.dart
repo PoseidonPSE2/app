@@ -38,6 +38,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
     await provider.fetchReviewAverage(widget.marker.id);
     await provider.fetchStationById(widget.marker.id);
     await provider.getLikeCounterForStation(widget.marker.id);
+    await provider.fetchImage(widget.marker.id);
   }
 
   Future<void> navigateToReviewPage(
