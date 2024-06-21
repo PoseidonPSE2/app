@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hello_worl2/pages/navbar/refill.dart';
+import 'package:hello_worl2/provider/map_provider.dart';
 import 'package:hello_worl2/widgets/bottom_sheet.dart';
 import 'package:hello_worl2/widgets/drawer.dart';
 import 'package:hello_worl2/widgets/map.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,6 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final provider = MapProvider();
 
   @override
   void initState() {
@@ -128,14 +131,15 @@ class _HomeState extends State<Home> {
               width: 60,
               height: 60,
               child: FittedBox(
-                child: FloatingActionButton(
-                  heroTag: 'userLocation',
-                  shape: const CircleBorder(),
-                  onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => const RefillScreen()));
-                  },
-                  child: const Icon(Icons.explore_outlined),
+                child: Consumer<MapProvider>(
+                  builder: (context, provider, child) => FloatingActionButton(
+                    heroTag: 'userLocation',
+                    shape: const CircleBorder(),
+                    onPressed: () => provider.toggle(),
+                    child: provider.isToggled
+                        ? const Icon(Icons.explore)
+                        : const Icon(Icons.explore_outlined),
+                  ),
                 ),
               ),
             ),
