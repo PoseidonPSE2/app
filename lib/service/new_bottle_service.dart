@@ -14,7 +14,7 @@ class NewBottleService {
       body: jsonEncode(bottle.toJson()),
     );
 
-    print(bottle.toJson());
+    print(response.body);
     if (response.statusCode == 201) {
       print('New bottle created successfully');
     } else {

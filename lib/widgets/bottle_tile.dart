@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
@@ -12,6 +13,14 @@ class BottleTile extends StatefulWidget {
 }
 
 class _BottleTileState extends State<BottleTile> {
+  ImageProvider<Object> _getImageProvider() {
+    if (widget.bottle.pathImage == null || widget.bottle.pathImage!.isEmpty) {
+      return AssetImage("assets/image/wasserspender.jpg");
+    } else {
+      return FileImage(File(widget.bottle.pathImage!));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -32,8 +41,8 @@ class _BottleTileState extends State<BottleTile> {
                 height: constraints.maxHeight * 0.5,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    "assets/image/wasserspender.jpg",
+                  child: Image(
+                    image: _getImageProvider(),
                     fit: BoxFit.cover,
                   ),
                 ),

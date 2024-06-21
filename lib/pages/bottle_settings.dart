@@ -1,7 +1,10 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hex/hex.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
@@ -16,10 +19,13 @@ class WaterSettings extends StatefulWidget {
 class _WaterSettingsState extends State<WaterSettings> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   double _currentWaterAmount = 250;
   bool isStillWater = true;
   String nfcId = "";
+  File? _selectedImage;
+  String? _base64Image;
 
   @override
   void initState() {
@@ -69,6 +75,33 @@ class _WaterSettingsState extends State<WaterSettings> {
     }
   }
 
+  Future<void> _pickImage() async {
+    try {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+        setState(() {
+          _selectedImage = imageFile;
+        });
+        await _convertImageToBase64(imageFile);
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
+  Future<void> _convertImageToBase64(File image) async {
+    try {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _base64Image = base64Encode(bytes);
+      });
+    } catch (e) {
+      print('Error converting image to Base64: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +139,19 @@ class _WaterSettingsState extends State<WaterSettings> {
                     hintText: 'Flaschentitel',
                   ),
                 ),
+              ),
+              if (_selectedImage != null)
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Image.file(
+                    _selectedImage!,
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: const Text('Bild auswählen'),
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -227,9 +273,9 @@ class _WaterSettingsState extends State<WaterSettings> {
                           waterType: isStillWater ? "tap" : "mineral",
                           nfcId: nfcId, // Falls verfügbar, sonst leer.
                           userId: currentUser.userId,
+                          pathImage: _base64Image,
                         );
 
-                        //context.read<BottleProvider>().addBottle(newBottle);
                         try {
                           await Provider.of<BottleProvider>(context,
                                   listen: false)
