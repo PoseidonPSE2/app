@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hello_worl2/model/refillstation.dart';
 import 'package:hello_worl2/model/user.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
+import 'package:hello_worl2/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import '../restApi/waterEnums.dart';
 import 'WaterstationReport.dart';
@@ -38,6 +38,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
     await provider.fetchReviewAverage(widget.marker.id);
     await provider.fetchStationById(widget.marker.id);
     await provider.getLikeCounterForStation(widget.marker.id);
+    await provider.fetchImage(widget.marker.id);
   }
 
   Future<void> navigateToReviewPage(
@@ -109,7 +110,9 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
             builder: (context, provider, child) {
               return TextButton(
                 onPressed: () {
-                  navigateToReportPage(context, provider.selectedStation!);
+                  if (provider.selectedStation != null) {
+                    navigateToReportPage(context, provider.selectedStation!);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -131,7 +134,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
       body: Consumer<RefillStationProvider>(
         builder: (context, provider, child) {
           if (provider.selectedStation == null) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
             return Column(
               children: [
@@ -153,16 +156,24 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                                     height: screenHeight * 0.15,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),
-                                      image: provider.imageBase64?.image != null && provider.imageBase64!.image!.isNotEmpty
-                                          ? DecorationImage(
-                                        image: MemoryImage(base64Decode(provider.imageBase64!.image!)),
-                                        fit: BoxFit.cover,
-                                      )
-                                          : DecorationImage(
-                                        image: const AssetImage("assets/image/herz.jpg"),
-                                        fit: BoxFit.cover,
-                                      ),
+                                      image:
+                                          provider.imageBase64?.image != null &&
+                                                  provider.imageBase64!.image!
+                                                      .isNotEmpty
+                                              ? DecorationImage(
+                                                  image: MemoryImage(
+                                                      base64Decode(provider
+                                                          .imageBase64!
+                                                          .image!)),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : null,
                                     ),
+                                    child: provider.imageBase64?.image ==
+                                                null ||
+                                            provider.imageBase64!.image!.isEmpty
+                                        ? LoadingScreen()
+                                        : null,
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
@@ -367,7 +378,6 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                       left: 15, top: 15, right: 15, bottom: 40),
                   child: ElevatedButton(
                     onPressed: () {
-                      print("test2");
                       navigateToReviewPage(context, provider.selectedStation!);
                     },
                     child: Text('Bewerten'),

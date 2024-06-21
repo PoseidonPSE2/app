@@ -127,11 +127,13 @@ class RefillStationProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
   Future<void> fetchImage(int id) async {
     _isLoading = true;
     notifyListeners();
     try {
       _imageBase64 = await ApiService().getRefillstationImage(id);
+      print(_imageBase64?.image);
       _errorMessage = null;
     } catch (e) {
       _errorMessage = 'Failed to fetch image';
@@ -140,5 +142,4 @@ class RefillStationProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 }
