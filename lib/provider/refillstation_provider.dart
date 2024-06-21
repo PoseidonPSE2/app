@@ -25,6 +25,11 @@ class RefillStationProvider with ChangeNotifier {
   bool get isLiked => _isLiked;
   RefillStationImage? get imageBase64 => _imageBase64;
 
+  set imageBase64(RefillStationImage? value) {
+    _imageBase64 = value;
+    notifyListeners();
+  }
+
   Future<void> fetchStations() async {
     _isLoading = true;
     notifyListeners();
@@ -98,6 +103,7 @@ class RefillStationProvider with ChangeNotifier {
 
   Future<void> getLike(int stationId, int userId) async {
     _isLoading = true;
+    
     notifyListeners();
     try {
       _isLiked = await ApiService().getLike(stationId, userId);
@@ -133,7 +139,6 @@ class RefillStationProvider with ChangeNotifier {
     notifyListeners();
     try {
       _imageBase64 = await ApiService().getRefillstationImage(id);
-      print(_imageBase64?.image);
       _errorMessage = null;
     } catch (e) {
       _errorMessage = 'Failed to fetch image';

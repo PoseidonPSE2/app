@@ -34,6 +34,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
 
   Future<void> fetchReviewData() async {
     final provider = Provider.of<RefillStationProvider>(context, listen: false);
+    provider.imageBase64 = null;
     await provider.getLike(widget.marker.id, currentUser!.userId);
     await provider.fetchReviewAverage(widget.marker.id);
     await provider.fetchStationById(widget.marker.id);
