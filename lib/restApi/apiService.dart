@@ -70,9 +70,9 @@ class ApiService {
     final response = await http.get(Uri.parse(url));
     print(response.statusCode);
     if (response.statusCode == 200) {
-      final jsonBody = jsonDecode(response.body) as List<dynamic>;
+      final jsonBody = jsonDecode(response.body);
       if (jsonBody.isNotEmpty) {
-        return RefillstationReview.fromJson(jsonBody.first);
+        return RefillstationReview.fromJson(jsonBody);
       } else {
         // Return a default review if no review is found
         return RefillstationReview(
