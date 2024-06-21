@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/model/refillstation.dart';
@@ -109,7 +110,19 @@ class ApiService {
       body: body,
     );
   }
+  Future<RefillStationImage?> getRefillstationImage(int refillstationId) async {
+    String url = "$_baseUrl/refill_stations/image/$refillstationId";
 
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final jsonBody = jsonDecode(response.body);
+      return RefillStationImage.fromJson(jsonBody);
+    } else {
+      print('Failed to fetch image with id: ${response.statusCode}');
+      return null;
+    }
+  }
   Future<int> getLikeCounterForStation(int stationId) async {
     final response =
         await http.get(Uri.parse('$_baseUrl/likes/$stationId/count'));

@@ -176,3 +176,17 @@ class RefillstationProblem {
         //'mediaLink': mediaLink,
       };
 }
+
+class RefillStationImage {
+  final String? image;
+
+  RefillStationImage({
+    required this.image,
+  }) : super();
+
+  factory RefillStationImage.fromJson(Map<String, dynamic> json) {
+    return RefillStationImage(
+      image: json['station_image'] as String,
+    );
+  }
+}

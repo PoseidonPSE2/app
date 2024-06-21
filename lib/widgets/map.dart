@@ -15,6 +15,7 @@ class Map extends StatefulWidget {
 
 class _MapWidgetState extends State<Map> {
   final provider = RefillStationProvider();
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,7 @@ class _MapWidgetState extends State<Map> {
     return Image.asset(status
         ? 'assets/image/frontpage.png'
         : 'assets/image/frontpage_dark.png');
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,19 +68,34 @@ class _MapWidgetState extends State<Map> {
                 subdomains: const ['a', 'b', 'c'],
               ),
               MarkerLayer(
-                markers: refillStationLocations.map((marker) {
-                  return Marker(
-                    point: LatLng(marker.latitude, marker.longitude),
-                    width: 90.0,
-                    height: 90.0,
-                    child: marker.status
-                        ? GestureDetector(
-                            onTap: () => navigateToDetailsPage(context, marker),
-                            child: _buildMarkerChild(marker.status),
-                          )
-                        : _buildMarkerChild(marker.status),
-                  );
-                }).toList(),
+                markers: [
+                  // Existing markers from refillStationLocations
+                  ...refillStationLocations.map((marker) {
+                    return Marker(
+                      point: LatLng(marker.latitude, marker.longitude),
+                      width: 90.0,
+                      height: 90.0,
+                      child: marker.status
+                          ? GestureDetector(
+                              onTap: () =>
+                                  navigateToDetailsPage(context, marker),
+                              child: _buildMarkerChild(marker.status),
+                            )
+                          : _buildMarkerChild(marker.status),
+                    );
+                  }).toList(),
+
+/*                  if (currentLocation != null)
+                    Marker(
+                      point: LatLng(
+                        currentLocation!.latitude,
+                        currentLocation!.longitude,
+                      ),
+                      child: const Icon(Icons.location_on),
+                    ),
+
+ */
+                ],
               ),
             ],
           );

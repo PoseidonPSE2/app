@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hello_worl2/model/refillstation.dart';
@@ -151,9 +153,13 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                                     height: screenHeight * 0.15,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),
-                                      image: const DecorationImage(
-                                        image:
-                                            AssetImage("assets/image/herz.jpg"),
+                                      image: provider.imageBase64?.image != null && provider.imageBase64!.image!.isNotEmpty
+                                          ? DecorationImage(
+                                        image: MemoryImage(base64Decode(provider.imageBase64!.image!)),
+                                        fit: BoxFit.cover,
+                                      )
+                                          : DecorationImage(
+                                        image: const AssetImage("assets/image/herz.jpg"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),

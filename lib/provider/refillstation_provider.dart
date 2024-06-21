@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/refillstation.dart';
 import 'package:hello_worl2/restApi/apiService.dart';
@@ -11,6 +13,7 @@ class RefillStationProvider with ChangeNotifier {
   RefillstationReview? _review;
   int _likes = 0;
   bool _isLiked = false;
+  RefillStationImage? _imageBase64;
 
   List<RefillStationMarker> get stations => _stations;
   bool get isLoading => _isLoading;
@@ -20,6 +23,7 @@ class RefillStationProvider with ChangeNotifier {
   RefillstationReview? get review => _review;
   int get likes => _likes;
   bool get isLiked => _isLiked;
+  RefillStationImage? get imageBase64 => _imageBase64;
 
   Future<void> fetchStations() async {
     _isLoading = true;
@@ -123,4 +127,18 @@ class RefillStationProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+  Future<void> fetchImage(int id) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _imageBase64 = await ApiService().getRefillstationImage(id);
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = 'Failed to fetch image';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
 }
