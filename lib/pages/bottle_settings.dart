@@ -277,6 +277,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                         );
 
                         try {
+                          print(newBottle);
                           await Provider.of<BottleProvider>(context,
                                   listen: false)
                               .addBottle(newBottle);

@@ -1,6 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/model/user.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
@@ -80,7 +81,7 @@ class _RefillScreenState extends State<RefillScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flasche auffüllen"),
+        title: const Text("Flasche auffüllen"),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       key: navigatorKey,
@@ -145,9 +146,9 @@ class _RefillScreenState extends State<RefillScreen> {
                                               offset: Offset(0, 5),
                                             ),
                                           ],
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                "assets/image/wasserspender.jpg"),
+                                          image: DecorationImage(
+                                            image: _getImageProvider(
+                                                bottle.pathImage),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -237,6 +238,16 @@ class _RefillScreenState extends State<RefillScreen> {
         ),
       ),
     );
+  }
+
+  ImageProvider<Object> _getImageProvider(String? pathImage) {
+    if (pathImage == null || pathImage.isEmpty) {
+      return AssetImage("assets/image/wasserspender.jpg");
+    } else {
+      // Handle Base64 encoded image
+      final base64Data = pathImage;
+      return MemoryImage(base64Decode(base64Data));
+    }
   }
 
   void _startNFCReading() async {

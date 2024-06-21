@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
@@ -17,7 +18,8 @@ class _BottleTileState extends State<BottleTile> {
     if (widget.bottle.pathImage == null || widget.bottle.pathImage!.isEmpty) {
       return AssetImage("assets/image/wasserspender.jpg");
     } else {
-      return FileImage(File(widget.bottle.pathImage!));
+      final base64Data = widget.bottle.pathImage!;
+      return MemoryImage(base64Decode(base64Data));
     }
   }
 

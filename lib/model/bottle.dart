@@ -29,7 +29,7 @@ class Bottle {
       fillVolume: json['fill_volume'] as int,
       waterType: json['water_type'] as String,
       title: json['title'] as String,
-      pathImage: json['path_image'] as String?,
+      pathImage: json['bottle_image'] as String?,
       active: json['active'] as bool,
       waterTransactions: json['water_transactions'] as List<dynamic>?,
     );
@@ -43,7 +43,7 @@ class Bottle {
       'fill_volume': fillVolume,
       'water_type': waterType,
       'title': title,
-      'path_image': pathImage,
+      'bottle_image': pathImage,
       'active': active,
       'water_transactions': waterTransactions,
     };

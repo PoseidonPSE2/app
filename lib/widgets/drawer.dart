@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/other/login.dart';
 import 'package:hello_worl2/pages/settings/ContributionCommunity.dart';
 import 'package:hello_worl2/pages/settings/ContributionKaiserslautern.dart';
-import 'package:hello_worl2/pages/settings/myBottle.dart';
+import 'package:hello_worl2/pages/settings/bottle.dart';
 import 'package:hello_worl2/widgets/custom_list_tile.dart';
 import 'package:hello_worl2/widgets/user_progress.dart';
 

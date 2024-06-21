@@ -39,7 +39,6 @@ class NewBottleService {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-      print("Raw JSON response: $data");
 
       List<Bottle> bottles = data.map((item) => Bottle.fromJson(item)).toList();
       return bottles;
