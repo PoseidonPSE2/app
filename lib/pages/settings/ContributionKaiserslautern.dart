@@ -25,82 +25,98 @@ class _KLContributionScreenState extends State<KLContributionScreen> {
         centerTitle: true,
         title: const Text('Refill'),
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: futureContribution,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data available'));
-          } else {
-            final data = snapshot.data!;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Padding(padding: EdgeInsets.all(30)),
-                const SizedBox(
-                  width: 500,
-                  height: 200,
-                  child: Image(image: AssetImage("assets/image/refill_kl.png")),
-                ),
-                const Padding(padding: EdgeInsets.all(10)),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                  child: Text(
-                    "Alle Refillstationen in Kaiserslautern",
-                    style: Theme.of(context).textTheme.titleLarge,
-                    textAlign: TextAlign.center,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Padding(padding: EdgeInsets.all(30)),
+          const SizedBox(
+            width: 500,
+            height: 200,
+            child: Image(image: AssetImage("assets/image/refill_kl.png")),
+          ),
+          const Padding(padding: EdgeInsets.all(10)),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+            child: Text(
+              "Alle Refillstationen in Kaiserslautern",
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Padding(padding: EdgeInsets.all(20)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const FaIcon(
+                    FontAwesomeIcons.handHoldingDroplet,
+                    size: 40,
                   ),
-                ),
-                const Padding(padding: EdgeInsets.all(20)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const FaIcon(
-                          FontAwesomeIcons.handHoldingDroplet,
-                          size: 40,
-                        ),
-                        Text(
-                          '${data['amountRefillStationManual']}x Manuell',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const FaIcon(
-                          FontAwesomeIcons.glassWaterDroplet,
-                          size: 40,
-                        ),
-                        Text(
-                          '${data['amountRefillStationSmart']}x Smart',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.all(30)),
-                ElevatedButton(
-                  onPressed: () {
-                    launchUrlString(
-                        'https://www.kaiserslautern.de/sozial_leben_wohnen/umwelt/klimaschutz/projekte/055055/index.html.de');
-                  },
-                  child: const Text(
-                    'Zur Kaiserslautern Seite',
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
-            );
-          }
-        },
+                  FutureBuilder<Map<String, dynamic>>(
+                    future: futureContribution,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text("0x Manuell");
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text('No data available');
+                      } else {
+                        final data = snapshot.data!;
+                        return Text(
+                            '${data['amountRefillStationManual']}x Manuell');
+                      }
+                    },
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const FaIcon(
+                    FontAwesomeIcons.glassWaterDroplet,
+                    size: 40,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  FutureBuilder<Map<String, dynamic>>(
+                    future: futureContribution,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text("0x Smart");
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text('Keine Daten vorhanden');
+                      } else {
+                        final data = snapshot.data!;
+                        return Text(
+                            '${data['amountRefillStationSmart']}x Smart');
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Padding(padding: EdgeInsets.all(30)),
+          ElevatedButton(
+            onPressed: () {
+              launchUrlString(
+                  'https://www.kaiserslautern.de/sozial_leben_wohnen/umwelt/klimaschutz/projekte/055055/index.html.de');
+            },
+            child: const Text(
+              'Zur Kaiserslautern Seite',
+            ),
+          ),
+        ],
       ),
     );
   }
