@@ -6,6 +6,8 @@ import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/map_provider.dart';
+
 class Map extends StatefulWidget {
   const Map({super.key});
 
@@ -15,6 +17,7 @@ class Map extends StatefulWidget {
 
 class _MapWidgetState extends State<Map> {
   final provider = RefillStationProvider();
+  final mapProvider = MapProvider();
 
   @override
   void initState() {
@@ -43,8 +46,8 @@ class _MapWidgetState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RefillStationProvider>(
-      builder: (context, provider, child) {
+    return Consumer2<RefillStationProvider, MapProvider>(
+      builder: (context, provider,mapProvider, child) {
         if (provider.isLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (provider.errorMessage != null) {
@@ -85,16 +88,18 @@ class _MapWidgetState extends State<Map> {
                     );
                   }).toList(),
 
-/*                  if (currentLocation != null)
-                    Marker(
+                 if (mapProvider.isToggled)
+                    const Marker(
                       point: LatLng(
-                        currentLocation!.latitude,
-                        currentLocation!.longitude,
+                        49.447911,
+                        7.771705,
                       ),
-                      child: const Icon(Icons.location_on),
+                      width: 90.0,
+                      height: 90.0,
+                      child: Icon(Icons.location_on),
                     ),
 
- */
+
                 ],
               ),
             ],
