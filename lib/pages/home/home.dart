@@ -136,10 +136,10 @@ class _HomeState extends State<Home> {
                       provider.toggle();
                       if (provider.isToggled) {
                         getCurrentLocation();
-                        timer = Timer.periodic(const Duration(seconds: 30), (_) => getCurrentLocation());
-                      } else {
-                        timer?.cancel();
-                        timer = null;
+                        // timer = Timer.periodic(const Duration(seconds: 30), (_) => getCurrentLocation());
+                      // } else {
+                      //   timer?.cancel();
+                      //   timer = null;
                       }
                     },
                     child: Icon(
