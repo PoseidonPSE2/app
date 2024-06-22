@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
+import 'package:hello_worl2/pages/drawer/bottle/bottle_edit.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,7 @@ class BottleTile extends StatefulWidget {
 class _BottleTileState extends State<BottleTile> {
   ImageProvider<Object> _getImageProvider() {
     if (widget.bottle.pathImage == null || widget.bottle.pathImage!.isEmpty) {
-      return AssetImage("assets/image/wasserspender.jpg");
+      return const AssetImage("assets/image/wasserspender.jpg");
     } else {
       final base64Data = widget.bottle.pathImage!;
       return MemoryImage(base64Decode(base64Data));
@@ -38,14 +38,22 @@ class _BottleTileState extends State<BottleTile> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight * 0.5,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image(
-                    image: _getImageProvider(),
-                    fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => EditBottle(
+                            bottle: widget.bottle,
+                          )));
+                },
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight * 0.5,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image(
+                      image: _getImageProvider(),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
