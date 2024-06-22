@@ -28,6 +28,21 @@ class ApiService {
     }
   }
 
+  Future<List<RefillStation>> getAllRefillStations() async {
+    String url = "$_baseUrl/refill_stations";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final jsonBody = jsonDecode(response.body);
+      return jsonBody
+          .map<RefillStation>((station) => RefillStation.fromJson(station))
+          .toList();
+    } else {
+      throw Exception(
+          'Failed to fetch refill stations: ${response.statusCode}');
+    }
+  }
+
   Future<RefillStation> getRefillstationById(int refillstationId) async {
     String url = "$_baseUrl/refill_stations/$refillstationId";
 
@@ -110,6 +125,7 @@ class ApiService {
       body: body,
     );
   }
+
   Future<RefillStationImage?> getRefillstationImage(int refillstationId) async {
     String url = "$_baseUrl/refill_stations/image/$refillstationId";
 
@@ -123,6 +139,7 @@ class ApiService {
       return null;
     }
   }
+
   Future<int> getLikeCounterForStation(int stationId) async {
     final response =
         await http.get(Uri.parse('$_baseUrl/likes/$stationId/count'));

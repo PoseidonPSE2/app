@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hello_worl2/service/settings/kl_contribution_service.dart';
+import 'package:hello_worl2/service/drawer/kl_contribution_service.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class KLContributionScreen extends StatefulWidget {

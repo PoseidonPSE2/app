@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:hello_worl2/pages/navbar/refill.dart';
+import 'package:hello_worl2/pages/home/refill.dart';
 import 'package:hello_worl2/provider/map_provider.dart';
 import 'package:hello_worl2/widgets/bottom_sheet.dart';
 import 'package:hello_worl2/widgets/drawer.dart';
 import 'package:hello_worl2/widgets/map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -17,6 +20,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final provider = MapProvider();
+  Timer? timer;
+
 
   @override
   void initState() {
@@ -63,23 +68,15 @@ class _HomeState extends State<Home> {
         return;
       }
     }
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    /*
-    setState(() {
-
-      currentLocation = LocationModel(
-        latitude: position.latitude,
-        longitude: position.longitude,
+    if (provider.isToggled) {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
       );
-      mapController.move(
-        LatLng(currentLocation!.latitude, currentLocation!.longitude),
-        15.0,
-      );
-    });
 
-     */
+      LatLng currentUserLocation =
+          LatLng(position.latitude, position.longitude);
+      provider.setPosition(currentUserLocation);
+    }
   }
 
   @override
@@ -135,10 +132,21 @@ class _HomeState extends State<Home> {
                   builder: (context, provider, child) => FloatingActionButton(
                     heroTag: 'userLocation',
                     shape: const CircleBorder(),
-                    onPressed: () => provider.toggle(),
-                    child: provider.isToggled
-                        ? const Icon(Icons.explore)
-                        : const Icon(Icons.explore_outlined),
+                    onPressed: () {
+                      provider.toggle();
+                      if (provider.isToggled) {
+                        getCurrentLocation();
+                        timer = Timer.periodic(const Duration(seconds: 30), (_) => getCurrentLocation());
+                      } else {
+                        timer?.cancel();
+                        timer = null;
+                      }
+                    },
+                    child: Icon(
+                      provider.isToggled
+                          ? Icons.explore
+                          : Icons.explore_outlined,
+                    ),
                   ),
                 ),
               ),

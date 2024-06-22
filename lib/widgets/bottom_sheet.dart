@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:hello_worl2/widgets/refillstation_details.dart';
 import 'package:provider/provider.dart';
-import 'package:hello_worl2/model/refillstation.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   const CustomBottomSheet({super.key});
@@ -59,11 +58,11 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     } else if (provider.errorMessage != null) {
                       return Center(
                           child: Text('Error: ${provider.errorMessage}'));
-                    } else if (provider.stations.isEmpty) {
+                    } else if (provider.stationMarkers.isEmpty) {
                       return const Center(
                           child: Text('Keine Refill-Station vorhanden!'));
                     } else {
-                      final detailsList = provider.stations;
+                      final detailsList = provider.stationMarkers;
                       return CustomScrollView(
                         controller: scrollController,
                         slivers: [

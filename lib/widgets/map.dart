@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hello_worl2/model/refillstation.dart';
-import 'package:hello_worl2/pages/WaterstationDetails.dart';
+import 'package:hello_worl2/model/user.dart';
+import 'package:hello_worl2/pages/map/WaterstationDetails.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
+import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
@@ -16,18 +18,30 @@ class Map extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<Map> {
-  final provider = RefillStationProvider();
   final mapProvider = MapProvider();
+
+  late RefillStationProvider provider;
+  User? currentUser;
+
 
   @override
   void initState() {
     super.initState();
+    currentUser = Provider.of<UserProvider>(context, listen: false).user;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider = Provider.of<RefillStationProvider>(context, listen: false);
+    });
   }
 
   void navigateToDetailsPage(
       BuildContext context, RefillStationMarker marker) async {
     await provider.fetchStationById(marker.id);
     await provider.fetchReviewAverage(marker.id);
+    await provider.getLike(marker.id, currentUser!.userId);
+    await provider.fetchReviewAverage(marker.id);
+    await provider.fetchStationById(marker.id);
+    await provider.getLikeCounterForStation(marker.id);
+    await provider.fetchImage(marker.id);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -46,19 +60,22 @@ class _MapWidgetState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Consumer2<RefillStationProvider, MapProvider>(
       builder: (context, provider,mapProvider, child) {
         if (provider.isLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (provider.errorMessage != null) {
           return Center(child: Text('Error: ${provider.errorMessage}'));
-        } else if (provider.stations.isEmpty) {
+        } else if (provider.stationMarkers.isEmpty) {
           return const Center(child: Text('Keine Refill-Station vorhanden!'));
         } else {
-          final refillStationLocations = provider.stations;
-          return FlutterMap(
-            options: const MapOptions(
-              initialCenter: LatLng(49.440067, 7.749126),
+          final refillStationLocations = provider.stationMarkers;
+
+        return FlutterMap(
+            options: MapOptions(
+              initialCenter: mapProvider.isToggled ? mapProvider.getUserLocation :const LatLng(49.440067, 7.749126),
               initialZoom: 13,
               minZoom: 10,
               maxZoom: 18,
@@ -89,14 +106,12 @@ class _MapWidgetState extends State<Map> {
                   }).toList(),
 
                  if (mapProvider.isToggled)
-                    const Marker(
-                      point: LatLng(
-                        49.447911,
-                        7.771705,
-                      ),
+
+                     Marker(
+                      point: mapProvider.getUserLocation,
                       width: 90.0,
                       height: 90.0,
-                      child: Icon(Icons.location_on),
+                      child: const Icon(Icons.location_on, color: Colors.red,),
                     ),
 
 
