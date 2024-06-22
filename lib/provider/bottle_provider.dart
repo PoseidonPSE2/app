@@ -34,6 +34,11 @@ class BottleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> editBottle(Bottle bottle) async {
+    await _bottleService.editBottle(bottle);
+    notifyListeners();
+  }
+
   void removeBottle(int bottleId) async {
     final index = _bottles.indexWhere((bottle) => bottle.id == bottleId);
     if (index != -1) {

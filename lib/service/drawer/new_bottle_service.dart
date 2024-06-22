@@ -23,6 +23,23 @@ class NewBottleService {
     }
   }
 
+  Future<void> editBottle(Bottle bottle) async {
+    print(bottle);
+    final response = await http.put(
+      Uri.parse(baseUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(bottle.toJson()),
+    );
+    if (response.statusCode == 200) {
+      print('Deine Wasserflasche wurde geändert!');
+    } else {
+      print(response.statusCode);
+      throw Exception('Failed to create new bottle');
+    }
+  }
+
   Future<void> deleteBottle(int bottleId) async {
     final url = '$baseUrl/$bottleId';
     final response = await http.delete(Uri.parse(url));

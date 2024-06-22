@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
@@ -9,27 +10,39 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
 
-class WaterSettings extends StatefulWidget {
-  const WaterSettings({super.key});
+class EditBottle extends StatefulWidget {
+  final Bottle bottle;
+
+  const EditBottle({super.key, required this.bottle});
 
   @override
-  State<WaterSettings> createState() => _WaterSettingsState();
+  State<EditBottle> createState() => _EditBottleState();
 }
 
-class _WaterSettingsState extends State<WaterSettings> {
+class _EditBottleState extends State<EditBottle> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _textEditingController = TextEditingController();
+  late TextEditingController _textEditingController;
   final ImagePicker _picker = ImagePicker();
 
-  double _currentWaterAmount = 250;
-  bool isStillWater = true;
+  late double _currentWaterAmount;
+  late bool isStillWater;
   String nfcId = "";
-  File? _selectedImage;
+  Uint8List? _imageBytes;
   String? _base64Image;
 
   @override
   void initState() {
     super.initState();
+    _textEditingController = TextEditingController(text: widget.bottle.title);
+    _currentWaterAmount = widget.bottle.fillVolume.toDouble();
+    isStillWater = widget.bottle.waterType == "tap";
+    _base64Image = widget.bottle.pathImage;
+    nfcId = widget.bottle.nfcId != null ? widget.bottle.nfcId! : "";
+
+    if (_base64Image != null) {
+      _imageBytes = base64Decode(_base64Image!);
+    }
+
     _startNFCReading();
   }
 
@@ -81,24 +94,14 @@ class _WaterSettingsState extends State<WaterSettings> {
           await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         File imageFile = File(pickedFile.path);
+        final bytes = await imageFile.readAsBytes();
         setState(() {
-          _selectedImage = imageFile;
+          _imageBytes = bytes;
+          _base64Image = base64Encode(bytes);
         });
-        await _convertImageToBase64(imageFile);
       }
     } catch (e) {
       print('Error picking image: $e');
-    }
-  }
-
-  Future<void> _convertImageToBase64(File image) async {
-    try {
-      final bytes = await image.readAsBytes();
-      setState(() {
-        _base64Image = base64Encode(bytes);
-      });
-    } catch (e) {
-      print('Error converting image to Base64: $e');
     }
   }
 
@@ -140,13 +143,24 @@ class _WaterSettingsState extends State<WaterSettings> {
                   ),
                 ),
               ),
-              if (_selectedImage != null)
+              if (_imageBytes != null)
                 Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Image.file(
-                    _selectedImage!,
+                  child: Container(
                     width: 100,
                     height: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black, // Farbe des Rands
+                        width: 2, // Breite des Rands
+                      ),
+                      borderRadius:
+                          BorderRadius.circular(10), // Abgerundete Ecken
+                      image: DecorationImage(
+                        image: MemoryImage(_imageBytes!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
               ElevatedButton(
@@ -267,19 +281,26 @@ class _WaterSettingsState extends State<WaterSettings> {
                           userProvider.user; // Access the current user
                       if (currentUser != null) {
                         // Check if currentUser is not null
-                        final newBottle = Bottle(
+                        Bottle editedBottle = Bottle(
+                          id: widget.bottle.id,
                           title: _textEditingController.text,
                           fillVolume: _currentWaterAmount.toInt(),
                           waterType: isStillWater ? "tap" : "mineral",
-                          nfcId: nfcId, // Falls verfügbar, sonst leer.
+                          nfcId: nfcId,
                           userId: currentUser.userId,
                           pathImage: _base64Image,
+                          active: widget.bottle.active,
+                          waterTransactions: widget.bottle.waterTransactions,
                         );
 
                         try {
+                          print(editedBottle);
                           await Provider.of<BottleProvider>(context,
                                   listen: false)
-                              .addBottle(newBottle);
+                              .editBottle(editedBottle);
+                          await Provider.of<BottleProvider>(context,
+                                  listen: false)
+                              .fetchBottles(currentUser);
                         } catch (e) {
                           print('Error creating new bottle: $e');
                         }
