@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/service/settings/community_service.dart';
+import 'package:hello_worl2/service/drawer/community_service.dart';
 
 class CommunityContributionScreen extends StatefulWidget {
   @override

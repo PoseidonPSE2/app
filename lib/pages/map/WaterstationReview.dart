@@ -5,7 +5,7 @@ import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hello_worl2/restApi/apiService.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import '../model/user.dart';
+import '../../model/user.dart';
 
 class Waterstationreview extends StatefulWidget {
   final RefillStation station;
@@ -140,7 +140,6 @@ class _WaterstationreviewState extends State<Waterstationreview> {
                     },
                     child: Text(
                       'Absenden',
-                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                 ],

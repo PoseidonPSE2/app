@@ -7,7 +7,7 @@ import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hello_worl2/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import '../restApi/waterEnums.dart';
+import '../../restApi/waterEnums.dart';
 import 'WaterstationReport.dart';
 import 'WaterstationReview.dart';
 
@@ -27,19 +27,6 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
   void initState() {
     super.initState();
     currentUser = Provider.of<UserProvider>(context, listen: false).user;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetchReviewData();
-    });
-  }
-
-  Future<void> fetchReviewData() async {
-    final provider = Provider.of<RefillStationProvider>(context, listen: false);
-    provider.imageBase64 = null;
-    await provider.getLike(widget.marker.id, currentUser!.userId);
-    await provider.fetchReviewAverage(widget.marker.id);
-    await provider.fetchStationById(widget.marker.id);
-    await provider.getLikeCounterForStation(widget.marker.id);
-    await provider.fetchImage(widget.marker.id);
   }
 
   Future<void> navigateToReviewPage(
@@ -50,7 +37,6 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
         builder: (context) => Waterstationreview(station: marker),
       ),
     );
-    fetchReviewData(); // Fetch the latest review data when returning from the review page
   }
 
   void navigateToReportPage(BuildContext context, RefillStation marker) {

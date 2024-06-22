@@ -1,11 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/refillstation.dart';
 import 'package:hello_worl2/restApi/apiService.dart';
 
 class RefillStationProvider with ChangeNotifier {
-  List<RefillStationMarker> _stations = [];
+  List<RefillStationMarker> _stationMarkers = [];
+  List<RefillStation> _stations = [];
   bool _isLoading = false;
   String? _errorMessage;
   RefillStation? _selectedStation;
@@ -15,7 +14,8 @@ class RefillStationProvider with ChangeNotifier {
   bool _isLiked = false;
   RefillStationImage? _imageBase64;
 
-  List<RefillStationMarker> get stations => _stations;
+  List<RefillStationMarker> get stationMarkers => _stationMarkers;
+  List<RefillStation> get stations => _stations;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   RefillStation? get selectedStation => _selectedStation;
@@ -34,7 +34,9 @@ class RefillStationProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      _stations = await ApiService().getAllRefillMarker();
+      _stationMarkers = await ApiService().getAllRefillMarker();
+      _stations = await ApiService().getAllRefillStations();
+
       _errorMessage = null;
     } catch (e) {
       _errorMessage = 'Failed to fetch stations';
@@ -103,7 +105,7 @@ class RefillStationProvider with ChangeNotifier {
 
   Future<void> getLike(int stationId, int userId) async {
     _isLoading = true;
-    
+
     notifyListeners();
     try {
       _isLiked = await ApiService().getLike(stationId, userId);

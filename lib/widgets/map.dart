@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hello_worl2/model/refillstation.dart';
-import 'package:hello_worl2/pages/WaterstationDetails.dart';
+import 'package:hello_worl2/model/user.dart';
+import 'package:hello_worl2/pages/map/WaterstationDetails.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
+import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
@@ -14,17 +16,27 @@ class Map extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<Map> {
-  final provider = RefillStationProvider();
+  late RefillStationProvider provider;
+  User? currentUser;
 
   @override
   void initState() {
     super.initState();
+    currentUser = Provider.of<UserProvider>(context, listen: false).user;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider = Provider.of<RefillStationProvider>(context, listen: false);
+    });
   }
 
   void navigateToDetailsPage(
       BuildContext context, RefillStationMarker marker) async {
     await provider.fetchStationById(marker.id);
     await provider.fetchReviewAverage(marker.id);
+    await provider.getLike(marker.id, currentUser!.userId);
+    await provider.fetchReviewAverage(marker.id);
+    await provider.fetchStationById(marker.id);
+    await provider.getLikeCounterForStation(marker.id);
+    await provider.fetchImage(marker.id);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -49,10 +61,10 @@ class _MapWidgetState extends State<Map> {
           return const Center(child: CircularProgressIndicator());
         } else if (provider.errorMessage != null) {
           return Center(child: Text('Error: ${provider.errorMessage}'));
-        } else if (provider.stations.isEmpty) {
+        } else if (provider.stationMarkers.isEmpty) {
           return const Center(child: Text('Keine Refill-Station vorhanden!'));
         } else {
-          final refillStationLocations = provider.stations;
+          final refillStationLocations = provider.stationMarkers;
           return FlutterMap(
             options: const MapOptions(
               initialCenter: LatLng(49.440067, 7.749126),

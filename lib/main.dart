@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/pages/settings/SettingsScreen.dart';
-import 'package:hello_worl2/pages/bottle_settings.dart';
-import 'package:hello_worl2/pages/other/login.dart';
+import 'package:hello_worl2/pages/drawer/bottle/bottle_settings.dart';
+import 'package:hello_worl2/pages/home/login.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
 import 'package:hello_worl2/provider/map_provider.dart';
 import 'package:hello_worl2/provider/rating_provider.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hello_worl2/theme/theme.dart';
-import 'package:hello_worl2/pages/home.dart';
+import 'package:hello_worl2/pages/home/home.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -40,7 +39,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => const Home(),
         '/water_settings': (context) => const WaterSettings(),
-        '/test': (context) => UserListScreen(),
       },
     );
   }
