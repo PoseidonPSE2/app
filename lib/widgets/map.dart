@@ -7,7 +7,6 @@ import 'package:hello_worl2/provider/refillstation_provider.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-
 import '../provider/map_provider.dart';
 
 class Map extends StatefulWidget {
@@ -18,18 +17,22 @@ class Map extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<Map> {
-  final mapProvider = MapProvider();
-
+  late MapProvider mapProvider;
   late RefillStationProvider provider;
   User? currentUser;
-
+  late MapController mapController;
 
   @override
   void initState() {
     super.initState();
+    mapController = MapController();
     currentUser = Provider.of<UserProvider>(context, listen: false).user;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<RefillStationProvider>(context, listen: false);
+      mapProvider = Provider.of<MapProvider>(context, listen: false);
+      if (mapProvider.isToggled) {
+        _centerOnLocation(mapProvider.getUserLocation);
+      }
     });
   }
 
@@ -38,8 +41,6 @@ class _MapWidgetState extends State<Map> {
     await provider.fetchStationById(marker.id);
     await provider.fetchReviewAverage(marker.id);
     await provider.getLike(marker.id, currentUser!.userId);
-    await provider.fetchReviewAverage(marker.id);
-    await provider.fetchStationById(marker.id);
     await provider.getLikeCounterForStation(marker.id);
     await provider.fetchImage(marker.id);
     Navigator.push(
@@ -58,12 +59,14 @@ class _MapWidgetState extends State<Map> {
         : 'assets/image/frontpage_dark.png');
   }
 
+  void _centerOnLocation(LatLng location) {
+    mapController.move(location, mapController.zoom);
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Consumer2<RefillStationProvider, MapProvider>(
-      builder: (context, provider,mapProvider, child) {
+      builder: (context, provider, mapProvider, child) {
         if (provider.isLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (provider.errorMessage != null) {
@@ -73,10 +76,19 @@ class _MapWidgetState extends State<Map> {
         } else {
           final refillStationLocations = provider.stationMarkers;
 
-        return FlutterMap(
+          if (mapProvider.isToggled) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _centerOnLocation(mapProvider.getUserLocation);
+            });
+          }
+
+          return FlutterMap(
+            mapController: mapController,
             options: MapOptions(
-              initialCenter: mapProvider.isToggled ? mapProvider.getUserLocation :const LatLng(49.440067, 7.749126),
-              initialZoom: 13,
+              initialCenter: mapProvider.isToggled
+                  ? mapProvider.getUserLocation
+                  : const LatLng(49.440067, 7.749126),
+              initialZoom: 15,
               minZoom: 10,
               maxZoom: 18,
               interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
@@ -89,7 +101,6 @@ class _MapWidgetState extends State<Map> {
               ),
               MarkerLayer(
                 markers: [
-                  // Existing markers from refillStationLocations
                   ...refillStationLocations.map((marker) {
                     return Marker(
                       point: LatLng(marker.latitude, marker.longitude),
@@ -103,18 +114,17 @@ class _MapWidgetState extends State<Map> {
                             )
                           : _buildMarkerChild(marker.status),
                     );
-                  }).toList(),
-
-                 if (mapProvider.isToggled)
-
-                     Marker(
+                  }),
+                  if (mapProvider.isToggled)
+                    Marker(
                       point: mapProvider.getUserLocation,
                       width: 90.0,
                       height: 90.0,
-                      child: const Icon(Icons.location_on, color: Colors.red,),
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                      ),
                     ),
-
-
                 ],
               ),
             ],

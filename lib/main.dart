@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
 
     return MaterialApp(
-      theme: brightness == Brightness.light ? lightMode : darkMode,
+      theme: brightness == Brightness.light ? lightMode : lightMode,
       home: Login(),
       debugShowCheckedModeBanner: false,
       routes: {

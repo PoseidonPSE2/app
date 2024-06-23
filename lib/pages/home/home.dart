@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hello_worl2/pages/home/refill.dart';
@@ -19,14 +18,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final provider = MapProvider();
+  late MapProvider provider;
   Timer? timer;
-
+  List<LatLng> locationslol = [
+    LatLng(49.4433, 7.7622),
+    LatLng(49.440067, 7.749126),
+    LatLng(49.44694255672088, 7.751210803377673)
+  ];
 
   @override
   void initState() {
     super.initState();
-    // Entfernt: Der Aufruf von fetchStations ist nicht mehr hier notwendig
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider = Provider.of<MapProvider>(context, listen: false);
+    });
   }
 
   void getCurrentLocation() async {
@@ -75,8 +80,26 @@ class _HomeState extends State<Home> {
 
       LatLng currentUserLocation =
           LatLng(position.latitude, position.longitude);
-      provider.setPosition(currentUserLocation);
+
+      provider.setPosition(locationslol.removeLast());
+
+      setState(() {});
     }
+  }
+
+  void startLocationUpdates() {
+    timer = Timer.periodic(
+        Duration(seconds: 30), (Timer t) => getCurrentLocation());
+  }
+
+  void stopLocationUpdates() {
+    timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -100,8 +123,8 @@ class _HomeState extends State<Home> {
       ),
       extendBody: true,
       drawer: const CustomDrawer(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: Column(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min, // Restrict column size
         children: [
           Padding(
@@ -123,7 +146,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.only(left: 20, bottom: 20),
             child: SizedBox(
               width: 60,
               height: 60,
@@ -136,10 +159,9 @@ class _HomeState extends State<Home> {
                       provider.toggle();
                       if (provider.isToggled) {
                         getCurrentLocation();
-                        // timer = Timer.periodic(const Duration(seconds: 30), (_) => getCurrentLocation());
-                      // } else {
-                      //   timer?.cancel();
-                      //   timer = null;
+                        startLocationUpdates();
+                      } else {
+                        stopLocationUpdates();
                       }
                     },
                     child: Icon(
