@@ -48,11 +48,7 @@ class RefillStation {
     );
   }
 
-  static final Widget markerChild = Container(
-    child: Container(
-      child: Image.asset('assets/image/frontpage.png'),
-    ),
-  );
+  static final Widget markerChild = Image.asset('assets/image/frontpage.png');
 
   Widget get child => markerChild;
 }
@@ -79,11 +75,7 @@ class RefillStationMarker {
     );
   }
 
-  static final Widget markerChild = Container(
-    child: Container(
-      child: Image.asset('assets/image/frontpage.png'),
-    ),
-  );
+  static final Widget markerChild = Image.asset('assets/image/frontpage.png');
 
   Widget get child => markerChild;
 }

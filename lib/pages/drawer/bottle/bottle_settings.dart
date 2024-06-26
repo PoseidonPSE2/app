@@ -47,7 +47,7 @@ class _WaterSettingsState extends State<WaterSettings> {
             var cachedMessageMap = ndefMap['ndef'];
             if (cachedMessageMap.containsKey('identifier')) {
               var identifier = cachedMessageMap['identifier'];
-              final hexEncoder = const HexEncoder();
+              const hexEncoder = HexEncoder();
               String hexString = hexEncoder.convert(identifier);
               String hexStringWithOperator = "";
 
@@ -61,7 +61,6 @@ class _WaterSettingsState extends State<WaterSettings> {
 
               String nfcChipId = hexStringWithOperator.substring(
                   0, hexStringWithOperator.length - 1);
-              print(nfcChipId);
               setState(() {
                 nfcId = nfcChipId;
               });
@@ -265,7 +264,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _onConfirm,
                       child: _isLoading
-                          ? CircularProgressIndicator(
+                          ? const CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.white,
                               ),

@@ -5,7 +5,7 @@ import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
 
 class Login extends StatelessWidget {
-  Login({Key? key}) : super(key: key);
+  Login({super.key});
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
@@ -14,7 +14,7 @@ class Login extends StatelessWidget {
       body: Consumer2<UserProvider, RefillStationProvider>(
         builder: (context, userProvider, refillStationProvider, child) {
           return userProvider.isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -56,7 +56,7 @@ class Login extends StatelessWidget {
                           );
                         }
                       },
-                      child: Text("Login"),
+                      child: const Text("Login"),
                     ),
                   ],
                 );

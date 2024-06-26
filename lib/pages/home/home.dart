@@ -35,12 +35,12 @@ class _HomeState extends State<Home> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Location Service Disabled'),
-          content: Text('Please enable location services.'),
+          title: const Text('Location Service Disabled'),
+          content: const Text('Please enable location services.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
@@ -55,12 +55,12 @@ class _HomeState extends State<Home> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Location Permission Denied'),
-            content: Text('Please grant location permission.'),
+            title: const Text('Location Permission Denied'),
+            content: const Text('Please grant location permission.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           ),
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
 
   void startLocationUpdates() {
     timer = Timer.periodic(
-        Duration(seconds: 10), (Timer t) => getCurrentLocation());
+        const Duration(seconds: 10), (Timer t) => getCurrentLocation());
   }
 
   void stopLocationUpdates() {

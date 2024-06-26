@@ -60,7 +60,7 @@ class _EditBottleState extends State<EditBottle> {
             var cachedMessageMap = ndefMap['ndef'];
             if (cachedMessageMap.containsKey('identifier')) {
               var identifier = cachedMessageMap['identifier'];
-              final hexEncoder = const HexEncoder();
+              const hexEncoder = HexEncoder();
               String hexString = hexEncoder.convert(identifier);
               String hexStringWithOperator = "";
 
@@ -74,7 +74,6 @@ class _EditBottleState extends State<EditBottle> {
 
               String nfcChipId = hexStringWithOperator.substring(
                   0, hexStringWithOperator.length - 1);
-              print(nfcChipId);
               setState(() {
                 nfcId = nfcChipId;
               });
@@ -279,7 +278,7 @@ class _EditBottleState extends State<EditBottle> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _onConfirm,
                       child: _isLoading
-                          ? CircularProgressIndicator(
+                          ? const CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.white,
                               ),
@@ -320,7 +319,6 @@ class _EditBottleState extends State<EditBottle> {
         );
 
         try {
-          print(editedBottle.nfcId);
           await Provider.of<BottleProvider>(context, listen: false)
               .editBottle(editedBottle);
           await Provider.of<BottleProvider>(context, listen: false)

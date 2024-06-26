@@ -5,7 +5,7 @@ import '../provider/rating_provider.dart';
 
 class Reviewslider extends StatefulWidget {
   final String title;
-  const Reviewslider({Key? key, required this.title}) : super(key: key);
+  const Reviewslider({super.key, required this.title});
 
   @override
   State<Reviewslider> createState() => _SliderState();

@@ -29,7 +29,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                CustomListTile(
+                const CustomListTile(
                   text: 'Community Beitrag',
                   destination: CommunityContributionScreen(),
                 ),

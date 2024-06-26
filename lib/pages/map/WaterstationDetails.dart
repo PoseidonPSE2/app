@@ -51,7 +51,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
   static String formatAddressWithLineBreak(String address) {
     List<String> addressParts = address.split(', ');
 
-    String formattedAddress = addressParts[0] + ",\n" + addressParts[1];
+    String formattedAddress = "${addressParts[0]},\n${addressParts[1]}";
     return formattedAddress;
   }
 
@@ -147,7 +147,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                           ),
                           child: provider.imageBase64?.image == null ||
                                   provider.imageBase64!.image!.isEmpty
-                              ? LoadingScreen()
+                              ? const LoadingScreen()
                               : null,
                         ),
                         Column(

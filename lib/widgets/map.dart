@@ -80,8 +80,8 @@ class _MapWidgetState extends State<Map> {
 
           return FlutterMap(
             mapController: mapController,
-            options: MapOptions(
-              initialCenter: const LatLng(49.440067, 7.749126),
+            options: const MapOptions(
+              initialCenter: LatLng(49.440067, 7.749126),
               initialZoom: 13,
               minZoom: 10,
               maxZoom: 18,

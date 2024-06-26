@@ -27,7 +27,7 @@ class _RefillstationDetailsState extends State<RefillstationDetails> {
   static String formatAddressWithLineBreak(String address) {
     List<String> addressParts = address.split(', ');
 
-    String formattedAddress = addressParts[0] + ",\n" + addressParts[1];
+    String formattedAddress = "${addressParts[0]},\n${addressParts[1]}";
     return formattedAddress;
   }
 

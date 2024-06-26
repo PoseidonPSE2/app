@@ -97,7 +97,7 @@ class _BottleTileState extends State<BottleTile> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: _isLoading
-                            ? LoadingScreen()
+                            ? const LoadingScreen()
                             : IconButton(
                                 icon: Icon(
                                   Icons.remove,

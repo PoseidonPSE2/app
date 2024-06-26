@@ -4,8 +4,7 @@ import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 class WaterloadingAnimation extends StatefulWidget {
   final double duration;
 
-  const WaterloadingAnimation({Key? key, required this.duration})
-      : super(key: key);
+  const WaterloadingAnimation({super.key, required this.duration});
 
   @override
   _WaterloadingAnimationState createState() => _WaterloadingAnimationState();
@@ -47,7 +46,7 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Die Flasche ist voll!'),
+          title: const Text('Die Flasche ist voll!'),
           content: Text("Es hat genau ${widget.duration} sekunden gedauert"),
           actions: [
             TextButton(
@@ -85,7 +84,7 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
           builder: (context, child) {
             return LiquidCustomProgressIndicator(
               value: _animation.value, // Use the animated value
-              valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+              valueColor: const AlwaysStoppedAnimation(Colors.blueAccent),
               backgroundColor: Colors.white,
               direction: Axis.vertical,
               shapePath: _buildBottlePath(),

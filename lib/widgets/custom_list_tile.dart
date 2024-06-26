@@ -7,11 +7,6 @@ class CustomListTile extends StatelessWidget {
   const CustomListTile(
       {required this.text, required this.destination, super.key});
 
-  _navigateToDestination(BuildContext context, Widget destination) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => destination),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

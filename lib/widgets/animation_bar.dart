@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AnimatedProgressbar extends StatelessWidget {
   final double value;
 
-  AnimatedProgressbar({required this.value});
+  const AnimatedProgressbar({super.key, required this.value});
 
   @override
   Widget build(BuildContext context) {

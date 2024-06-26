@@ -4,6 +4,8 @@ import 'package:hello_worl2/service/drawer/community_service.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class CommunityContributionScreen extends StatefulWidget {
+  const CommunityContributionScreen({super.key});
+
   @override
   _CommunityContributionScreenState createState() =>
       _CommunityContributionScreenState();
@@ -66,11 +68,11 @@ class _CommunityContributionScreenState
                 future: futureContribution,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('Keine Daten vorhanden!'));
+                    return const Center(child: Text('Keine Daten vorhanden!'));
                   } else {
                     final data = snapshot.data!;
                     return Column(

@@ -4,6 +4,8 @@ import 'package:hello_worl2/service/drawer/kl_contribution_service.dart';
 import 'package:hello_worl2/widgets/loading.dart';
 
 class KLContributionScreen extends StatefulWidget {
+  const KLContributionScreen({super.key});
+
   @override
   _KLContributionScreenState createState() => _KLContributionScreenState();
 }
@@ -49,7 +51,7 @@ class _KLContributionScreenState extends State<KLContributionScreen> {
                   future: futureContribution,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return LoadingScreen();
+                      return const LoadingScreen();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -77,7 +79,7 @@ class _KLContributionScreenState extends State<KLContributionScreen> {
                   future: futureContribution,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return LoadingScreen();
+                      return const LoadingScreen();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

@@ -19,7 +19,6 @@ class BottleProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _bottles = await _bottleService.fetchUserBottles(userId.userId);
-      _bottles.forEach((path) => print(path.toJson()));
     } catch (e) {
       print(e);
       print("hier ein fehler");
