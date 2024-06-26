@@ -29,8 +29,6 @@ class _RefillScreenState extends State<RefillScreen> {
       if (currentUser != null) {
         Provider.of<BottleProvider>(context, listen: false)
             .fetchBottles(currentUser!);
-        Provider.of<UserProvider>(context, listen: false)
-            .fetchUserContribution();
       }
     });
   }
@@ -84,25 +82,18 @@ class _RefillScreenState extends State<RefillScreen> {
                               builder: (BuildContext context) {
                                 return GestureDetector(
                                   onTap: () async {
-                                    Bottle editedBottle = Bottle(
-                                      id: 1,
-                                      title: "Letzte App-Wahl",
-                                      fillVolume: bottle.fillVolume.toInt(),
-                                      waterType: bottle.waterType,
-                                      nfcId: nfcId.toUpperCase(),
-                                      userId: bottle.userId,
-                                    );
-                                    try {
-                                      await Provider.of<BottleProvider>(context,
-                                              listen: false)
-                                          .editBottle(editedBottle);
-                                      await Provider.of<BottleProvider>(context,
-                                              listen: false)
-                                          .fetchBottles(currentUser!);
-                                      setState(() {});
-                                    } catch (e) {
-                                      print('Error creating new bottle: $e');
-                                    }
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => EditRefill(
+                                                bottle: Bottle(
+                                                    userId: bottle.userId,
+                                                    id: 1,
+                                                    fillVolume: bottle
+                                                        .fillVolume
+                                                        .toInt(),
+                                                    waterType: bottle.waterType,
+                                                    title:
+                                                        "Letzte App-Wahl"))));
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.symmetric(

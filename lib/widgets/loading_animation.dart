@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 
 class WaterloadingAnimation extends StatefulWidget {
+  final double duration;
+
+  const WaterloadingAnimation({Key? key, required this.duration})
+      : super(key: key);
+
   @override
   _WaterloadingAnimationState createState() => _WaterloadingAnimationState();
 }
@@ -10,7 +15,6 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  bool _isFull = false;
 
   @override
   void initState() {
@@ -18,7 +22,8 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5), // Animation duration is 5 seconds
+      duration: Duration(
+          seconds: widget.duration.toInt()), // Use the provided duration
     );
 
     _animation = Tween<double>(
@@ -27,17 +32,39 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
     ).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          setState(() {
-            _isFull = true;
-          });
-          // Show SnackBar when animation is complete
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Die Flasche ist voll!'),
-            ),
-          );
+          setState(() {});
+          // Show dialog when animation is complete
+          _showCompletionDialog();
         }
       });
+
+    // Start the animation immediately
+    _controller.forward();
+  }
+
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Die Flasche ist voll!'),
+          content: Text('hier steht wieviel gemacht wurde blabla'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              child: const Text(
+                'Zurück zur Map',
+                style: TextStyle(
+                  color: Color(0xFF2196F3),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -46,48 +73,23 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
     super.dispose();
   }
 
-  void _startAnimation() {
-    _isFull = false; // Reset full status
-    _controller.reset(); // Reset animation
-    _controller.forward(); // Start the animation
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Water Bottle Indicator"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed:
-                  _isFull ? null : _startAnimation, // Disable button when full
-              child: Text(
-                'Start Animation',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 400,
-              child: AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return LiquidCustomProgressIndicator(
-                    value: _animation.value, // Use the animated value
-                    valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
-                    backgroundColor: Colors.white,
-                    direction: Axis.vertical,
-                    shapePath: _buildBottlePath(),
-                  );
-                },
-              ),
-            ),
-          ],
+    return Center(
+      child: SizedBox(
+        width: 200,
+        height: 400,
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return LiquidCustomProgressIndicator(
+              value: _animation.value, // Use the animated value
+              valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+              backgroundColor: Colors.white,
+              direction: Axis.vertical,
+              shapePath: _buildBottlePath(),
+            );
+          },
         ),
       ),
     );

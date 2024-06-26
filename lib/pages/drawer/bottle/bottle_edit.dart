@@ -26,6 +26,7 @@ class _EditBottleState extends State<EditBottle> {
 
   late double _currentWaterAmount;
   late bool isStillWater;
+  bool _isLoading = false;
   String nfcId = "";
   Uint8List? _imageBytes;
   String? _base64Image;
@@ -112,218 +113,237 @@ class _EditBottleState extends State<EditBottle> {
         centerTitle: true,
         title: const Text('Neue Flasche'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: TextFormField(
-                  controller: _textEditingController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Bitte geben Sie einen Flaschentitel ein';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    hintText: 'Flaschentitel',
-                  ),
-                ),
-              ),
-              if (_imageBytes != null)
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black, // Farbe des Rands
-                        width: 2, // Breite des Rands
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(10), // Abgerundete Ecken
-                      image: DecorationImage(
-                        image: MemoryImage(_imageBytes!),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              ElevatedButton(
-                onPressed: _pickImage,
-                child: const Text('Bild auswählen'),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Meine Wasserpräferenz",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              Slider(
-                value: _currentWaterAmount,
-                min: 250,
-                max: 1500,
-                divisions: 5,
-                label: '${_currentWaterAmount.round()} ml',
-                onChanged: (double value) {
-                  setState(() {
-                    _currentWaterAmount = value;
-                  });
-                },
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(15.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('250 ml', style: TextStyle(fontSize: 16)),
-                  Text('1500 ml', style: TextStyle(fontSize: 16)),
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: TextFormField(
+                      controller: _textEditingController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Bitte geben Sie einen Flaschentitel ein';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        hintText: 'Flaschentitel',
+                      ),
+                    ),
+                  ),
+                  if (_imageBytes != null)
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black, // Farbe des Rands
+                            width: 2, // Breite des Rands
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(10), // Abgerundete Ecken
+                          image: DecorationImage(
+                            image: MemoryImage(_imageBytes!),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ElevatedButton(
+                    onPressed: _pickImage,
+                    child: const Text('Bild auswählen'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      "Meine Wasserpräferenz",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  Slider(
+                    value: _currentWaterAmount,
+                    min: 250,
+                    max: 1500,
+                    divisions: 5,
+                    label: '${_currentWaterAmount.round()} ml',
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentWaterAmount = value;
+                      });
+                    },
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('250 ml', style: TextStyle(fontSize: 16)),
+                      Text('1500 ml', style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Still',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Switch(
+                          value: !isStillWater,
+                          onChanged: (bool value) {
+                            setState(() {
+                              isStillWater = !value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          'Sprudel',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  nfcId == ""
+                      ? Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Bitte NFC-Chip scannen:",
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                "(optional NFC auf dem Smartphone aktivieren)",
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(nfcId),
+                              const Icon(
+                                Icons.check,
+                                size: 50,
+                                color: Colors.green,
+                              ),
+                            ],
+                          ),
+                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _onConfirm,
+                      child: _isLoading
+                          ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              'Bestätigen',
+                            ),
+                    ),
+                  ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Still',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Switch(
-                      value: !isStillWater,
-                      onChanged: (bool value) {
-                        setState(() {
-                          isStillWater = !value;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Sprudel',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              nfcId == ""
-                  ? Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade400,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Bitte NFC-Chip scannen:",
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "(optional NFC auf dem Smartphone aktivieren)",
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade400,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(nfcId),
-                          const Icon(
-                            Icons.check,
-                            size: 50,
-                            color: Colors.green,
-                          ),
-                        ],
-                      ),
-                    ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 20,
-                  bottom: 20,
-                ),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final userProvider = context.read<UserProvider>();
-                      final currentUser =
-                          userProvider.user; // Access the current user
-                      if (currentUser != null) {
-                        setState(() {});
-                        // Check if currentUser is not null
-                        Bottle editedBottle = Bottle(
-                          id: widget.bottle.id,
-                          title: _textEditingController.text,
-                          fillVolume: _currentWaterAmount.toInt(),
-                          waterType: isStillWater ? "tap" : "mineral",
-                          nfcId: nfcId.toUpperCase(),
-                          userId: currentUser.userId,
-                          pathImage: _base64Image,
-                          active: widget.bottle.active,
-                          waterTransactions: widget.bottle.waterTransactions,
-                        );
-
-                        try {
-                          print(editedBottle.nfcId);
-                          await Provider.of<BottleProvider>(context,
-                                  listen: false)
-                              .editBottle(editedBottle);
-                          await Provider.of<BottleProvider>(context,
-                                  listen: false)
-                              .fetchBottles(currentUser);
-                        } catch (e) {
-                          print('Error creating new bottle: $e');
-                        }
-                        Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Bitte füllen Sie alle Felder aus'),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text(
-                    'Bestätigen',
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  void _onConfirm() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final userProvider = context.read<UserProvider>();
+      final currentUser = userProvider.user; // Access the current user
+      if (currentUser != null) {
+        final editedBottle = Bottle(
+          id: widget.bottle.id,
+          title: _textEditingController.text,
+          fillVolume: _currentWaterAmount.toInt(),
+          waterType: isStillWater ? "tap" : "mineral",
+          nfcId: nfcId.toUpperCase(),
+          userId: currentUser.userId,
+          pathImage: _base64Image,
+          active: widget.bottle.active,
+          waterTransactions: widget.bottle.waterTransactions,
+        );
+
+        try {
+          print(editedBottle.nfcId);
+          await Provider.of<BottleProvider>(context, listen: false)
+              .editBottle(editedBottle);
+          await Provider.of<BottleProvider>(context, listen: false)
+              .fetchBottles(currentUser);
+          Navigator.pop(context);
+        } catch (e) {
+          print('Error creating new bottle: $e');
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bitte füllen Sie alle Felder aus'),
+          ),
+        );
+      }
+    }
   }
 }
