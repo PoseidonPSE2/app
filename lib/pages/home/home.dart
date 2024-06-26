@@ -86,8 +86,8 @@ class _HomeState extends State<Home> {
   }
 
   void startLocationUpdates() {
-    timer =
-        Timer.periodic(Duration(seconds: 5), (Timer t) => getCurrentLocation());
+    timer = Timer.periodic(
+        Duration(seconds: 10), (Timer t) => getCurrentLocation());
   }
 
   void stopLocationUpdates() {
