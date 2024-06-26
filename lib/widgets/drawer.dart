@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/pages/home/login.dart';
-import 'package:hello_worl2/pages/drawer/ContributionCommunity.dart';
-import 'package:hello_worl2/pages/drawer/ContributionKaiserslautern.dart';
+import 'package:hello_worl2/pages/drawer/contribution_community.dart';
 import 'package:hello_worl2/pages/drawer/bottle/bottle.dart';
 import 'package:hello_worl2/widgets/custom_list_tile.dart';
 import 'package:hello_worl2/widgets/user_progress.dart';

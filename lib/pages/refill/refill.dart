@@ -16,7 +16,6 @@ class RefillScreen extends StatefulWidget {
 }
 
 class _RefillScreenState extends State<RefillScreen> {
-  double _waterAmount = 0.0;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   User? currentUser;
   String nfcId = "04:72:52:1A:94:11:90";

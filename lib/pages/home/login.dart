@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hello_worl2/model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
@@ -38,27 +37,17 @@ class Login extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         if (_textEditingController.text.isNotEmpty) {
-                          String? userId = _textEditingController.text;
-                          if (userId != null) {
-                            userProvider.setUser(User(userId: 4));
+                          userProvider.setUser(User(userId: 4));
 
-                            // Set the RefillStationProvider in UserProvider
-                            userProvider.setRefillStationProvider(
-                                refillStationProvider);
+                          // Set the RefillStationProvider in UserProvider
+                          userProvider
+                              .setRefillStationProvider(refillStationProvider);
 
-                            // Rufen Sie die Methode zum Sammeln der Daten auf
-                            await userProvider.fetchDataAfterLogin();
+                          // Rufen Sie die Methode zum Sammeln der Daten auf
+                          await userProvider.fetchDataAfterLogin();
 
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, "/home");
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Ungültiger User. Bitte geben Sie eine gültigen User ein'),
-                              ),
-                            );
-                          }
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/home");
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

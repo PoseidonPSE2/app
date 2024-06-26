@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
 
@@ -16,8 +15,6 @@ class EditRefill extends StatefulWidget {
 
 class _EditBottleState extends State<EditRefill> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController _textEditingController;
-  final ImagePicker _picker = ImagePicker();
 
   late double _currentWaterAmount;
   late bool isStillWater;
@@ -26,7 +23,6 @@ class _EditBottleState extends State<EditRefill> {
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController(text: widget.bottle.title);
     _currentWaterAmount = widget.bottle.fillVolume.toDouble();
     isStillWater = widget.bottle.waterType == "tap";
   }

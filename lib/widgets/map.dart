@@ -82,7 +82,7 @@ class _MapWidgetState extends State<Map> {
             mapController: mapController,
             options: MapOptions(
               initialCenter: const LatLng(49.440067, 7.749126),
-              initialZoom: 15,
+              initialZoom: 13,
               minZoom: 10,
               maxZoom: 18,
               interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,

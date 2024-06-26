@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/model/refillstation.dart';
@@ -106,13 +105,11 @@ class ApiService {
 
   void postRefillstationReview(RefillstationReview review) async {
     var body = jsonEncode(review);
-    print("test2:" + body);
     Uri uri = Uri.parse("$_baseUrl/refill_station_reviews");
-    final response = await http.post(
+    await http.post(
       uri,
       body: body,
     );
-    print("test" + response.body);
   }
 
   void postRefillstationProblem(RefillstationProblem problem) async {
@@ -120,7 +117,7 @@ class ApiService {
     // var body = problem.toJson();
 
     Uri uri = Uri.parse("$_baseUrl/refill_station_problems");
-    final response = await http.post(
+    await http.post(
       uri,
       body: body,
     );

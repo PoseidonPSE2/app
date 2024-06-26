@@ -131,182 +131,175 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: screenWidth * 0.3,
-                                    height: screenHeight * 0.15,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      image:
-                                          provider.imageBase64?.image != null &&
-                                                  provider.imageBase64!.image!
-                                                      .isNotEmpty
-                                              ? DecorationImage(
-                                                  image: MemoryImage(
-                                                      base64Decode(provider
-                                                          .imageBase64!
-                                                          .image!)),
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : null,
-                                    ),
-                                    child: provider.imageBase64?.image ==
-                                                null ||
-                                            provider.imageBase64!.image!.isEmpty
-                                        ? LoadingScreen()
-                                        : null,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                provider.selectedStation!.name,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall,
-                                              ),
-                                            ),
-                                            Column(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    provider.toggleLike(
-                                                        widget.marker.id,
-                                                        currentUser!.userId);
-                                                  },
-                                                  icon: Icon(
-                                                    provider.isLiked
-                                                        ? Icons.favorite
-                                                        : Icons.favorite_border,
-                                                    color: provider.isLiked
-                                                        ? Colors.red
-                                                        : Colors.grey,
-                                                    size: 30,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  provider.likes.toString(),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.location_on_sharp,
-                                              size: 22.0,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              formatAddressWithLineBreak(
-                                                  provider.selectedStation!
-                                                      .address),
+                        Container(
+                          width: screenWidth,
+                          height: screenHeight * 0.25,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: provider.imageBase64?.image != null &&
+                                    provider.imageBase64!.image!.isNotEmpty
+                                ? DecorationImage(
+                                    image: MemoryImage(base64Decode(
+                                        provider.imageBase64!.image!)),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                          child: provider.imageBase64?.image == null ||
+                                  provider.imageBase64!.image!.isEmpty
+                              ? LoadingScreen()
+                              : null,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              provider.selectedStation!.name,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .labelLarge,
+                                                  .headlineSmall,
                                             ),
-                                          ],
-                                        ),
-                                      ],
+                                          ),
+                                          Text(
+                                            provider.likes.toString(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              provider.toggleLike(
+                                                  widget.marker.id,
+                                                  currentUser!.userId);
+                                            },
+                                            icon: Icon(
+                                              provider.isLiked
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border,
+                                              color: provider.isLiked
+                                                  ? Colors.red
+                                                  : Colors.grey,
+                                              size: 30,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on_sharp,
+                                            size: 22.0,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            formatAddressWithLineBreak(provider
+                                                .selectedStation!.address),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            const Divider(
+                              height: 20,
+                              color: Colors.grey,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      provider.reviewAverage!.accesibility
+                                          .toStringAsFixed(1)
+                                          .toString(),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        provider.reviewAverage!.accesibility
-                                            .toStringAsFixed(1)
-                                            .toString(),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      const Icon(
-                                        Icons.star,
-                                      ),
-                                    ],
-                                  ),
-                                  const Text(
-                                    ' · ',
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        provider.reviewAverage!.cleanness
-                                            .toStringAsFixed(1)
-                                            .toString(),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      const Icon(
-                                        Icons.star,
-                                      ),
-                                    ],
-                                  ),
-                                  const Text(
-                                    ' · ',
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        provider.reviewAverage!.waterQuality
-                                            .toStringAsFixed(1)
-                                            .toString(),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      const Icon(
-                                        Icons.star,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 5),
-                              const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Erreichbarkeit",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "Sauberkeit",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "Wasser Qualität",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    const Icon(
+                                      Icons.star,
+                                    ),
+                                  ],
+                                ),
+                                const Text(
+                                  ' · ',
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      provider.reviewAverage!.cleanness
+                                          .toStringAsFixed(1)
+                                          .toString(),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    const Icon(
+                                      Icons.star,
+                                    ),
+                                  ],
+                                ),
+                                const Text(
+                                  ' · ',
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      provider.reviewAverage!.waterQuality
+                                          .toStringAsFixed(1)
+                                          .toString(),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    const Icon(
+                                      Icons.star,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Erreichbarkeit",
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  "Sauberkeit",
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  "Wasser Qualität",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const Divider(
+                          height: 20,
+                          color: Colors.grey,
                         ),
                         Text(
                           provider.selectedStation!.description,
@@ -367,7 +360,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                     onPressed: () {
                       navigateToReviewPage(context, provider.selectedStation!);
                     },
-                    child: Text('Bewerten'),
+                    child: const Text('Bewerten'),
                   ),
                 ),
               ],
