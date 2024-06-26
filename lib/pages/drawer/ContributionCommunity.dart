@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hello_worl2/pages/drawer/ContributionKaiserslautern.dart';
 import 'package:hello_worl2/service/drawer/community_service.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CommunityContributionScreen extends StatefulWidget {
   @override
@@ -51,59 +53,80 @@ class _CommunityContributionScreenState
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Image(image: AssetImage("assets/image/recycling.jpg")),
+          const SizedBox(
+            width: 500,
+            height: 200,
+            child: Image(image: AssetImage("assets/image/refill_kl.png")),
+          ),
+          KLContributionScreen(),
           const Padding(padding: EdgeInsets.all(10)),
-          FutureBuilder<Map<String, dynamic>>(
-            future: futureContribution,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('Keine Daten vorhanden!'));
-              } else {
-                final data = snapshot.data!;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                      child: Text(
-                        "Du bist einer von ${data['amountUser']} aktiven Refillern!",
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      child: Text(
-                        'Gemeinsam habt ihr ${formatWeight((data['savedTrash'] as num).toDouble())} an Müll und Plastik verhindert.',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      child: Text(
-                        'Ihr habt insgesamt ${formatVolume(data['amountWater'])} Wasser gefüllt.',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      child: Text(
-                        'Ihr habt insgesamt ${data['amountFillings']} Füllungen durchgeführt und dabei ${formatMoney((data['savedMoney'] as num).toDouble())} gespart.',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                );
-              }
-            },
+          Expanded(
+            child: SingleChildScrollView(
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: futureContribution,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('Keine Daten vorhanden!'));
+                  } else {
+                    final data = snapshot.data!;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                          child: Text(
+                            "Du bist einer von ${data['amountUser']} aktiven Refillern!",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          child: Text(
+                            'Gemeinsam habt ihr ${formatWeight((data['savedTrash'] as num).toDouble())} an Müll und Plastik verhindert.',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          child: Text(
+                            'Ihr habt insgesamt ${formatVolume(data['amountWater'])} Wasser gefüllt.',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          child: Text(
+                            'Ihr habt insgesamt ${data['amountFillings']} Füllungen durchgeführt und dabei ${formatMoney((data['savedMoney'] as num).toDouble())} gespart.',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 30),
+            child: ElevatedButton(
+              onPressed: () {
+                launchUrlString(
+                    'https://www.kaiserslautern.de/sozial_leben_wohnen/umwelt/klimaschutz/projekte/055055/index.html.de');
+              },
+              child: const Text(
+                'Zur Kaiserslautern Seite',
+              ),
+            ),
           ),
         ],
       ),

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:hello_worl2/pages/home/refill.dart';
+import 'package:hello_worl2/pages/refill/refill.dart';
 import 'package:hello_worl2/provider/map_provider.dart';
-import 'package:hello_worl2/widgets/bottom_sheet.dart';
 import 'package:hello_worl2/widgets/drawer.dart';
 import 'package:hello_worl2/widgets/map.dart';
 import 'package:latlong2/latlong.dart';
@@ -20,11 +20,6 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MapProvider provider;
   Timer? timer;
-  List<LatLng> locationslol = [
-    LatLng(49.4433, 7.7622),
-    LatLng(49.440067, 7.749126),
-    LatLng(49.44694255672088, 7.751210803377673)
-  ];
 
   @override
   void initState() {
@@ -34,7 +29,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void getCurrentLocation() async {
+  void getCurrentLocation({bool centerMap = false}) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       showDialog(
@@ -81,15 +76,18 @@ class _HomeState extends State<Home> {
       LatLng currentUserLocation =
           LatLng(position.latitude, position.longitude);
 
-      provider.setPosition(locationslol.removeLast());
+      provider.setPosition(currentUserLocation);
 
-      setState(() {});
+      if (centerMap) {
+        provider.centerMap();
+        setState(() {});
+      }
     }
   }
 
   void startLocationUpdates() {
-    timer = Timer.periodic(
-        Duration(seconds: 30), (Timer t) => getCurrentLocation());
+    timer =
+        Timer.periodic(Duration(seconds: 5), (Timer t) => getCurrentLocation());
   }
 
   void stopLocationUpdates() {
@@ -109,8 +107,9 @@ class _HomeState extends State<Home> {
       body: Stack(
         children: [
           const Map(),
-          Padding(
-            padding: const EdgeInsets.only(left: 25, top: 50),
+          Positioned(
+            top: 50,
+            left: 25,
             child: FloatingActionButton(
               heroTag: 'uniqueDrawer',
               shape: const CircleBorder(),
@@ -118,47 +117,19 @@ class _HomeState extends State<Home> {
               child: const Icon(Icons.menu),
             ),
           ),
-          //const CustomBottomSheet(),
-        ],
-      ),
-      extendBody: true,
-      drawer: const CustomDrawer(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.min, // Restrict column size
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: SizedBox(
-              width: 60,
-              height: 60,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  heroTag: 'uniqueNFC',
-                  shape: const CircleBorder(),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RefillScreen()));
-                  },
-                  child: const Icon(Icons.nfc),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 20),
-            child: SizedBox(
-              width: 60,
-              height: 60,
-              child: FittedBox(
-                child: Consumer<MapProvider>(
+          Positioned(
+            top: 50,
+            right: 25,
+            child: Column(
+              children: [
+                Consumer<MapProvider>(
                   builder: (context, provider, child) => FloatingActionButton(
                     heroTag: 'userLocation',
                     shape: const CircleBorder(),
                     onPressed: () {
                       provider.toggle();
                       if (provider.isToggled) {
-                        getCurrentLocation();
+                        getCurrentLocation(centerMap: true);
                         startLocationUpdates();
                       } else {
                         stopLocationUpdates();
@@ -171,10 +142,42 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  heroTag: 'centerMap',
+                  shape: const CircleBorder(),
+                  onPressed: () {
+                    getCurrentLocation(centerMap: true);
+                  },
+                  child: const FaIcon(FontAwesomeIcons.locationArrow),
+                ),
+              ],
             ),
           ),
         ],
+      ),
+      extendBody: true,
+      drawer: const CustomDrawer(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: SizedBox(
+          width: 80,
+          height: 80,
+          child: FittedBox(
+            child: FloatingActionButton(
+              heroTag: 'uniqueWater',
+              shape: const CircleBorder(),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const RefillScreen()));
+              },
+              child: const FaIcon(
+                FontAwesomeIcons.glassWaterDroplet,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

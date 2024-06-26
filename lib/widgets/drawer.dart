@@ -31,10 +31,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 CustomListTile(
-                  text: 'Beitrag in Kaiserslautern',
-                  destination: KLContributionScreen(),
-                ),
-                CustomListTile(
                   text: 'Community Beitrag',
                   destination: CommunityContributionScreen(),
                 ),

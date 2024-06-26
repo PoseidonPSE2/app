@@ -245,7 +245,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(nfcId),
+                          Text(nfcId.toUpperCase()),
                           const Icon(
                             Icons.check,
                             size: 50,
@@ -271,7 +271,8 @@ class _WaterSettingsState extends State<WaterSettings> {
                           title: _textEditingController.text,
                           fillVolume: _currentWaterAmount.toInt(),
                           waterType: isStillWater ? "tap" : "mineral",
-                          nfcId: nfcId, // Falls verfügbar, sonst leer.
+                          nfcId: nfcId
+                              .toUpperCase(), // Falls verfügbar, sonst leer.
                           userId: currentUser.userId,
                           pathImage: _base64Image,
                         );

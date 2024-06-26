@@ -37,7 +37,17 @@ class UserProvider extends ChangeNotifier {
       // Fetch refill stations
       await _refillStationProvider?.fetchStations();
 
-      // Fetch user contribution
+      fetchUserContribution();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchUserContribution() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
       final userContributionService = UserContributionService();
       _userContribution =
           await userContributionService.fetchUserContribution(_user!);

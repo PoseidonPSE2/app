@@ -280,13 +280,14 @@ class _EditBottleState extends State<EditBottle> {
                       final currentUser =
                           userProvider.user; // Access the current user
                       if (currentUser != null) {
+                        setState(() {});
                         // Check if currentUser is not null
                         Bottle editedBottle = Bottle(
                           id: widget.bottle.id,
                           title: _textEditingController.text,
                           fillVolume: _currentWaterAmount.toInt(),
                           waterType: isStillWater ? "tap" : "mineral",
-                          nfcId: nfcId,
+                          nfcId: nfcId.toUpperCase(),
                           userId: currentUser.userId,
                           pathImage: _base64Image,
                           active: widget.bottle.active,
@@ -294,7 +295,7 @@ class _EditBottleState extends State<EditBottle> {
                         );
 
                         try {
-                          print(editedBottle);
+                          print(editedBottle.nfcId);
                           await Provider.of<BottleProvider>(context,
                                   listen: false)
                               .editBottle(editedBottle);

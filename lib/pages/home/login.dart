@@ -30,22 +30,17 @@ class Login extends StatelessWidget {
                       padding: const EdgeInsets.all(15),
                       child: TextField(
                         controller: _textEditingController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
                         decoration: const InputDecoration(
-                          hintText: 'UserID',
+                          hintText: 'User',
                         ),
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () async {
                         if (_textEditingController.text.isNotEmpty) {
-                          int? userId =
-                              int.tryParse(_textEditingController.text);
+                          String? userId = _textEditingController.text;
                           if (userId != null) {
-                            userProvider.setUser(User(userId: userId));
+                            userProvider.setUser(User(userId: 4));
 
                             // Set the RefillStationProvider in UserProvider
                             userProvider.setRefillStationProvider(
@@ -60,14 +55,14 @@ class Login extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
-                                    'Ungültige UserID. Bitte geben Sie eine gültige Zahl ein'),
+                                    'Ungültiger User. Bitte geben Sie eine gültigen User ein'),
                               ),
                             );
                           }
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Bitte geben Sie eine UserID ein'),
+                              content: Text('Bitte geben Sie einen User ein'),
                             ),
                           );
                         }

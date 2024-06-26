@@ -20,19 +20,15 @@ class _MapWidgetState extends State<Map> {
   late MapProvider mapProvider;
   late RefillStationProvider provider;
   User? currentUser;
-  late MapController mapController;
+  MapController mapController = MapController();
 
   @override
   void initState() {
     super.initState();
-    mapController = MapController();
     currentUser = Provider.of<UserProvider>(context, listen: false).user;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<RefillStationProvider>(context, listen: false);
       mapProvider = Provider.of<MapProvider>(context, listen: false);
-      if (mapProvider.isToggled) {
-        _centerOnLocation(mapProvider.getUserLocation);
-      }
     });
   }
 
@@ -60,7 +56,7 @@ class _MapWidgetState extends State<Map> {
   }
 
   void _centerOnLocation(LatLng location) {
-    mapController.move(location, mapController.zoom);
+    mapController.move(location, mapController.camera.zoom);
   }
 
   @override
@@ -76,7 +72,7 @@ class _MapWidgetState extends State<Map> {
         } else {
           final refillStationLocations = provider.stationMarkers;
 
-          if (mapProvider.isToggled) {
+          if (mapProvider.shouldCenterMap) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _centerOnLocation(mapProvider.getUserLocation);
             });
@@ -85,9 +81,7 @@ class _MapWidgetState extends State<Map> {
           return FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              initialCenter: mapProvider.isToggled
-                  ? mapProvider.getUserLocation
-                  : const LatLng(49.440067, 7.749126),
+              initialCenter: const LatLng(49.440067, 7.749126),
               initialZoom: 15,
               minZoom: 10,
               maxZoom: 18,
@@ -122,6 +116,7 @@ class _MapWidgetState extends State<Map> {
                       height: 90.0,
                       child: const Icon(
                         Icons.location_on,
+                        size: 40,
                         color: Colors.red,
                       ),
                     ),

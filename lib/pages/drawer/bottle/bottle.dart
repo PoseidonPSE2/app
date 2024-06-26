@@ -23,6 +23,8 @@ class _MyBottleState extends State<MyBottle> {
       if (currentUser != null) {
         Provider.of<BottleProvider>(context, listen: false)
             .fetchBottles(currentUser!);
+        Provider.of<UserProvider>(context, listen: false)
+            .fetchUserContribution();
       }
     });
   }
@@ -58,7 +60,12 @@ class _MyBottleState extends State<MyBottle> {
                 if (bottleProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return bottleProvider.bottles.isEmpty
+
+                // Sort the bottles by id
+                final sortedBottles = bottleProvider.bottles
+                  ..sort((a, b) => a.id!.compareTo(b.id!));
+
+                return sortedBottles.isEmpty
                     ? Center(
                         child: Text(
                           "Erstelle neue Wasserflaschen...",
@@ -73,10 +80,10 @@ class _MyBottleState extends State<MyBottle> {
                           crossAxisSpacing: 10,
                           childAspectRatio: 0.6,
                         ),
-                        itemCount: bottleProvider.bottles.length,
+                        itemCount: sortedBottles.length,
                         itemBuilder: (context, index) {
                           return BottleTile(
-                            bottle: bottleProvider.bottles[index],
+                            bottle: sortedBottles[index],
                           );
                         },
                       );

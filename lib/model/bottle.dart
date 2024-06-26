@@ -25,7 +25,7 @@ class Bottle {
     return Bottle(
       id: json['id'] as int,
       userId: json['user_id'] as int,
-      nfcId: json['nfc_id'],
+      nfcId: json['NFCID'],
       fillVolume: json['fill_volume'] as int,
       waterType: json['water_type'] as String,
       title: json['title'] as String,
@@ -39,7 +39,7 @@ class Bottle {
     return {
       'id': id,
       'user_id': userId,
-      'nfc_id': nfcId,
+      'NFCID': nfcId,
       'fill_volume': fillVolume,
       'water_type': waterType,
       'title': title,
