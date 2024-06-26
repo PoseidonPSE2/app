@@ -31,23 +31,21 @@ OfferedWatertype getOfferedWatertype(String typeString) {
 }
 
 String offeredWaterTypeToString(OfferedWatertype waterType) {
-  String waterTypeAsString;
   switch (waterType) {
     case OfferedWatertype.mineral:
-      return waterTypeAsString = "Mineralwasser";
+      return "Mineralwasser";
     case OfferedWatertype.tap:
-      return waterTypeAsString = "Leitungswasser";
+      return "Leitungswasser";
     case OfferedWatertype.mineralAndTap:
-      return waterTypeAsString = "Mineralwasser, Leitungswasser";
+      return "Mineralwasser, Leitungswasser";
   }
 }
 
 String waterStationTypeToString(WaterStationType waterType) {
-  String waterTypeAsString;
   switch (waterType) {
     case WaterStationType.manual:
-      return waterTypeAsString = "Manuele Wasserstation";
+      return "Manuele Wasserstation";
     case WaterStationType.smart:
-      return waterTypeAsString = "Smarte Wasserstation";
+      return "Smarte Wasserstation";
   }
 }
