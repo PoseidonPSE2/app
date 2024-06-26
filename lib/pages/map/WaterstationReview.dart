@@ -18,6 +18,7 @@ class Waterstationreview extends StatefulWidget {
 
 class _WaterstationreviewState extends State<Waterstationreview> {
   User? currentUser;
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -126,21 +127,41 @@ class _WaterstationreviewState extends State<Waterstationreview> {
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: () async {
-                      RefillstationReview review = RefillstationReview(
-                        cleanness: cleanlinessRating.toInt(),
-                        accessibility: accessibilityRating.toInt(),
-                        water_quality: waterQualityRating.toInt(),
-                        station_id: widget.station.id,
-                        user_id: currentUser?.userId,
-                      );
-                      ApiService().postRefillstationReview(review);
-                      await provider.fetchReviewAverage(widget.station.id);
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Absenden',
-                    ),
+                    onPressed: _isSubmitting
+                        ? null
+                        : () async {
+                            setState(() {
+                              _isSubmitting = true;
+                            });
+
+                            RefillstationReview review = RefillstationReview(
+                              cleanness: cleanlinessRating.toInt(),
+                              accessibility: accessibilityRating.toInt(),
+                              water_quality: waterQualityRating.toInt(),
+                              station_id: widget.station.id,
+                              user_id: currentUser?.userId,
+                            );
+
+                            try {
+                              ApiService().postRefillstationReview(review);
+                              await provider
+                                  .fetchReviewAverage(widget.station.id);
+                              Navigator.pop(context);
+                            } catch (error) {
+                              print(
+                                  'Fehler beim Absenden der Bewertung: $error');
+                            } finally {
+                              setState(() {
+                                _isSubmitting = false;
+                              });
+                            }
+                          },
+                    child: _isSubmitting
+                        ? CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : Text('Bewertung senden'),
                   ),
                 ],
               ),
