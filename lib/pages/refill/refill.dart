@@ -29,6 +29,8 @@ class _RefillScreenState extends State<RefillScreen> {
       if (currentUser != null) {
         Provider.of<BottleProvider>(context, listen: false)
             .fetchBottles(currentUser!);
+        Provider.of<UserProvider>(context, listen: false)
+            .fetchUserContribution();
       }
     });
   }

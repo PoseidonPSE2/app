@@ -25,14 +25,13 @@ class _KLContributionScreenState extends State<KLContributionScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+          padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
           child: Text(
             "Alle Refillstationen in Kaiserslautern",
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
         ),
-        const Padding(padding: EdgeInsets.all(20)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

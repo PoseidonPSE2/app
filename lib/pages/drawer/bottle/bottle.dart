@@ -23,8 +23,6 @@ class _MyBottleState extends State<MyBottle> {
       if (currentUser != null) {
         Provider.of<BottleProvider>(context, listen: false)
             .fetchBottles(currentUser!);
-        Provider.of<UserProvider>(context, listen: false)
-            .fetchUserContribution();
       }
     });
   }

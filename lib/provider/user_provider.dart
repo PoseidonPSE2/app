@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/user.dart';
 import 'package:hello_worl2/model/user_contribution.dart';
 import 'package:hello_worl2/provider/refillstation_provider.dart';
+import 'package:hello_worl2/service/drawer/community_service.dart';
+import 'package:hello_worl2/service/drawer/kl_contribution_service.dart';
 import 'package:hello_worl2/service/drawer/user_contribution_service.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -9,10 +11,14 @@ class UserProvider extends ChangeNotifier {
   bool _isLoading = false;
   RefillStationProvider? _refillStationProvider;
   UserContribution? _userContribution;
+  Map<String, dynamic>? _klContribution;
+  Map<String, dynamic>? _communityContribution;
 
   User? get user => _user;
   bool get isLoading => _isLoading;
   UserContribution? get userContribution => _userContribution;
+  Map<String, dynamic>? get klContribution => _klContribution;
+  Map<String, dynamic>? get communityContribution => _communityContribution;
 
   void setUser(User newUser) {
     _user = newUser;
@@ -51,6 +57,13 @@ class UserProvider extends ChangeNotifier {
       final userContributionService = UserContributionService();
       _userContribution =
           await userContributionService.fetchUserContribution(_user!);
+
+      final klContributionService = KLContributionService();
+      _klContribution = await klContributionService.fetchKLContribution();
+
+      final communityService = CommunityService();
+      _communityContribution =
+          await communityService.fetchCommunityContribution();
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -47,15 +47,15 @@ class _CommunityContributionScreenState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Refill'),
+        title: const Text('Community Beitrag'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(
-            width: 500,
-            height: 200,
+            width: 400,
+            height: 150,
             child: Image(image: AssetImage("assets/image/refill_kl.png")),
           ),
           KLContributionScreen(),

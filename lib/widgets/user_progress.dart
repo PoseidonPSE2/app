@@ -31,9 +31,8 @@ class Progress extends StatelessWidget {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
         final userContribution = userProvider.userContribution;
-        if (userProvider.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (userContribution == null) {
+
+        if (userContribution == null) {
           return const Center(child: Text('No data available'));
         } else {
           return Padding(

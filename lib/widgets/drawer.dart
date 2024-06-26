@@ -34,7 +34,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   destination: CommunityContributionScreen(),
                 ),
                 const CustomListTile(
-                  text: 'Meine Flasche',
+                  text: 'Meine Flaschen',
                   destination: MyBottle(),
                 ),
               ],
