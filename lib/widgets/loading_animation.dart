@@ -48,14 +48,15 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Die Flasche ist voll!'),
-          content: Text('hier steht wieviel gemacht wurde blabla'),
+          content: Text("Es hat genau ${widget.duration} sekunden gedauert"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                
               },
               child: const Text(
-                'Zurück zur Map',
+                'OK',
                 style: TextStyle(
                   color: Color(0xFF2196F3),
                 ),

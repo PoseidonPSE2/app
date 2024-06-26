@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hello_worl2/model/bottle.dart';
 import 'package:hello_worl2/provider/user_provider.dart';
+import 'package:hello_worl2/service/mqtt_service.dart';
 import 'package:hello_worl2/widgets/loading_animation.dart';
+import 'package:mqtt_client/mqtt_client.dart';
 import 'package:provider/provider.dart';
 import 'package:hello_worl2/provider/bottle_provider.dart';
 
@@ -21,12 +24,45 @@ class _EditBottleState extends State<EditRefill> {
   late bool isStillWater;
   bool _isLoading = false;
   String nfcId = "04:72:52:1A:94:11:90";
+  late MqttService _mqttService;
+  double _mqttDuration = 0.0; // Instanzvariable zum Speichern der Dauer
 
   @override
   void initState() {
     super.initState();
     _currentWaterAmount = widget.bottle.fillVolume.toDouble();
     isStillWater = widget.bottle.waterType == "tap";
+
+    final userProvider = context.read<UserProvider>();
+    final currentUser = userProvider.user;
+    if (currentUser != null) {
+      // Initialize MQTT Service with currentUser
+      _mqttService = MqttService(currentUser);
+      _mqttService.client.updates
+          ?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+        final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+        final String pt =
+            MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        print('Message received: $pt');
+        try {
+          final Map<String, dynamic> message = jsonDecode(pt);
+          if (message.containsKey('duration')) {
+            _mqttDuration = message['duration']; // Speichere die Dauer
+            _onMqttMessageReceived(_mqttDuration); // Handle the message
+          }
+        } catch (e) {
+          print('Error decoding MQTT message: $e');
+        }
+      });
+    }
+  }
+
+  void _onMqttMessageReceived(double duration) {
+    // Handle the received message
+    setState(() {
+      _isLoading = false;
+    });
+    _showWaterAnimationDialog(duration);
   }
 
   @override
@@ -152,7 +188,7 @@ class _EditBottleState extends State<EditRefill> {
         });
 
         // Popup anzeigen
-        _showNfcScanDialog(5.0); // Provide the duration in seconds
+        _showNfcScanDialog(); // Remove duration here
       } else {
         setState(() {
           _isLoading = false;
@@ -161,9 +197,10 @@ class _EditBottleState extends State<EditRefill> {
     }
   }
 
-  void _showNfcScanDialog(double duration) {
+  void _showNfcScanDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false, // Disable dismissing the dialog
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('NFC Scan erforderlich'),
@@ -179,7 +216,6 @@ class _EditBottleState extends State<EditRefill> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                _showWaterAnimationDialog(duration);
               },
             ),
           ],
@@ -191,12 +227,26 @@ class _EditBottleState extends State<EditRefill> {
   void _showWaterAnimationDialog(double duration) {
     showDialog(
       context: context,
+      barrierDismissible: false, // Disable dismissing the dialog
       builder: (BuildContext context) {
-        return Dialog(
-          child: Padding(
+        return AlertDialog(
+          title: Padding(
             padding: const EdgeInsets.all(20.0),
             child: WaterloadingAnimation(duration: duration),
           ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Color(0xFF2196F3),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+            ),
+          ],
         );
       },
     );
