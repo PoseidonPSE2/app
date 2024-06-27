@@ -230,6 +230,7 @@ class _EditBottleState extends State<EditRefill> {
       barrierDismissible: false, // Disable dismissing the dialog
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.grey[200],
           title: Padding(
             padding: const EdgeInsets.all(20.0),
             child: WaterloadingAnimation(duration: duration),
