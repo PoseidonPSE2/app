@@ -71,6 +71,14 @@ class _RefillScreenState extends State<RefillScreen> {
 
                   return Column(
                     children: [
+                      const Text(
+                        "Klicke auf eine Flasche",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
                       Center(
                         child: CarouselSlider(
                           options: CarouselOptions(
@@ -180,7 +188,12 @@ class _RefillScreenState extends State<RefillScreen> {
                         ),
                       ),
                       const SizedBox(height: 20.0),
-                      const Text("oder"),
+                      const Text(
+                        "oder",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
                       const SizedBox(height: 20.0),
                       ElevatedButton(
                         onPressed: () {
@@ -193,7 +206,7 @@ class _RefillScreenState extends State<RefillScreen> {
                                       waterType: "tap",
                                       title: "Letzte App-Wahl"))));
                         },
-                        child: const Text("Manuell auffüllen"),
+                        child: const Text("Manuell anpassen"),
                       ),
                     ],
                   );

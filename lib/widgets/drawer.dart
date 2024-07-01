@@ -30,7 +30,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 const CustomListTile(
-                  text: 'Community Beitrag',
+                  text: 'Beitrag der Community',
                   destination: CommunityContributionScreen(),
                 ),
                 const CustomListTile(

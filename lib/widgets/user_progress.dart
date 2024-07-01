@@ -53,45 +53,51 @@ class Progress extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.local_drink),
-                        const SizedBox(width: 8),
-                        Text(
-                          ": ${userContribution.amountFillings} Füllungen",
+                        Row(
+                          children: [
+                            const Icon(Icons.local_drink),
+                            const SizedBox(width: 8),
+                            Text(
+                              ": ${userContribution.amountFillings} Füllungen",
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.euro),
+                            const SizedBox(width: 8),
+                            Text(
+                              ": ${formatMoney(userContribution.savedMoney)}",
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.water_drop),
-                        const SizedBox(width: 8),
-                        Text(
-                          ": ${formatVolume(userContribution.amountWater)}",
+                        Row(
+                          children: [
+                            const Icon(Icons.water_drop),
+                            const SizedBox(width: 8),
+                            Text(
+                              ": ${formatVolume(userContribution.amountWater)}",
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.euro),
-                        const SizedBox(width: 8),
-                        Text(
-                          ": ${formatMoney(userContribution.savedMoney)}",
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.delete),
-                        const SizedBox(width: 8),
-                        Text(
-                          ": ${formatWeight(userContribution.savedTrash)}",
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.delete),
+                            const SizedBox(width: 8),
+                            Text(
+                              ": ${formatWeight(userContribution.savedTrash)}",
+                            ),
+                          ],
                         ),
                       ],
                     ),

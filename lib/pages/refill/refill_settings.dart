@@ -238,7 +238,7 @@ class _EditBottleState extends State<EditRefill> {
           actions: <Widget>[
             TextButton(
               child: const Text(
-                'OK',
+                'Zurück zur Map',
                 style: TextStyle(
                   color: Color(0xFF2196F3),
                 ),

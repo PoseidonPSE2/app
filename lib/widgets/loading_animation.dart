@@ -14,6 +14,7 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  bool isFull = false;
 
   @override
   void initState() {
@@ -31,40 +32,14 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
     ).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          setState(() {});
-          // Show dialog when animation is complete
-          _showCompletionDialog();
+          setState(() {
+            isFull = true; // Update the state when animation is complete
+          });
         }
       });
 
     // Start the animation immediately
     _controller.forward();
-  }
-
-  void _showCompletionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey,
-          title: const Text('Die Flasche ist voll!'),
-          content: Text("Es hat genau ${widget.duration} sekunden gedauert"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  color: Color(0xFF2196F3),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -75,23 +50,33 @@ class _WaterloadingAnimationState extends State<WaterloadingAnimation>
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 200,
-        height: 400,
-        child: AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            return LiquidCustomProgressIndicator(
-              value: _animation.value, // Use the animated value
-              valueColor: const AlwaysStoppedAnimation(Colors.blueAccent),
-              backgroundColor: Colors.white,
-              direction: Axis.vertical,
-              shapePath: _buildBottlePath(),
-            );
-          },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Center(
+          child: SizedBox(
+            width: 200,
+            height: 400,
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return LiquidCustomProgressIndicator(
+                  value: _animation.value, // Use the animated value
+                  valueColor: const AlwaysStoppedAnimation(Colors.blueAccent),
+                  backgroundColor: Colors.white,
+                  direction: Axis.vertical,
+                  shapePath: _buildBottlePath(),
+                );
+              },
+            ),
+          ),
         ),
-      ),
+        SizedBox(height: 20),
+        Text(
+          isFull ? 'Die Flasche ist voll!' : 'Wird gefüllt...',
+          style: TextStyle(fontSize: 18),
+        ),
+      ],
     );
   }
 
