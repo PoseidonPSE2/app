@@ -37,6 +37,11 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
         builder: (context) => Waterstationreview(station: marker),
       ),
     );
+    await Provider.of<RefillStationProvider>(context, listen: false)
+        .fetchReviewAverage(marker.id);
+    await Provider.of<RefillStationProvider>(context, listen: false)
+        .fetchReview(currentUser!.userId, marker.id);
+    setState(() {});
   }
 
   void navigateToReportPage(BuildContext context, RefillStation marker) {
@@ -227,7 +232,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                                 Row(
                                   children: [
                                     Text(
-                                      provider.reviewAverage!.accesibility
+                                      provider.reviewAverage!.cleanness
                                           .toStringAsFixed(1)
                                           .toString(),
                                     ),
@@ -245,7 +250,7 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                                 Row(
                                   children: [
                                     Text(
-                                      provider.reviewAverage!.cleanness
+                                      provider.reviewAverage!.accesibility
                                           .toStringAsFixed(1)
                                           .toString(),
                                     ),
@@ -282,11 +287,11 @@ class WaterstationdetailsState extends State<Waterstationdetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Erreichbarkeit",
+                                  "Sauberkeit",
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  "Sauberkeit",
+                                  "Erreichbarkeit",
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(

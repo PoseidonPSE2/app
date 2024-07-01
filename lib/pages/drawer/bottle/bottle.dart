@@ -40,6 +40,15 @@ class _MyBottleState extends State<MyBottle> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Meine Flaschen'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Provider.of<UserProvider>(context, listen: false)
+                .fetchUserContribution();
+            setState(() {});
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () async {

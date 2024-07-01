@@ -144,8 +144,12 @@ class _WaterstationreviewState extends State<Waterstationreview> {
 
                             try {
                               ApiService().postRefillstationReview(review);
+
+                              await provider.fetchReview(
+                                  currentUser!.userId, widget.station.id);
                               await provider
                                   .fetchReviewAverage(widget.station.id);
+                              setState(() {});
                               Navigator.pop(context);
                             } catch (error) {
                               print(

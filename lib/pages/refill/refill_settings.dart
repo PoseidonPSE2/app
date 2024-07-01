@@ -58,7 +58,6 @@ class _EditBottleState extends State<EditRefill> {
   }
 
   void _onMqttMessageReceived(double duration) {
-    // Handle the received message
     setState(() {
       _isLoading = false;
     });
