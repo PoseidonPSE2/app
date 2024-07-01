@@ -48,7 +48,7 @@ class _EditBottleState extends State<EditRefill> {
           final Map<String, dynamic> message = jsonDecode(pt);
           if (message.containsKey('duration')) {
             _mqttDuration = message['duration']; // Speichere die Dauer
-            _onMqttMessageReceived(_mqttDuration); // Handle the message
+            _onMqttMessageReceived(_mqttDuration);
           }
         } catch (e) {
           print('Error decoding MQTT message: $e');
@@ -57,11 +57,13 @@ class _EditBottleState extends State<EditRefill> {
     }
   }
 
-  void _onMqttMessageReceived(double duration) {
+  Future<void> _onMqttMessageReceived(double duration) async {
     setState(() {
       _isLoading = false;
     });
     _showWaterAnimationDialog(duration);
+    await Provider.of<UserProvider>(context, listen: false)
+        .fetchUserContribution();
   }
 
   @override

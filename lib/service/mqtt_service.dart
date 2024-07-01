@@ -12,7 +12,9 @@ class MqttService {
   String get message => _message;
 
   MqttService(this.currentUser) {
-    client = MqttServerClient('maqiatto.com', 'testingham');
+    String currentTime = DateTime.now().toIso8601String();
+    client = MqttServerClient(
+        'maqiatto.com', currentUser.userId.toString() + currentTime);
     client.port = 1883;
     client.logging(on: true);
     client.onDisconnected = _onDisconnected;
@@ -20,7 +22,7 @@ class MqttService {
     client.onSubscribed = _onSubscribed;
 
     final connMessage = MqttConnectMessage()
-        .withClientIdentifier('testingham')
+        .withClientIdentifier(currentUser.userId.toString() + currentTime)
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
     client.connectionMessage = connMessage;

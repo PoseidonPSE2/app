@@ -42,8 +42,8 @@ class _MyBottleState extends State<MyBottle> {
         title: const Text('Meine Flaschen'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Provider.of<UserProvider>(context, listen: false)
+          onPressed: () async {
+            await Provider.of<UserProvider>(context, listen: false)
                 .fetchUserContribution();
             setState(() {});
             Navigator.pop(context);
