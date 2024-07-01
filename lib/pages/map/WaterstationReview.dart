@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/refillstation.dart';
-import 'package:hello_worl2/provider/refillstation_provider.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
-import 'package:hello_worl2/restApi/apiService.dart';
+import 'package:refill/model/refillstation.dart';
+import 'package:refill/provider/refillstation_provider.dart';
+import 'package:refill/provider/user_provider.dart';
+import 'package:refill/restApi/apiService.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import '../../model/user.dart';

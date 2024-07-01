@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/refillstation.dart';
-import 'package:hello_worl2/restApi/apiService.dart';
+import 'package:refill/model/refillstation.dart';
+import 'package:refill/restApi/apiService.dart';
 
 class Waterstationreport extends StatefulWidget {
   final RefillStation station;

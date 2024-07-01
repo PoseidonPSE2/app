@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/provider/bottle_provider.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
-import 'package:hello_worl2/widgets/bottle_tile.dart';
+import 'package:refill/model/user.dart';
+import 'package:refill/provider/bottle_provider.dart';
+import 'package:refill/provider/user_provider.dart';
+import 'package:refill/widgets/bottle_tile.dart';
 import 'package:provider/provider.dart';
 
 class MyBottle extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/provider/refillstation_provider.dart';
-import 'package:hello_worl2/widgets/refillstation_details.dart';
+import 'package:refill/provider/refillstation_provider.dart';
+import 'package:refill/widgets/refillstation_details.dart';
 import 'package:provider/provider.dart';
 
 class CustomBottomSheet extends StatefulWidget {

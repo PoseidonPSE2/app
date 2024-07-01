@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:hello_worl2/restApi/waterEnums.dart';
+import 'package:refill/restApi/waterEnums.dart';
 
 class RefillStation {
   final int id;

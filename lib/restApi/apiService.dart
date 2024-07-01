@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/model/refillstation.dart';
+import 'package:refill/model/bottle.dart';
+import 'package:refill/model/refillstation.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'package:hello_worl2/restApi/mapper.dart';
+import 'package:refill/restApi/mapper.dart';
 
 class ApiService {
   // static final config = loadYaml('config.yaml');

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:hello_worl2/model/bottle.dart';
+import 'package:refill/model/bottle.dart';
 
 class NewBottleService {
   static String baseUrl = 'https://poseidon-backend.fly.dev/bottles';

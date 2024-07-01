@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
-import 'package:hello_worl2/service/mqtt_service.dart';
-import 'package:hello_worl2/widgets/loading_animation.dart';
+import 'package:refill/model/bottle.dart';
+import 'package:refill/provider/user_provider.dart';
+import 'package:refill/service/mqtt_service.dart';
+import 'package:refill/widgets/loading_animation.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:provider/provider.dart';
-import 'package:hello_worl2/provider/bottle_provider.dart';
+import 'package:refill/provider/bottle_provider.dart';
 
 class EditRefill extends StatefulWidget {
   final Bottle bottle;

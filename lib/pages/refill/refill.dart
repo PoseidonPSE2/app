@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/pages/refill/refill_settings.dart';
-import 'package:hello_worl2/provider/bottle_provider.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
+import 'package:refill/model/bottle.dart';
+import 'package:refill/model/user.dart';
+import 'package:refill/pages/refill/refill_settings.dart';
+import 'package:refill/provider/bottle_provider.dart';
+import 'package:refill/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class RefillScreen extends StatefulWidget {

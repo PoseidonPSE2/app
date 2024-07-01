@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/service/drawer/new_bottle_service.dart';
+import 'package:refill/model/bottle.dart';
+import 'package:refill/model/user.dart';
+import 'package:refill/service/drawer/new_bottle_service.dart';
 
 class BottleProvider extends ChangeNotifier {
   List<Bottle> _bottles = [];

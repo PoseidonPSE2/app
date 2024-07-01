@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
+import 'package:refill/model/bottle.dart';
+import 'package:refill/provider/user_provider.dart';
 import 'package:hex/hex.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:hello_worl2/provider/bottle_provider.dart';
+import 'package:refill/provider/bottle_provider.dart';
 
 class EditBottle extends StatefulWidget {
   final Bottle bottle;

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/model/bottle.dart';
-import 'package:hello_worl2/pages/drawer/bottle/bottle_edit.dart';
-import 'package:hello_worl2/provider/bottle_provider.dart';
-import 'package:hello_worl2/widgets/loading.dart';
+import 'package:refill/model/bottle.dart';
+import 'package:refill/pages/drawer/bottle/bottle_edit.dart';
+import 'package:refill/provider/bottle_provider.dart';
+import 'package:refill/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class BottleTile extends StatefulWidget {

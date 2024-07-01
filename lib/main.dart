@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/pages/drawer/bottle/bottle_settings.dart';
-import 'package:hello_worl2/pages/home/login.dart';
-import 'package:hello_worl2/provider/bottle_provider.dart';
-import 'package:hello_worl2/provider/map_provider.dart';
-import 'package:hello_worl2/provider/rating_provider.dart';
-import 'package:hello_worl2/provider/refillstation_provider.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
-import 'package:hello_worl2/theme/theme.dart';
-import 'package:hello_worl2/pages/home/home.dart';
+import 'package:refill/pages/drawer/bottle/bottle_settings.dart';
+import 'package:refill/pages/home/login.dart';
+import 'package:refill/provider/bottle_provider.dart';
+import 'package:refill/provider/map_provider.dart';
+import 'package:refill/provider/rating_provider.dart';
+import 'package:refill/provider/refillstation_provider.dart';
+import 'package:refill/provider/user_provider.dart';
+import 'package:refill/theme/theme.dart';
+import 'package:refill/pages/home/home.dart';
 import 'package:provider/provider.dart';
 
 void main() {

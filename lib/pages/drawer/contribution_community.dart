@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hello_worl2/pages/drawer/contribution_kl.dart';
-import 'package:hello_worl2/service/drawer/community_service.dart';
+import 'package:refill/pages/drawer/contribution_kl.dart';
+import 'package:refill/service/drawer/community_service.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class CommunityContributionScreen extends StatefulWidget {

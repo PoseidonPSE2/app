@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/model/user_contribution.dart';
+import 'package:refill/model/user.dart';
+import 'package:refill/model/user_contribution.dart';
 
 class UserContributionService {
   final String baseUrl = 'https://poseidon-backend.fly.dev';

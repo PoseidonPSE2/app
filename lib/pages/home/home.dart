@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:hello_worl2/pages/refill/refill.dart';
-import 'package:hello_worl2/provider/map_provider.dart';
-import 'package:hello_worl2/widgets/drawer.dart';
-import 'package:hello_worl2/widgets/map.dart';
+import 'package:refill/pages/refill/refill.dart';
+import 'package:refill/provider/map_provider.dart';
+import 'package:refill/widgets/drawer.dart';
+import 'package:refill/widgets/map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 

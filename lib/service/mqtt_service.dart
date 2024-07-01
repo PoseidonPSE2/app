@@ -1,6 +1,6 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:hello_worl2/model/user.dart';
+import 'package:refill/model/user.dart';
 
 class MqttService {
   late MqttServerClient client;

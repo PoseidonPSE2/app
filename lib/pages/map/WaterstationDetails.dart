@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hello_worl2/model/refillstation.dart';
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/provider/refillstation_provider.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
-import 'package:hello_worl2/widgets/loading.dart';
+import 'package:refill/model/refillstation.dart';
+import 'package:refill/model/user.dart';
+import 'package:refill/provider/refillstation_provider.dart';
+import 'package:refill/provider/user_provider.dart';
+import 'package:refill/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import '../../restApi/waterEnums.dart';
 import 'WaterstationReport.dart';

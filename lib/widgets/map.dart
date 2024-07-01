@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:hello_worl2/model/refillstation.dart';
-import 'package:hello_worl2/model/user.dart';
-import 'package:hello_worl2/pages/map/WaterstationDetails.dart';
-import 'package:hello_worl2/provider/refillstation_provider.dart';
-import 'package:hello_worl2/provider/user_provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import '../provider/map_provider.dart';
+import 'package:refill/model/refillstation.dart';
+import 'package:refill/model/user.dart';
+import 'package:refill/pages/map/WaterstationDetails.dart';
+import 'package:refill/provider/map_provider.dart';
+import 'package:refill/provider/refillstation_provider.dart';
+import 'package:refill/provider/user_provider.dart';
 
 class Map extends StatefulWidget {
   const Map({super.key});
