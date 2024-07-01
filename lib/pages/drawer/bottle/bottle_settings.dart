@@ -78,7 +78,7 @@ class _WaterSettingsState extends State<WaterSettings> {
   Future<void> _pickImage() async {
     try {
       final XFile? pickedFile =
-          await _picker.pickImage(source: ImageSource.gallery);
+          await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
         File imageFile = File(pickedFile.path);
         setState(() {
@@ -278,7 +278,6 @@ class _WaterSettingsState extends State<WaterSettings> {
               ),
             ),
           ),
-         
         ],
       ),
     );

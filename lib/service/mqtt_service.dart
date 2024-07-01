@@ -12,7 +12,7 @@ class MqttService {
   String get message => _message;
 
   MqttService(this.currentUser) {
-    client = MqttServerClient('maqiatto.com', 'vsmqtt_client_b094');
+    client = MqttServerClient('maqiatto.com', 'testingham');
     client.port = 1883;
     client.logging(on: true);
     client.onDisconnected = _onDisconnected;
@@ -20,7 +20,7 @@ class MqttService {
     client.onSubscribed = _onSubscribed;
 
     final connMessage = MqttConnectMessage()
-        .withClientIdentifier('vsmqtt_client_b094')
+        .withClientIdentifier('testingham')
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
     client.connectionMessage = connMessage;
